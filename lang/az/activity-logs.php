@@ -1,0 +1,168 @@
+<?php
+
+return [
+    'resource' => [
+        'label' => 'Fəaliyyət qeydi',
+        'plural_label' => 'Fəaliyyət qeydləri',
+        'navigation_label' => 'Fəaliyyət qeydləri',
+        'navigation_group' => 'Sistem',
+    ],
+
+    'table' => [
+        'columns' => [
+            'id' => 'ID',
+            'event' => 'Əməliyyat',
+            'section' => 'Bölmə',
+            'model' => 'Model',
+            'log_name' => 'Model',
+            'description' => 'Təsvir',
+            'causer' => 'İstifadəçi',
+            'subject_type' => 'Obyekt tipi',
+            'subject_id' => 'Obyekt ID',
+            'ip_address' => 'IP ünvan',
+            'user_agent' => 'User Agent',
+            'created_at' => 'Tarix və vaxt',
+        ],
+    ],
+
+    'filters' => [
+        'event' => 'Əməliyyat',
+        'log_name' => 'Model',
+        'causer' => 'İstifadəçi',
+        'date_range' => 'Tarix aralığı',
+        'from' => 'Başlanğıc',
+        'until' => 'Son',
+    ],
+
+    'events' => [
+        'created' => 'Yaradılıb',
+        'updated' => 'Yenilənib',
+        'deleted' => 'Silinib',
+        'restored' => 'Bərpa edilib',
+    ],
+
+    'sections' => [
+        'post' => 'Yazılar',
+        'category' => 'Kateqoriyalar',
+        'tag' => 'Teqlər',
+        'user' => 'İstifadəçilər',
+        'posttype' => 'Yazı tipləri',
+        'staticpage' => 'Statik səhifələr',
+    ],
+
+    'models' => [
+        'Post' => 'Yazı',
+        'Category' => 'Kateqoriya',
+        'Tag' => 'Teq',
+        'User' => 'İstifadəçi',
+        'PostType' => 'Yazı tipi',
+        'StaticPage' => 'Statik səhifə',
+    ],
+
+    'view' => [
+        'basic_info' => 'Əsas məlumat',
+        'changes' => 'Dəyişikliklər',
+        'all_data' => 'Bütün məlumatlar',
+        'technical_info' => 'Texniki məlumat',
+        'field' => 'Sahə',
+        'value' => 'Dəyər',
+        'old_value' => 'Köhnə dəyər',
+        'new_value' => 'Yeni dəyər',
+        'deleted_data' => 'Silinmiş məlumatlar',
+        'created_data' => 'Yaradılmış məlumatlar',
+        'changes_label' => 'Dəyişikliklər:',
+        'content_images_changes' => 'Məzmun şəkillərində dəyişikliklər:',
+        'deleted' => 'Silindi:',
+        'added' => 'Əlavə edildi:',
+        'created' => 'Yaradıldı:',
+        'deleted_images' => 'Silinmiş şəkillər:',
+        'added_images' => 'Əlavə edilmiş şəkillər:',
+        'was' => 'Əvvəlki:',
+        'became' => 'Yeni:',
+    ],
+
+    'system' => 'Sistem',
+    'no_changes' => 'Dəyişiklik yoxdur',
+    'no_data' => 'Məlumat yoxdur',
+    'empty' => 'Boş',
+    'yes' => 'Bəli',
+    'no' => 'Xeyr',
+
+    'descriptions' => [
+        'post_gallery_changed' => ':model ":name" qalereya dəyişdirildi',
+        'post_categories_changed' => ':model ":name" kateqoriyalar dəyişdirildi',
+        'post_types_changed' => ':model ":name" tiplər dəyişdirildi',
+        'post_widgets_changed' => ':model ":name" vidjetlər dəyişdirildi',
+        'user_avatar_changed' => ':model ":name" avatar dəyişdirildi',
+        'model_created' => ':model ":name" yaradıldı',
+        'model_updated' => ':model ":name" yeniləndi',
+        'model_deleted' => ':model ":name" silindi',
+        'model_restored' => ':model ":name" bərpa edildi',
+        'model_created_id' => ':model #:id yaradıldı',
+        'model_updated_id' => ':model #:id yeniləndi',
+        'model_deleted_id' => ':model #:id silindi',
+        'model_restored_id' => ':model #:id bərpa edildi',
+        'including_gallery' => ' (qalereya daxil olmaqla)',
+        'including_categories' => ' (kateqoriyalar daxil olmaqla)',
+        'including_types' => ' (tiplər daxil olmaqla)',
+        'including_widgets' => ' (vidjetlər daxil olmaqla)',
+        'including_avatar' => ' (avatar daxil olmaqla)',
+    ],
+
+    'fields' => [
+        // Ümumi sahələr
+        'id' => 'ID',
+        'name' => 'Ad',
+        'title' => 'Başlıq',
+        'slug' => 'URL',
+        'description' => 'Təsvir',
+        'content' => 'Məzmun',
+        'excerpt' => 'Çıxarış',
+        'order' => 'Sıra',
+        'color' => 'Rəng',
+        'icon' => 'İkon',
+        'is_active' => 'Aktiv',
+        'created_at' => 'Yaradılma tarixi',
+        'updated_at' => 'Yenilənmə tarixi',
+        'deleted_at' => 'Silinmə tarixi',
+
+        // Yazılar
+        'old_url' => 'Köhnə URL',
+        'featured_image' => 'Əsas şəkil',
+        'featured_media_id' => 'Əsas media ID',
+        'author_id' => 'Müəllif',
+        'category_id' => 'Kateqoriya',
+        'categories' => 'Kateqoriyalar',
+        'types' => 'Tiplər',
+        'views' => 'Baxışlar',
+        'read_time' => 'Oxuma müddəti',
+        'is_featured' => 'Seçilmiş',
+        'is_published' => 'Dərc edilib',
+        'published_at' => 'Dərc tarixi',
+        'show_on_homepage' => 'Ana səhifədə göstər',
+        'show_in_slider' => 'Slayderdə göstər',
+        'show_in_types_block' => 'Tiplər blokunda göstər',
+        'show_in_important_today' => 'Bugün vaciblərdə göstər',
+        'is_hidden' => 'Gizli',
+        'gallery' => 'Qalereya',
+        'widgets' => 'Vidjetlər',
+
+        // SEO
+        'meta_title' => 'SEO Başlıq',
+        'meta_description' => 'SEO Təsvir',
+        'meta_keywords' => 'SEO Açar sözlər',
+
+        // Kateqoriyalar
+        'show_in_menu' => 'Menyuda göstər',
+        'parent_id' => 'Ana kateqoriya',
+
+        // İstifadəçilər
+        'email' => 'Email',
+        'role' => 'Rol',
+        'bio' => 'Bioqrafiya',
+        'avatar' => 'Avatar',
+        'password' => 'Şifrə',
+        'remember_token' => 'Xatırlama tokeni',
+        'email_verified_at' => 'Email təsdiqlənib',
+    ],
+];

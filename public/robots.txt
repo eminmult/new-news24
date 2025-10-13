@@ -1,0 +1,26 @@
+# robots.txt для OLAY.az
+# Обновлено: 2025-10-09
+
+# Правила для всех поисковых роботов
+User-agent: *
+Allow: /
+
+# Запретить индексацию страниц с параметрами (дубли)
+Disallow: /*?*page=
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+
+# Запретить индексацию поиска (включая параметры)
+Disallow: /search*
+
+# Специфичные правила для Yandex (поддерживает Clean-param)
+User-agent: Yandex
+Allow: /
+Disallow: /*?*page=
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /search*
+Clean-param: page&sort&filter /category/
+
+# Карта сайта
+Sitemap: https://fila.olay.az/sitemap.xml

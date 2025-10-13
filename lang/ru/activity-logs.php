@@ -1,0 +1,168 @@
+<?php
+
+return [
+    'resource' => [
+        'label' => 'Лог действий',
+        'plural_label' => 'Логи действий',
+        'navigation_label' => 'Логи действий',
+        'navigation_group' => 'Система',
+    ],
+
+    'table' => [
+        'columns' => [
+            'id' => 'ID',
+            'event' => 'Действие',
+            'section' => 'Раздел',
+            'model' => 'Модель',
+            'log_name' => 'Модель',
+            'description' => 'Описание',
+            'causer' => 'Пользователь',
+            'subject_type' => 'Тип объекта',
+            'subject_id' => 'ID объекта',
+            'ip_address' => 'IP адрес',
+            'user_agent' => 'User Agent',
+            'created_at' => 'Дата и время',
+        ],
+    ],
+
+    'filters' => [
+        'event' => 'Действие',
+        'log_name' => 'Модель',
+        'causer' => 'Пользователь',
+        'date_range' => 'Диапазон дат',
+        'from' => 'С',
+        'until' => 'По',
+    ],
+
+    'events' => [
+        'created' => 'Создан',
+        'updated' => 'Обновлён',
+        'deleted' => 'Удалён',
+        'restored' => 'Восстановлен',
+    ],
+
+    'sections' => [
+        'post' => 'Посты',
+        'category' => 'Категории',
+        'tag' => 'Теги',
+        'user' => 'Пользователи',
+        'posttype' => 'Типы постов',
+        'staticpage' => 'Статические страницы',
+    ],
+
+    'models' => [
+        'Post' => 'Пост',
+        'Category' => 'Категория',
+        'Tag' => 'Тег',
+        'User' => 'Пользователь',
+        'PostType' => 'Тип поста',
+        'StaticPage' => 'Статическая страница',
+    ],
+
+    'view' => [
+        'basic_info' => 'Основная информация',
+        'changes' => 'Изменения',
+        'all_data' => 'Все данные',
+        'technical_info' => 'Техническая информация',
+        'field' => 'Поле',
+        'value' => 'Значение',
+        'old_value' => 'Старое значение',
+        'new_value' => 'Новое значение',
+        'deleted_data' => 'Удаленные данные',
+        'created_data' => 'Созданные данные',
+        'changes_label' => 'Изменения:',
+        'content_images_changes' => 'Изменения изображений в содержании:',
+        'deleted' => 'Удалено:',
+        'added' => 'Добавлено:',
+        'created' => 'Создано:',
+        'deleted_images' => 'Удаленные изображения:',
+        'added_images' => 'Добавленные изображения:',
+        'was' => 'Было:',
+        'became' => 'Стало:',
+    ],
+
+    'system' => 'Система',
+    'no_changes' => 'Нет изменений',
+    'no_data' => 'Нет данных',
+    'empty' => 'Пусто',
+    'yes' => 'Да',
+    'no' => 'Нет',
+
+    'descriptions' => [
+        'post_gallery_changed' => ':model ":name" галерея изменена',
+        'post_categories_changed' => ':model ":name" категории изменены',
+        'post_types_changed' => ':model ":name" типы изменены',
+        'post_widgets_changed' => ':model ":name" виджеты изменены',
+        'user_avatar_changed' => ':model ":name" аватарка изменена',
+        'model_created' => ':model ":name" создан',
+        'model_updated' => ':model ":name" обновлён',
+        'model_deleted' => ':model ":name" удалён',
+        'model_restored' => ':model ":name" восстановлен',
+        'model_created_id' => ':model #:id создан',
+        'model_updated_id' => ':model #:id обновлён',
+        'model_deleted_id' => ':model #:id удалён',
+        'model_restored_id' => ':model #:id восстановлен',
+        'including_gallery' => ' (включая галерею)',
+        'including_categories' => ' (включая категории)',
+        'including_types' => ' (включая типы)',
+        'including_widgets' => ' (включая виджеты)',
+        'including_avatar' => ' (включая аватарку)',
+    ],
+
+    'fields' => [
+        // Общие поля
+        'id' => 'ID',
+        'name' => 'Название',
+        'title' => 'Заголовок',
+        'slug' => 'URL',
+        'description' => 'Описание',
+        'content' => 'Содержание',
+        'excerpt' => 'Отрывок',
+        'order' => 'Порядок',
+        'color' => 'Цвет',
+        'icon' => 'Иконка',
+        'is_active' => 'Активно',
+        'created_at' => 'Дата создания',
+        'updated_at' => 'Дата обновления',
+        'deleted_at' => 'Дата удаления',
+
+        // Посты
+        'old_url' => 'Старый URL',
+        'featured_image' => 'Главное изображение',
+        'featured_media_id' => 'ID главного медиа',
+        'author_id' => 'Автор',
+        'category_id' => 'Категория',
+        'categories' => 'Категории',
+        'types' => 'Типы',
+        'views' => 'Просмотры',
+        'read_time' => 'Время чтения',
+        'is_featured' => 'Избранное',
+        'is_published' => 'Опубликовано',
+        'published_at' => 'Дата публикации',
+        'show_on_homepage' => 'Показывать на главной',
+        'show_in_slider' => 'Показывать в слайдере',
+        'show_in_types_block' => 'Показывать в блоке типов',
+        'show_in_important_today' => 'Показывать в важных сегодня',
+        'is_hidden' => 'Скрыто',
+        'gallery' => 'Галерея',
+        'widgets' => 'Виджеты',
+
+        // SEO
+        'meta_title' => 'SEO Заголовок',
+        'meta_description' => 'SEO Описание',
+        'meta_keywords' => 'SEO Ключевые слова',
+
+        // Категории
+        'show_in_menu' => 'Показывать в меню',
+        'parent_id' => 'Родительская категория',
+
+        // Пользователи
+        'email' => 'Email',
+        'role' => 'Роль',
+        'bio' => 'Биография',
+        'avatar' => 'Аватарка',
+        'password' => 'Пароль',
+        'remember_token' => 'Токен запоминания',
+        'email_verified_at' => 'Email подтвержден',
+    ],
+];
