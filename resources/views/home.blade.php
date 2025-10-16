@@ -48,7 +48,7 @@
             <div class="slide {{ $loop->first ? 'active' : '' }}">
                 @php
                     $firstMedia = $post->getMedia('post-gallery')->first();
-                    $imageUrl = $firstMedia ? $firstMedia->getUrl('medium') : asset('images/placeholder.jpg');
+                    $imageUrl = $firstMedia ? $firstMedia->getUrl('webp') : asset('images/placeholder.jpg');
                 @endphp
                 <img src="{{ $imageUrl }}" alt="{{ $post->title }}">
                 <div class="slide-overlay"></div>

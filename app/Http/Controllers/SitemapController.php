@@ -67,14 +67,14 @@ class SitemapController extends Controller
             // Пробуем получить новости за последние 3 дня
             $posts = Post::published()
                 ->where('published_at', '>=', now()->subDays(3))
-                ->with(['category', 'author'])
+                ->with(['category', 'categories', 'author'])
                 ->latest('published_at')
                 ->get();
 
             // Если новостей за 3 дня нет, берем последние 30 новостей
             if ($posts->isEmpty()) {
                 $posts = Post::published()
-                    ->with(['category', 'author'])
+                    ->with(['category', 'categories', 'author'])
                     ->latest('published_at')
                     ->take(30)
                     ->get();
@@ -87,13 +87,16 @@ class SitemapController extends Controller
             $xml .= ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
 
             foreach ($posts as $post) {
+                // Получаем главную категорию (из many-to-many или из category_id)
+                $mainCategory = $post->main_category;
+
                 // Пропускаем посты без категории
-                if (!$post->category) {
+                if (!$mainCategory) {
                     continue;
                 }
 
                 $xml .= '<url>';
-                $xml .= '<loc>' . htmlspecialchars(route('post', ['category' => $post->category->slug, 'slug' => $post->slug])) . '</loc>';
+                $xml .= '<loc>' . htmlspecialchars(route('post', ['category' => $mainCategory->slug, 'slug' => $post->slug])) . '</loc>';
                 $xml .= '<news:news>';
                 $xml .= '<news:publication>';
                 $xml .= '<news:name>OLAY.az</news:name>';
@@ -101,9 +104,7 @@ class SitemapController extends Controller
                 $xml .= '</news:publication>';
                 $xml .= '<news:publication_date>' . $post->published_at->toAtomString() . '</news:publication_date>';
                 $xml .= '<news:title>' . htmlspecialchars($post->title) . '</news:title>';
-                if ($post->category) {
-                    $xml .= '<news:keywords>' . htmlspecialchars($post->category->name) . '</news:keywords>';
-                }
+                $xml .= '<news:keywords>' . htmlspecialchars($mainCategory->name) . '</news:keywords>';
                 $xml .= '</news:news>';
 
                 // Добавляем изображение если есть
@@ -137,7 +138,7 @@ class SitemapController extends Controller
         $xml = Cache::remember($cacheKey, 3600, function () {
             // Берем только последние 5000 постов для быстрой генерации
             $posts = Post::published()
-                ->with(['category'])
+                ->with(['category', 'categories'])
                 ->orderBy('published_at', 'desc')
                 ->limit(5000)
                 ->get();
@@ -148,13 +149,16 @@ class SitemapController extends Controller
             $xml .= ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
 
             foreach ($posts as $post) {
+                // Получаем главную категорию (из many-to-many или из category_id)
+                $mainCategory = $post->main_category;
+
                 // Пропускаем посты без категории
-                if (!$post->category) {
+                if (!$mainCategory) {
                     continue;
                 }
 
                 $xml .= '<url>';
-                $xml .= '<loc>' . htmlspecialchars(route('post', ['category' => $post->category->slug, 'slug' => $post->slug])) . '</loc>';
+                $xml .= '<loc>' . htmlspecialchars(route('post', ['category' => $mainCategory->slug, 'slug' => $post->slug])) . '</loc>';
                 $xml .= '<lastmod>' . $post->updated_at->toAtomString() . '</lastmod>';
 
                 // Определяем частоту изменений в зависимости от возраста новости
@@ -181,9 +185,7 @@ class SitemapController extends Controller
                     $xml .= '<image:image>';
                     $xml .= '<image:loc>' . htmlspecialchars($post->featured_image) . '</image:loc>';
                     $xml .= '<image:title>' . htmlspecialchars($post->title) . '</image:title>';
-                    if ($post->category) {
-                        $xml .= '<image:caption>' . htmlspecialchars($post->category->name) . '</image:caption>';
-                    }
+                    $xml .= '<image:caption>' . htmlspecialchars($mainCategory->name) . '</image:caption>';
                     $xml .= '</image:image>';
                 }
 
@@ -291,7 +293,7 @@ class SitemapController extends Controller
     {
         Cache::forget('sitemap_lastmod');
         Cache::forget('sitemap_news');
-        Cache::forget('sitemap_posts_v2');
+        Cache::forget('sitemap_posts_v3');
         Cache::forget('sitemap_categories');
         Cache::forget('sitemap_pages');
     }

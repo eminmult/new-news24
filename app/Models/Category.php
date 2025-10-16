@@ -40,10 +40,12 @@ class Category extends Model
         // Очищаем кеш категорий при любом изменении
         static::saved(function () {
             \Illuminate\Support\Facades\Cache::forget('menu_categories');
+            \App\Http\Controllers\SitemapController::clearCache();
         });
 
         static::deleted(function () {
             \Illuminate\Support\Facades\Cache::forget('menu_categories');
+            \App\Http\Controllers\SitemapController::clearCache();
         });
     }
 }

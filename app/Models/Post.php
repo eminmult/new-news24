@@ -141,26 +141,26 @@ class Post extends Model implements HasMedia
 
     public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
     {
-        // Маленькие превью для карточек - 300x200px (пропорции 3:2)
+        // Маленькие превью для карточек - 450x300px (пропорции 3:2)
         $this->addMediaConversion('thumb')
             ->format('webp')
-            ->fit(\Spatie\Image\Enums\Fit::Crop, 300, 200)
+            ->fit(\Spatie\Image\Enums\Fit::Crop, 450, 300)
             ->quality(78)
             ->performOnCollections('post-gallery', 'post-content-images')
             ->queued();
 
-        // Средние превью - 600x400px (пропорции 3:2)
+        // Средние превью - 700x467px (пропорции 3:2)
         $this->addMediaConversion('medium')
             ->format('webp')
-            ->fit(\Spatie\Image\Enums\Fit::Crop, 600, 400)
+            ->fit(\Spatie\Image\Enums\Fit::Crop, 700, 467)
             ->quality(80)
             ->performOnCollections('post-gallery', 'post-content-images')
             ->queued();
 
-        // Большая версия в WebP - максимум 800px (оригинальные пропорции)
+        // Большая версия в WebP - максимум 1000px (оригинальные пропорции)
         $this->addMediaConversion('webp')
             ->format('webp')
-            ->fit(\Spatie\Image\Enums\Fit::Max, 800, 800)
+            ->fit(\Spatie\Image\Enums\Fit::Max, 1000, 1000)
             ->quality(82)
             ->performOnCollections('post-gallery', 'post-content-images')
             ->queued();
@@ -362,4 +362,5 @@ class Post extends Model implements HasMedia
     {
         return 'posts';
     }
+
 }
