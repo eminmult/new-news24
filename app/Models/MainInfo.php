@@ -53,9 +53,9 @@ class MainInfo extends Model
 
         if (!$instance) {
             $instance = static::create([
-                'site_name' => 'OLAY.az',
-                'site_url' => 'https://olay.az',
-                'emails' => ['info@olay.az'],
+                'site_name' => 'News24.az',
+                'site_url' => 'https://news24.az',
+                'emails' => ['info@news24.az'],
                 'phones' => ['+994'],
             ]);
         }

@@ -1,9 +1,9 @@
 
 <?php
     $mainInfo = \App\Models\MainInfo::getInstance();
-    $siteName = $mainInfo?->site_name ?? 'OLAY.az';
-    $siteDescription = $mainInfo?->meta_description ?? 'OLAY.az - Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar';
-    $siteKeywords = $mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, olay.az';
+    $siteName = $mainInfo?->site_name ?? 'News24.az';
+    $siteDescription = $mainInfo?->meta_description ?? 'News24.az - Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar';
+    $siteKeywords = $mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az';
 ?>
 
 

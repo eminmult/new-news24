@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', $mainInfo?->site_name ?? 'OLAY.az')</title>
+    <title>@yield('title', $mainInfo?->site_name ?? 'News24.az')</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -125,7 +125,7 @@
                 <a href="{{ route('home') }}" class="logo">
                     <picture>
                         <source srcset="{{ asset('images/logo-cropped.webp') }}" type="image/webp">
-                        <img src="{{ asset('images/logo-cropped.png') }}" alt="{{ $mainInfo?->site_name ?? 'OLAY.az' }}" width="205" height="60">
+                        <img src="{{ asset('images/logo-cropped.png') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" width="205" height="60">
                     </picture>
                 </a>
                 <nav class="nav" id="mobileNav">
@@ -137,7 +137,7 @@
                         <a href="{{ route('home') }}" class="mobile-nav-logo">
                             <picture>
                                 <source srcset="{{ asset('images/logo-cropped.webp') }}" type="image/webp">
-                                <img src="{{ asset('images/logo-cropped.png') }}" alt="{{ $mainInfo?->site_name ?? 'OLAY.az' }}" width="205" height="60">
+                                <img src="{{ asset('images/logo-cropped.png') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" width="205" height="60">
                             </picture>
                         </a>
 
@@ -238,7 +238,7 @@
                     <a href="{{ route('contact') }}">Bizimlə Əlaqə</a>
                 </div>
                 <div class="footer-copy">
-                    <p>&copy; {{ date('Y') }} {{ $mainInfo?->site_name ?? 'OLAY.az' }} - Bütün hüquqlar qorunur</p>
+                    <p>&copy; {{ date('Y') }} {{ $mainInfo?->site_name ?? 'News24.az' }} - Bütün hüquqlar qorunur</p>
                     <p class="footer-credit">Created by GASIMOV.AZ</p>
                 </div>
             </div>

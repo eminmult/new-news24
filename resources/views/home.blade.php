@@ -2,7 +2,7 @@
 
 @php
     $mainInfo = \App\Models\MainInfo::getInstance();
-    $siteName = $mainInfo?->site_name ?? 'OLAY.az';
+    $siteName = $mainInfo?->site_name ?? 'News24.az';
 @endphp
 
 @section('title', $siteName . ' - Əsas səhifə')
@@ -11,7 +11,7 @@
     <x-seo
         :title="($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı'"
         :description="$mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.'"
-        :keywords="$mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, olay.az, siyasət, iqtisadiyyat, idman'"
+        :keywords="$mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman'"
         :ogType="'website'"
         :ogImage="asset('images/logo-cropped.png')"
         :canonical="route('home')"

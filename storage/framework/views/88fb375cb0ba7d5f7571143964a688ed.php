@@ -5,8 +5,8 @@
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "OLAY.az",
-  "alternateName": "Olay",
+  "name": "News24.az",
+  "alternateName": "News24",
   "url": "<?php echo e(config('app.url')); ?>",
   "description": "Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar",
   "inLanguage": "az",
@@ -27,8 +27,8 @@
 {
   "@context": "https://schema.org",
   "@type": "NewsMediaOrganization",
-  "name": "OLAY.az",
-  "alternateName": "Olay",
+  "name": "News24.az",
+  "alternateName": "News24",
   "url": "<?php echo e(config('app.url')); ?>",
   "logo": {
     "@type": "ImageObject",
@@ -78,7 +78,7 @@
   "dateModified": "<?php echo e($article->updated_at->toIso8601String()); ?>",
   "author": {
     "@type": "Person",
-    "name": "<?php echo e($article->author->name ?? 'OLAY.az'); ?>",
+    "name": "<?php echo e($article->author->name ?? 'News24.az'); ?>",
     <?php if($article->author): ?>
     "url": "<?php echo e(route('search', ['q' => $article->author->name])); ?>"
     <?php else: ?>
@@ -87,7 +87,7 @@
   },
   "publisher": {
     "@type": "Organization",
-    "name": "OLAY.az",
+    "name": "News24.az",
     "logo": {
       "@type": "ImageObject",
       "url": "<?php echo e(asset('images/logo-cropped.png')); ?>",

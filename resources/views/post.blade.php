@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $siteName = \App\Models\MainInfo::getInstance()?->site_name ?? 'OLAY.az';
+    $siteName = \App\Models\MainInfo::getInstance()?->site_name ?? 'News24.az';
 @endphp
 
 @section('title', $post->meta_title . ' - ' . $siteName)
@@ -20,7 +20,7 @@
         :modifiedTime="$post->updated_at->toIso8601String()"
         :section="$post->main_category?->name"
         :tags="$post->tags->pluck('name')->toArray()"
-        :twitterSite="'@olay_az'"
+        :twitterSite="'@news24_az'"
     />
 @endsection
 

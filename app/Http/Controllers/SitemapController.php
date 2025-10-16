@@ -99,7 +99,7 @@ class SitemapController extends Controller
                 $xml .= '<loc>' . htmlspecialchars(route('post', ['category' => $mainCategory->slug, 'slug' => $post->slug])) . '</loc>';
                 $xml .= '<news:news>';
                 $xml .= '<news:publication>';
-                $xml .= '<news:name>OLAY.az</news:name>';
+                $xml .= '<news:name>News24.az</news:name>';
                 $xml .= '<news:language>az</news:language>';
                 $xml .= '</news:publication>';
                 $xml .= '<news:publication_date>' . $post->published_at->toAtomString() . '</news:publication_date>';

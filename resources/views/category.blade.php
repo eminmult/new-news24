@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $siteName = \App\Models\MainInfo::getInstance()?->site_name ?? 'OLAY.az';
+    $siteName = \App\Models\MainInfo::getInstance()?->site_name ?? 'News24.az';
 @endphp
 
 @section('title', $category->name . ' - ' . $siteName)

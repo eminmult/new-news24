@@ -1,6 +1,6 @@
 <?php
     $mainInfo = \App\Models\MainInfo::getInstance();
-    $siteName = $mainInfo?->site_name ?? 'OLAY.az';
+    $siteName = $mainInfo?->site_name ?? 'News24.az';
 ?>
 
 <?php $__env->startSection('title', $siteName . ' - Əsas səhifə'); ?>
@@ -8,14 +8,14 @@
 <?php $__env->startSection('seo'); ?>
     <?php if (isset($component)) { $__componentOriginal42da61123f891e63201d7be28f403427 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal42da61123f891e63201d7be28f403427 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.seo','data' => ['title' => ($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı','description' => $mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.','keywords' => $mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, olay.az, siyasət, iqtisadiyyat, idman','ogType' => 'website','ogImage' => asset('images/logo-cropped.png'),'canonical' => route('home')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.seo','data' => ['title' => ($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı','description' => $mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.','keywords' => $mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman','ogType' => 'website','ogImage' => asset('images/logo-cropped.png'),'canonical' => route('home')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('seo'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı'),'description' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.'),'keywords' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, olay.az, siyasət, iqtisadiyyat, idman'),'ogType' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute('website'),'ogImage' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(asset('images/logo-cropped.png')),'canonical' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('home'))]); ?>
+<?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı'),'description' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.'),'keywords' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman'),'ogType' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute('website'),'ogImage' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(asset('images/logo-cropped.png')),'canonical' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('home'))]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal42da61123f891e63201d7be28f403427)): ?>
@@ -98,7 +98,7 @@
             <div class="slide <?php echo e($loop->first ? 'active' : ''); ?>">
                 <?php
                     $firstMedia = $post->getMedia('post-gallery')->first();
-                    $imageUrl = $firstMedia ? $firstMedia->getUrl('medium') : asset('images/placeholder.jpg');
+                    $imageUrl = $firstMedia ? $firstMedia->getUrl('webp') : asset('images/placeholder.jpg');
                 ?>
                 <img src="<?php echo e($imageUrl); ?>" alt="<?php echo e($post->title); ?>">
                 <div class="slide-overlay"></div>

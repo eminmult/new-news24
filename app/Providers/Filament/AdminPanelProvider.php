@@ -33,6 +33,9 @@ class AdminPanelProvider extends PanelProvider
                 ->displayLocale('ru')
                 ->circular();
         });
+
+        // Устанавливаем русский язык по умолчанию для админки
+        app()->setLocale('ru');
     }
 
     public function panel(Panel $panel): Panel
@@ -40,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->domain('edm.olay.az')
+            ->domain('edm.news24.az')
             ->path('')
             ->login()
             ->sidebarCollapsibleOnDesktop()
@@ -70,6 +73,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \App\Http\Middleware\SetDefaultLocale::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $__env->yieldContent('title', $mainInfo?->site_name ?? 'OLAY.az'); ?></title>
+    <title><?php echo $__env->yieldContent('title', $mainInfo?->site_name ?? 'News24.az'); ?></title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?php echo e(asset('favicon.ico')); ?>">
@@ -125,7 +125,7 @@
                 <a href="<?php echo e(route('home')); ?>" class="logo">
                     <picture>
                         <source srcset="<?php echo e(asset('images/logo-cropped.webp')); ?>" type="image/webp">
-                        <img src="<?php echo e(asset('images/logo-cropped.png')); ?>" alt="<?php echo e($mainInfo?->site_name ?? 'OLAY.az'); ?>" width="205" height="60">
+                        <img src="<?php echo e(asset('images/logo-cropped.png')); ?>" alt="<?php echo e($mainInfo?->site_name ?? 'News24.az'); ?>" width="205" height="60">
                     </picture>
                 </a>
                 <nav class="nav" id="mobileNav">
@@ -137,7 +137,7 @@
                         <a href="<?php echo e(route('home')); ?>" class="mobile-nav-logo">
                             <picture>
                                 <source srcset="<?php echo e(asset('images/logo-cropped.webp')); ?>" type="image/webp">
-                                <img src="<?php echo e(asset('images/logo-cropped.png')); ?>" alt="<?php echo e($mainInfo?->site_name ?? 'OLAY.az'); ?>" width="205" height="60">
+                                <img src="<?php echo e(asset('images/logo-cropped.png')); ?>" alt="<?php echo e($mainInfo?->site_name ?? 'News24.az'); ?>" width="205" height="60">
                             </picture>
                         </a>
 
@@ -238,7 +238,7 @@
                     <a href="<?php echo e(route('contact')); ?>">Bizimlə Əlaqə</a>
                 </div>
                 <div class="footer-copy">
-                    <p>&copy; <?php echo e(date('Y')); ?> <?php echo e($mainInfo?->site_name ?? 'OLAY.az'); ?> - Bütün hüquqlar qorunur</p>
+                    <p>&copy; <?php echo e(date('Y')); ?> <?php echo e($mainInfo?->site_name ?? 'News24.az'); ?> - Bütün hüquqlar qorunur</p>
                     <p class="footer-credit">Created by GASIMOV.AZ</p>
                 </div>
             </div>

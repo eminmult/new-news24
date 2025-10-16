@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $siteName = \App\Models\MainInfo::getInstance()?->site_name ?? 'OLAY.az';
+    $siteName = \App\Models\MainInfo::getInstance()?->site_name ?? 'News24.az';
 @endphp
 
 @section('title', 'Haqqımızda - ' . $siteName)
@@ -23,13 +23,13 @@
     {
       "@@context": "https://schema.org",
       "@@type": "AboutPage",
-      "name": "Haqqımızda - OLAY.az",
-      "description": "OLAY.az - Azərbaycanın aparıcı xəbər portalı. Bizim missiyamız, tariximiz və komandamız haqqında ətraflı məlumat.",
+      "name": "Haqqımızda - News24.az",
+      "description": "News24.az - Azərbaycanın aparıcı xəbər portalı. Bizim missiyamız, tariximiz və komandamız haqqında ətraflı məlumat.",
       "url": "{{ route('about') }}",
       "mainEntity": {
         "@@type": "NewsMediaOrganization",
-        "name": "OLAY.az",
-        "alternateName": "Olay",
+        "name": "News24.az",
+        "alternateName": "News24",
         "url": "{{ config('app.url') }}",
         "logo": {
           "@@type": "ImageObject",

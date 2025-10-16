@@ -13,35 +13,35 @@ class ConfigSeeder extends Seeder
             [
                 'key' => 'INSTAGRAM',
                 'label' => 'Instagram',
-                'value' => 'https://instagram.com/olay.az',
+                'value' => 'https://instagram.com/news24.az',
                 'type' => 'url',
                 'description' => 'Ссылка на Instagram профиль'
             ],
             [
                 'key' => 'FACEBOOK',
                 'label' => 'Facebook',
-                'value' => 'https://facebook.com/olay.az',
+                'value' => 'https://facebook.com/news24.az',
                 'type' => 'url',
                 'description' => 'Ссылка на Facebook страницу'
             ],
             [
                 'key' => 'YOUTUBE',
                 'label' => 'YouTube',
-                'value' => 'https://youtube.com/@olay.az',
+                'value' => 'https://youtube.com/@news24.az',
                 'type' => 'url',
                 'description' => 'Ссылка на YouTube канал'
             ],
             [
                 'key' => 'TIKTOK',
                 'label' => 'TikTok',
-                'value' => 'https://tiktok.com/@olay.az',
+                'value' => 'https://tiktok.com/@news24.az',
                 'type' => 'url',
                 'description' => 'Ссылка на TikTok профиль'
             ],
             [
                 'key' => 'TELEGRAM',
                 'label' => 'Telegram',
-                'value' => 'https://t.me/olay_az',
+                'value' => 'https://t.me/news24_az',
                 'type' => 'url',
                 'description' => 'Ссылка на Telegram канал'
             ],
@@ -55,7 +55,7 @@ class ConfigSeeder extends Seeder
             [
                 'key' => 'TWITTER',
                 'label' => 'Twitter (X)',
-                'value' => 'https://twitter.com/olay_az',
+                'value' => 'https://twitter.com/news24_az',
                 'type' => 'url',
                 'description' => 'Ссылка на Twitter профиль'
             ],
@@ -69,7 +69,7 @@ class ConfigSeeder extends Seeder
             [
                 'key' => 'EMAIL_RECEIVE_MESSAGES',
                 'label' => 'Email для сообщений',
-                'value' => 'info@olay.az',
+                'value' => 'info@news24.az',
                 'type' => 'email',
                 'description' => 'Email для получения сообщений с сайта'
             ],

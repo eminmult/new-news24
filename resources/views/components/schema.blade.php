@@ -5,8 +5,8 @@
 {
   "@@context": "https://schema.org",
   "@@type": "WebSite",
-  "name": "OLAY.az",
-  "alternateName": "Olay",
+  "name": "News24.az",
+  "alternateName": "News24",
   "url": "{{ config('app.url') }}",
   "description": "Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar",
   "inLanguage": "az",
@@ -27,8 +27,8 @@
 {
   "@@context": "https://schema.org",
   "@@type": "NewsMediaOrganization",
-  "name": "OLAY.az",
-  "alternateName": "Olay",
+  "name": "News24.az",
+  "alternateName": "News24",
   "url": "{{ config('app.url') }}",
   "logo": {
     "@@type": "ImageObject",
@@ -77,7 +77,7 @@
   "dateModified": "{{ $article->updated_at->toIso8601String() }}",
   "author": {
     "@@type": "Person",
-    "name": "{{ $article->author->name ?? 'OLAY.az' }}",
+    "name": "{{ $article->author->name ?? 'News24.az' }}",
     @if($article->author)
     "url": "{{ route('search', ['q' => $article->author->name]) }}"
     @else
@@ -86,7 +86,7 @@
   },
   "publisher": {
     "@@type": "Organization",
-    "name": "OLAY.az",
+    "name": "News24.az",
     "logo": {
       "@@type": "ImageObject",
       "url": "{{ asset('images/logo-cropped.png') }}",

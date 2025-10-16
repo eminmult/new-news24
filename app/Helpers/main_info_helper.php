@@ -22,7 +22,7 @@ if (!function_exists('site_name')) {
      */
     function site_name(): string
     {
-        return main_info()?->site_name ?? 'OLAY.az';
+        return main_info()?->site_name ?? 'News24.az';
     }
 }
 

@@ -21,6 +21,10 @@
 /storage/pail
 /storage/media-library
 /storage/app/public/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+!/storage/framework/sessions/.gitignore
+!/storage/framework/views/.gitignore
 /public/storage
 /vendor
 # Exclude image uploads
