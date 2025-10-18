@@ -25,6 +25,14 @@ class MainInfo extends Model
         'meta_keywords',
         'logo',
         'favicon',
+        'about_title',
+        'about_subtitle',
+        'about_intro',
+        'founder_name',
+        'founder_title',
+        'founder_description',
+        'founder_image',
+        'cooperation_text',
     ];
 
     protected $casts = [
