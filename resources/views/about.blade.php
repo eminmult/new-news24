@@ -135,7 +135,8 @@
                         @endphp
                         <img src="{{ $founderImage }}"
                              alt="{{ $mainInfo->founder_name ?? 'Liatris Holding MMC' }}"
-                             loading="lazy">
+                             loading="lazy"
+                             style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                 </div>
                 <div class="founder-info">
