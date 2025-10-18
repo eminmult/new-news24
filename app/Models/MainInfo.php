@@ -32,6 +32,7 @@ class MainInfo extends Model
         'founder_title',
         'founder_description',
         'founder_image',
+        'founder_image_version',
         'cooperation_text',
         'default_avatar',
     ];

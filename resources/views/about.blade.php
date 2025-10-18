@@ -126,7 +126,14 @@
             <div class="founder-card">
                 <div class="founder-photo">
                     <div class="photo-placeholder">
-                        <img src="{{ $mainInfo->founder_image ?? asset('images/liatris-holding.jpg') }}"
+                        @php
+                            $founderImage = $mainInfo->founder_image ?? asset('images/liatris-holding.jpg');
+                            // Add version parameter if URL doesn't already have query string
+                            if ($mainInfo && $mainInfo->founder_image && !str_contains($founderImage, '?')) {
+                                $founderImage .= '?v=' . ($mainInfo->founder_image_version ?? '1');
+                            }
+                        @endphp
+                        <img src="{{ $founderImage }}"
                              alt="{{ $mainInfo->founder_name ?? 'Liatris Holding MMC' }}"
                              loading="lazy">
                     </div>
@@ -144,7 +151,7 @@
     <section class="team-section">
         <div class="container">
             <h2 class="section-title">{{ $page->getContent('team.title', 'Redaksiya heyəti') }}</h2>
-            <p class="team-subtitle">{{ $page->getContent('team.description', 'Peşəkar jurnalistlərdən ibarət komandamız') }}</p>
+            <p class="team-subtitle" style="text-align: left;">{{ $page->getContent('team.description', 'Peşəkar jurnalistlərdən ibarət komandamız') }}</p>
 
             <div class="team-grid">
                 @forelse($authors as $author)
