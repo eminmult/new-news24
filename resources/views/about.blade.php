@@ -231,7 +231,7 @@
                 <h3 class="section-title">{{ $page->getContent('contact.map_title', 'Ofisimizin yeri') }}</h3>
                 <div class="map-container">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3039.0876582088947!2d49.83873731562238!3d40.38294207936527!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307d9c8c6c5555%3A0x1234567890abcdef!2sMikhail%20Koverochkin%20Street%2038%2C%20Baku%2C%20Azerbaijan!5e0!3m2!1sen!2saz!4v1234567890123!5m2!1sen!2saz"
+                        src="{{ $page->getContent('contact.map_embed_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3039.0876582088947!2d49.83873731562238!3d40.38294207936527!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307d9c8c6c5555%3A0x1234567890abcdef!2sMikhail%20Koverochkin%20Street%2038%2C%20Baku%2C%20Azerbaijan!5e0!3m2!1sen!2saz!4v1234567890123!5m2!1sen!2saz') }}"
                         width="100%"
                         height="450"
                         style="border:0; border-radius: 20px;"
