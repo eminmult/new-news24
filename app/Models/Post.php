@@ -147,7 +147,7 @@ class Post extends Model implements HasMedia
             ->fit(\Spatie\Image\Enums\Fit::Crop, 450, 300)
             ->quality(78)
             ->performOnCollections('post-gallery', 'post-content-images')
-            ->queued();
+            ->nonQueued();
 
         // Средние превью - 700x467px (пропорции 3:2)
         $this->addMediaConversion('medium')
@@ -155,7 +155,15 @@ class Post extends Model implements HasMedia
             ->fit(\Spatie\Image\Enums\Fit::Crop, 700, 467)
             ->quality(80)
             ->performOnCollections('post-gallery', 'post-content-images')
-            ->queued();
+            ->nonQueued();
+
+        // Большие превью для слайдеров - 1200x800px (пропорции 3:2)
+        $this->addMediaConversion('large')
+            ->format('webp')
+            ->fit(\Spatie\Image\Enums\Fit::Crop, 1200, 800)
+            ->quality(85)
+            ->performOnCollections('post-gallery', 'post-content-images')
+            ->nonQueued();
 
         // Большая версия в WebP - максимум 1000px (оригинальные пропорции)
         $this->addMediaConversion('webp')
@@ -163,7 +171,7 @@ class Post extends Model implements HasMedia
             ->fit(\Spatie\Image\Enums\Fit::Max, 1000, 1000)
             ->quality(82)
             ->performOnCollections('post-gallery', 'post-content-images')
-            ->queued();
+            ->nonQueued();
     }
 
     public function getFeaturedImageAttribute()
@@ -178,6 +186,35 @@ class Post extends Model implements HasMedia
         // Берем первое фото из галереи
         $firstMedia = $this->getFirstMedia('post-gallery');
         return $firstMedia ? $firstMedia->getUrl('thumb') : null;
+    }
+
+    public function getFeaturedImageMediumAttribute()
+    {
+        // Берем первое фото из галереи
+        $firstMedia = $this->getFirstMedia('post-gallery');
+        return $firstMedia ? $firstMedia->getUrl('medium') : null;
+    }
+
+    public function getFeaturedImageLargeAttribute()
+    {
+        // Берем первое фото из галереи
+        $firstMedia = $this->getFirstMedia('post-gallery');
+        if (!$firstMedia) {
+            return null;
+        }
+
+        // Проверяем существует ли large конверсия
+        try {
+            $largePath = $firstMedia->getPath('large');
+            if (file_exists($largePath)) {
+                return $firstMedia->getUrl('large');
+            }
+        } catch (\Exception $e) {
+            // Конверсия large не существует
+        }
+
+        // Fallback на medium если large не существует
+        return $firstMedia->getUrl('medium');
     }
 
     public function getFeaturedImageWebpAttribute()

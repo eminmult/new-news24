@@ -38,20 +38,43 @@ class HomeController extends Controller
                 ->where('show_in_important_today', true)
                 ->with(['categories', 'category', 'author'])
                 ->latest('published_at')
-                ->take(4)
+                ->take(Setting::get('trending_posts_count', 6))
                 ->get();
         });
 
-        // Фото/Видео посты - кеш 10 минут
-        $mediaPosts = Cache::remember('home_media_posts', 600, function() {
+        // Главные новости для главного блока - кеш 5 минут
+        $mainFeaturedPosts = Cache::remember('home_main_featured_posts', 300, function() {
+            return Post::published()
+                ->where('show_in_main_featured', true)
+                ->with(['categories', 'category', 'author'])
+                ->latest('published_at')
+                ->take(Setting::get('slider_posts_count', 5))
+                ->get();
+        });
+
+        // Видео посты для youtube-carousel - кеш 10 минут
+        $videoPosts = Cache::remember('home_video_posts', 600, function() {
             return Post::published()
                 ->where('show_in_types_block', true)
                 ->whereHas('types', function($query) {
-                    $query->whereIn('slug', ['photo', 'video']);
+                    $query->where('slug', 'video');
                 })
                 ->with(['categories', 'category', 'author', 'types'])
                 ->latest('published_at')
-                ->take(5)
+                ->take(6)
+                ->get();
+        });
+
+        // Фото посты - кеш 10 минут
+        $photoPosts = Cache::remember('home_photo_posts', 600, function() {
+            return Post::published()
+                ->where('show_in_types_block', true)
+                ->whereHas('types', function($query) {
+                    $query->where('slug', 'photo');
+                })
+                ->with(['categories', 'category', 'author', 'types'])
+                ->latest('published_at')
+                ->take(6)
                 ->get();
         });
 
@@ -64,7 +87,7 @@ class HomeController extends Controller
                 ->paginate(Setting::get('home_posts_count', 15));
         });
 
-        return view('home', compact('categories', 'sliderPosts', 'importantPosts', 'mediaPosts', 'latestPosts'));
+        return view('home', compact('categories', 'sliderPosts', 'importantPosts', 'mainFeaturedPosts', 'videoPosts', 'photoPosts', 'latestPosts'));
     }
 
     public function category($slug)

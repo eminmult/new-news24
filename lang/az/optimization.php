@@ -14,9 +14,12 @@ return [
         'search_posts_count' => 'Axtarış səhifəsindəki postların sayı',
         'category_posts_count' => 'Kateqoriya səhifəsindəki postların sayı',
         'tag_posts_count' => 'Teq səhifəsindəki postların sayı',
-        'slider_posts_count' => 'Slayderdəki postların sayı',
+        'slider_posts_count' => 'Slayderdəki postların sayı (əsas blok)',
         'related_posts_count' => 'Oxşar postların sayı',
-        'trending_posts_count' => 'Yan paneldəki postların sayı',
+        'trending_posts_count' => 'Mühüm xəbərlərin sayı (VACIB BUGÜN)',
+        'popular_posts_count' => 'Populyar xəbərlərin sayı (sidebar)',
+        'popular_posts_days' => 'Populyar xəbərlər üçün günlərin sayı',
+        'weather_city' => 'Hava proqnozu şəhəri',
     ],
 
     'actions' => [

@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class MigrateDlePosts extends Command
 {
-    protected $signature = 'migrate:dle-posts {--limit=100 : Количество постов для миграции}';
+    protected $signature = 'migrate:dle-posts {--limit=1000 : Количество постов для миграции} {--continue : Продолжить с последнего мигрированного поста}';
 
     protected $description = 'Мигрировать посты из DLE в Laravel Filament';
 
@@ -41,12 +41,26 @@ class MigrateDlePosts extends Command
 
             $dle = DB::connection('dle_mysql');
 
-            // Получаем посты из DLE (только с 2024 года)
-            $dlePosts = $dle->table('dle_post')
-                ->where('date', '>=', '2024-01-01 00:00:00')
-                ->orderBy('id', 'desc')
-                ->limit($limit)
-                ->get();
+            // Получаем посты из DLE (исключаем категории 33, 28, 32, 21)
+            $query = $dle->table('dle_post as p')
+                ->leftJoin('dle_post_extras as e', 'p.id', '=', 'e.news_id')
+                ->select('p.*', 'e.news_read')
+                ->whereRaw("NOT FIND_IN_SET('33', p.category)")
+                ->whereRaw("NOT FIND_IN_SET('28', p.category)")
+                ->whereRaw("NOT FIND_IN_SET('32', p.category)")
+                ->whereRaw("NOT FIND_IN_SET('21', p.category)")
+                ->orderBy('p.id', 'asc'); // Начинаем с самых старых
+
+            // Если --continue, продолжаем с последнего мигрированного поста
+            if ($this->option('continue')) {
+                $lastId = cache('dle_migration_last_id', 0);
+                if ($lastId > 0) {
+                    $this->info("📍 Продолжаем с поста ID: {$lastId}");
+                    $query = $query->where('p.id', '>', $lastId);
+                }
+            }
+
+            $dlePosts = $query->limit($limit)->get();
 
             $this->info("📰 Найдено постов в DLE: {$dlePosts->count()}");
             $this->newLine();
@@ -58,6 +72,9 @@ class MigrateDlePosts extends Command
                 try {
                     $this->migratePost($dlePost);
                     $this->stats['migrated']++;
+
+                    // Сохраняем ID последнего мигрированного поста
+                    cache(['dle_migration_last_id' => $dlePost->id], now()->addDays(30));
                 } catch (\Exception $e) {
                     $this->stats['errors']++;
                     $this->newLine();
@@ -146,7 +163,7 @@ class MigrateDlePosts extends Command
             'meta_title' => $this->cleanText($dlePost->metatitle ?: ''),
             'meta_description' => $this->cleanText($dlePost->descr ?: ''),
             'meta_keywords' => $this->cleanText($dlePost->keywords ?: ''),
-            'views' => 0,
+            'views' => $dlePost->news_read ?? 0,
             'is_published' => true,
             'published_at' => $dlePost->date,
             'show_on_homepage' => true,
@@ -254,10 +271,18 @@ class MigrateDlePosts extends Command
         }
 
         // Загружаем изображения в Spatie Media Library
+        // При добавлении автоматически генерируются все конверсии (thumb, medium, large)
+        // определенные в методе registerMediaConversions модели Post
         foreach ($images as $imageUrl) {
             try {
-                $post->addMediaFromUrl($imageUrl)
+                $media = $post->addMediaFromUrl($imageUrl)
                     ->toMediaCollection('post-gallery');
+
+                // Конверсии генерируются автоматически:
+                // - thumb: 450x300px (качество 78%)
+                // - medium: 700x467px (качество 80%)
+                // - large: 1200x800px (качество 85%)
+                // - webp: макс 1000px (качество 82%)
             } catch (\Exception $e) {
                 // Пропускаем изображения, которые не удалось загрузить
                 $this->warn("Не удалось загрузить изображение: {$imageUrl}");

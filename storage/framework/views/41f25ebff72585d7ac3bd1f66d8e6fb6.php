@@ -8,14 +8,14 @@
 <?php $__env->startSection('seo'); ?>
     <?php if (isset($component)) { $__componentOriginal42da61123f891e63201d7be28f403427 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal42da61123f891e63201d7be28f403427 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.seo','data' => ['title' => ($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı','description' => $mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.','keywords' => $mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman','ogType' => 'website','ogImage' => asset('images/logo-cropped.png'),'canonical' => route('home')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.seo','data' => ['title' => ($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı','description' => $mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.','keywords' => $mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman','ogType' => 'website','ogImage' => asset('images/newslogo3.svg'),'canonical' => route('home')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('seo'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı'),'description' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.'),'keywords' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman'),'ogType' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute('website'),'ogImage' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(asset('images/logo-cropped.png')),'canonical' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('home'))]); ?>
+<?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(($mainInfo?->meta_title ?? $siteName) . ' - Azərbaycanın aparıcı xəbər portalı'),'description' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.'),'keywords' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman'),'ogType' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute('website'),'ogImage' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(asset('images/newslogo3.svg')),'canonical' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('home'))]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal42da61123f891e63201d7be28f403427)): ?>
@@ -90,301 +90,239 @@
 
 <?php $__env->startSection('content'); ?>
 <main class="main">
-    <!-- Hero Slider -->
-    <?php if($sliderPosts->isNotEmpty()): ?>
-    <section class="hero-slider">
-        <div class="slider-container">
-            <?php $__currentLoopData = $sliderPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="slide <?php echo e($loop->first ? 'active' : ''); ?>">
-                <?php
-                    $firstMedia = $post->getMedia('post-gallery')->first();
-                    $imageUrl = $firstMedia ? $firstMedia->getUrl('webp') : asset('images/placeholder.jpg');
-                ?>
-                <img src="<?php echo e($imageUrl); ?>" alt="<?php echo e($post->title); ?>">
-                <div class="slide-overlay"></div>
-                <div class="slide-content">
-                    <div class="container">
-                        <?php if($post->main_category): ?>
-                        <span class="category-badge" data-category-id="<?php echo e($post->main_category->id); ?>" style="background-color: <?php echo e($post->main_category->color); ?>;"><?php echo e($post->main_category->name); ?></span>
-                        <?php endif; ?>
-                        <h1 class="slide-title"><a href="<?php echo e($post->url); ?>"><?php echo e($post->title); ?></a></h1>
-                        <?php if($post->author): ?>
-                        <div class="news-author">
-                            <img src="<?php echo e($post->author->avatar_thumb); ?>" alt="<?php echo e($post->author->name); ?>" class="author-avatar" loading="lazy">
-                            <div class="author-info">
-                                <span class="author-name"><?php echo e($post->author->name); ?></span>
-                                <span class="publish-date"><?php echo e($post->published_at->translatedFormat('d F Y, H:i')); ?></span>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-
-        <!-- Slider Navigation -->
-        <button class="slider-arrow slider-prev" aria-label="Əvvəlki slayd">‹</button>
-        <button class="slider-arrow slider-next" aria-label="Növbəti slayd">›</button>
-
-        <!-- Slider Dots -->
-        <div class="slider-dots">
-            <?php $__currentLoopData = $sliderPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <span class="dot <?php echo e($loop->first ? 'active' : ''); ?>" data-slide="<?php echo e($loop->index); ?>"></span>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-    </section>
-    <?php endif; ?>
-
-    <!-- Today's Important News Section -->
-    <?php if($importantPosts->isNotEmpty()): ?>
-    <section class="section-highlights">
+    <!-- Trending Topics Carousel -->
+    <?php if(request()->get('page', 1) == 1 && $importantPosts && $importantPosts->isNotEmpty()): ?>
+    <section class="trending-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">⭐ BUGÜNÜN ƏN ÖNƏMLİ XƏBƏRLƏRİ</h2>
-            </div>
-
-            <div class="today-grid">
-                <?php
-                    $mainPost = $importantPosts->first();
-                    $smallPosts = $importantPosts->slice(1, 3);
-                ?>
-
-                
-                <?php if($mainPost): ?>
-                <article class="today-card-large">
-                    <div class="today-image">
-                        <?php
-                            $mainMedia = $mainPost->getMedia('post-gallery')->first();
-                            $mainImageUrl = $mainMedia ? $mainMedia->getUrl('medium') : '/images/placeholder.jpg';
-                        ?>
-                        <img src="<?php echo e($mainImageUrl); ?>" alt="<?php echo e($mainPost->title); ?>" loading="lazy">
-                        <?php if($mainPost->main_category): ?>
-                        <span class="category-badge" data-category-id="<?php echo e($mainPost->main_category->id); ?>" style="background-color: <?php echo e($mainPost->main_category->color); ?>;">
-                            <?php echo e($mainPost->main_category->name); ?>
-
-                        </span>
-                        <?php endif; ?>
-                    </div>
-                    <div class="today-content">
-                        <h2 class="today-title-large">
-                            <a href="<?php echo e($mainPost->url); ?>"><?php echo e($mainPost->title); ?></a>
-                        </h2>
-                        <?php if($mainPost->author): ?>
-                        <div class="news-author">
-                            <img src="<?php echo e($mainPost->author->avatar_thumb); ?>"
-                                 alt="<?php echo e($mainPost->author->name); ?>"
-                                 class="author-avatar" loading="lazy">
-                            <div class="author-info">
-                                <span class="author-name"><?php echo e($mainPost->author->name); ?></span>
-                                <span class="publish-date"><?php echo e($mainPost->published_at->translatedFormat('d F Y, H:i')); ?></span>
+            <div class="trending-wrapper">
+                <div class="trending-nav-buttons">
+                    <button class="trending-nav-btn prev-trending" aria-label="Əvvəlki">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12 15l-5-5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="trending-nav-btn next-trending" aria-label="Növbəti">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M8 15l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="trending-carousel">
+                    <div class="trending-track">
+                        <?php $__currentLoopData = $importantPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="trending-card">
+                            <div class="trending-image <?php if(!$post->featured_image_thumb): ?> img-gradient-<?php echo e(($index % 8) + 1); ?> <?php endif; ?>">
+                                <?php if($post->featured_image_thumb): ?>
+                                <img src="<?php echo e($post->featured_image_thumb); ?>" alt="<?php echo e($post->title); ?>" loading="lazy">
+                                <?php endif; ?>
+                                <span class="trending-number"><?php echo e(str_pad($index + 1, 2, '0', STR_PAD_LEFT)); ?></span>
                             </div>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </article>
-                <?php endif; ?>
+                            <div class="trending-content">
+                                <?php if($post->main_category): ?>
+                                <span class="category-tag category-<?php echo e($post->main_category->id); ?>">
+                                    <?php echo e($post->main_category->name); ?>
 
-                
-                <?php if($smallPosts->isNotEmpty()): ?>
-                <div class="today-grid-small">
-                    <?php $__currentLoopData = $smallPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <article class="today-card-small">
-                        <div class="today-image-small">
-                            <?php if($post->featured_image_thumb): ?>
-                                <img src="<?php echo e($post->featured_image_thumb); ?>"
-                                     alt="<?php echo e($post->title); ?>" loading="lazy">
-                            <?php else: ?>
-                                <img src="/images/placeholder.jpg" alt="<?php echo e($post->title); ?>" loading="lazy">
-                            <?php endif; ?>
-                            <?php if($post->main_category): ?>
-                            <span class="category-badge" data-category-id="<?php echo e($post->main_category->id); ?>" style="background-color: <?php echo e($post->main_category->color); ?>;">
-                                <?php echo e($post->main_category->name); ?>
-
-                            </span>
-                            <?php endif; ?>
-                        </div>
-                        <div class="today-content-small">
-                            <h3 class="today-title-small">
-                                <a href="<?php echo e($post->url); ?>"><?php echo e($post->title); ?></a>
-                            </h3>
-                            <?php if($post->author): ?>
-                            <div class="news-author">
-                                <img src="<?php echo e($post->author->avatar_thumb); ?>"
-                                     alt="<?php echo e($post->author->name); ?>"
-                                     class="author-avatar" loading="lazy">
-                                <div class="author-info">
-                                    <span class="author-name"><?php echo e($post->author->name); ?></span>
-                                    <span class="publish-date"><?php echo e($post->published_at->translatedFormat('d F Y')); ?></span>
+                                </span>
+                                <?php endif; ?>
+                                <h3><a href="<?php echo e($post->url); ?>"><?php echo e($post->title); ?></a></h3>
+                                <div class="card-meta">
+                                    <span>📈 <?php echo e(number_format($post->views)); ?> baxış</span>
+                                    <span><?php echo e($post->published_at->diffForHumans()); ?></span>
                                 </div>
                             </div>
-                            <?php endif; ?>
                         </div>
-                    </article>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
                 </div>
-                <?php endif; ?>
             </div>
         </div>
     </section>
     <?php endif; ?>
 
-    <!-- Media Section (FOTO-VIDEO) -->
-    <?php if($mediaPosts->isNotEmpty()): ?>
-    <section class="section-media">
+    <!-- Main Featured Section -->
+    <?php if(request()->get('page', 1) == 1 && $mainFeaturedPosts && $mainFeaturedPosts->isNotEmpty()): ?>
+    <section class="main-featured-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">📸 FOTO-VİDEO</h2>
-            </div>
+            <div class="main-featured-wrapper">
+                <!-- Featured Slider (75%) -->
+                <div class="main-featured-slider-wrapper">
+                    <button class="main-featured-nav-btn prev-main-featured" aria-label="Əvvəlki">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
 
-            <div class="media-showcase">
+                    <div class="main-featured-slider">
+                        <div class="main-featured-track">
+                            <?php $__currentLoopData = $mainFeaturedPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <article class="main-featured-card">
+                                <div class="card-image">
+                                    <?php if($post->featured_image_large): ?>
+                                        <img src="<?php echo e($post->featured_image_large); ?>" alt="<?php echo e($post->title); ?>" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                                    <?php else: ?>
+                                        <div class="img-gradient-<?php echo e(($loop->index % 8) + 1); ?>" style="width: 100%; height: 100%;"></div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-header">
+                                        <?php if($post->main_category): ?>
+                                        <span class="category-badge category-<?php echo e($post->main_category->id); ?>">
+                                            <?php echo e($post->main_category->name); ?>
+
+                                        </span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <h3 class="card-title"><a href="<?php echo e($post->url); ?>"><?php echo e($post->title); ?></a></h3>
+                                    <span class="card-date"><?php echo e(format_date_az($post->published_at, 'd F Y, H:i')); ?></span>
+                                </div>
+                            </article>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+
+                    <button class="main-featured-nav-btn next-main-featured" aria-label="Növbəti">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Side Image (25%) - Advertising Banner -->
                 <?php
-                    // Первый пост - featured (большая карточка)
-                    $featuredPost = $mediaPosts->first();
-                    // Остальные - маленькие карточки
-                    $smallMediaPosts = $mediaPosts->slice(1, 4);
+                    $adBanner = config_value('MAIN_FEATURED_AD_BANNER', '/images/ad-banner-264x528.png');
                 ?>
-
-                <!-- Main Featured Video/Photo -->
-                <?php if($featuredPost): ?>
-                <article class="media-featured">
-                    <div class="media-featured-image">
-                        <?php
-                            $featuredMedia = $featuredPost->getMedia('post-gallery')->first();
-                            $featuredImageUrl = $featuredMedia ? $featuredMedia->getUrl('medium') : '/images/placeholder.jpg';
-                        ?>
-                        <img src="<?php echo e($featuredImageUrl); ?>" alt="<?php echo e($featuredPost->title); ?>" loading="lazy">
-                        <div class="featured-gradient"></div>
-
-                        <?php if($featuredPost->types->contains('slug', 'video')): ?>
-                        <div class="featured-play">
-                            <svg width="80" height="80" viewBox="0 0 80 80">
-                                <circle cx="40" cy="40" r="40" fill="white" opacity="0.95"/>
-                                <path d="M32 24v32l28-16z" fill="#ef4444"/>
-                            </svg>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="media-featured-content">
-                        <span class="featured-tag">
-                            <?php if($featuredPost->types->contains('slug', 'video')): ?>
-                                VİDEO
-                            <?php else: ?>
-                                FOTO
-                            <?php endif; ?>
-                        </span>
-                        <h3 class="featured-title">
-                            <a href="<?php echo e($featuredPost->url); ?>"><?php echo e($featuredPost->title); ?></a>
-                        </h3>
-                        <?php if($featuredPost->author): ?>
-                        <div class="featured-author">
-                            <img src="<?php echo e($featuredPost->author->avatar_thumb); ?>" alt="<?php echo e($featuredPost->author->name); ?>" loading="lazy">
-                            <div>
-                                <span class="featured-author-name"><?php echo e($featuredPost->author->name); ?></span>
-                                <span class="featured-date"><?php echo e($featuredPost->published_at->translatedFormat('d F Y')); ?></span>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </article>
-                <?php endif; ?>
-
-                <!-- Photos/Videos Grid -->
-                <?php if($smallMediaPosts->isNotEmpty()): ?>
-                <div class="media-photos">
-                    <?php $__currentLoopData = $smallMediaPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mediaPost): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <article class="photo-item">
-                        <div class="photo-wrapper">
-                            <?php if($mediaPost->featured_image_thumb): ?>
-                                <img src="<?php echo e($mediaPost->featured_image_thumb); ?>" alt="<?php echo e($mediaPost->title); ?>" loading="lazy">
-                            <?php else: ?>
-                                <img src="/images/placeholder.jpg" alt="<?php echo e($mediaPost->title); ?>" loading="lazy">
-                            <?php endif; ?>
-                            <div class="photo-gradient"></div>
-
-                            <?php if($mediaPost->types->contains('slug', 'video')): ?>
-                            <div class="photo-icon">
-                                <svg width="40" height="40" viewBox="0 0 40 40">
-                                    <circle cx="20" cy="20" r="20" fill="white" opacity="0.95"/>
-                                    <path d="M16 12v16l14-8z" fill="#ef4444"/>
-                                </svg>
-                            </div>
-                            <?php else: ?>
-                            <div class="photo-icon">
-                                <svg width="40" height="40" viewBox="0 0 40 40">
-                                    <circle cx="20" cy="20" r="20" fill="white" opacity="0.95"/>
-                                    <path d="M26 14H14c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V16c0-1.1-.9-2-2-2zm-10 11l-2-2.5 2-2 1.5 1.5 4-5 5 6v3H16z" fill="#ec4899"/>
-                                </svg>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="photo-content">
-                            <h4 class="photo-title">
-                                <a href="<?php echo e($mediaPost->url); ?>"><?php echo e($mediaPost->title); ?></a>
-                            </h4>
-                            <?php if($mediaPost->author): ?>
-                            <div class="photo-author">
-                                <img src="<?php echo e($mediaPost->author->avatar_thumb); ?>" alt="<?php echo e($mediaPost->author->name); ?>" loading="lazy">
-                                <span class="photo-author-name"><?php echo e($mediaPost->author->name); ?></span>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                    </article>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </div>
+                <?php if($adBanner): ?>
+                <a href="<?php echo e(config_value('MAIN_FEATURED_AD_BANNER_LINK', '#')); ?>" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
+                    <img src="<?php echo e($adBanner); ?>" alt="Reklam" class="main-featured-side-image" style="width: 100%; height: 100%; object-fit: fill; border-radius: 20px;" loading="lazy">
+                </a>
                 <?php endif; ?>
             </div>
         </div>
     </section>
     <?php endif; ?>
 
-    <!-- All News Section -->
-    <section class="section-all-news">
+    <!-- Breaking News Ticker -->
+    <?php if($latestPosts && $latestPosts->count() > 0): ?>
+    <section class="breaking-news" <?php if(request()->get('page', 1) != 1): ?> style="margin-top: 40px;" <?php endif; ?>>
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">📰 BÜTÜN XƏBƏRLƏR</h2>
+            <div class="ticker-wrapper">
+                <span class="ticker-label">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M9 0L3 9h4l-1 7 6-9H8l1-7z"/>
+                    </svg>
+                    Təcili xəbərlər
+                </span>
+                <div class="ticker-overflow">
+                    <div class="ticker-content">
+                        <?php $__currentLoopData = $latestPosts->take(10); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <span class="ticker-item">
+                                <a href="<?php echo e($post->url); ?>"><?php echo e($post->title); ?></a>
+                            </span>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        
+                        <?php $__currentLoopData = $latestPosts->take(10); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <span class="ticker-item">
+                                <a href="<?php echo e($post->url); ?>"><?php echo e($post->title); ?></a>
+                            </span>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                </div>
             </div>
-            <div class="feed-grid">
-                <?php $__currentLoopData = $latestPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <article class="feed-card">
-                    <div class="feed-image">
-                        <?php if($post->featured_image_thumb): ?>
-                            <img src="<?php echo e($post->featured_image_thumb); ?>" alt="<?php echo e($post->title); ?>" loading="lazy">
-                        <?php else: ?>
-                            <img src="/images/placeholder.jpg" alt="<?php echo e($post->title); ?>" loading="lazy">
-                        <?php endif; ?>
+        </div>
+    </section>
+    <?php endif; ?>
 
-                        <?php if($post->hasMedia('gallery')): ?>
-                        <div class="gallery-icon">
-                            <svg width="32" height="32" viewBox="0 0 32 32">
-                                <rect width="32" height="32" rx="8" fill="url(#galleryGradient)"/>
-                                <path d="M24 10H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2zm-14 12l-2-2.5 2-2 1.5 1.5 4.5-6 5 6.5v3H10z" fill="white"/>
-                                <circle cx="11" cy="15" r="1.5" fill="white"/>
-                            </svg>
+    <!-- YouTube Carousel Section -->
+    <?php if(request()->get('page', 1) == 1 && $videoPosts && $videoPosts->isNotEmpty()): ?>
+    <section class="youtube-carousel-section">
+        <div class="container">
+            <div class="youtube-carousel-header">
+                <h2 class="section-title">
+                    Video xəbərlər
+                </h2>
+            </div>
+
+            <div class="youtube-carousel-wrapper">
+                <button class="youtube-nav-btn prev-youtube" aria-label="Əvvəlki">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+
+                <div class="youtube-carousel">
+                    <div class="youtube-carousel-track">
+                        <?php $__currentLoopData = $videoPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <article class="yt-card">
+                            <a href="<?php echo e($post->url); ?>" class="yt-thumbnail">
+                                <?php if($post->featured_image_thumb): ?>
+                                    <img src="<?php echo e($post->featured_image_thumb); ?>" alt="<?php echo e($post->title); ?>" class="yt-thumbnail-bg" loading="lazy">
+                                <?php else: ?>
+                                    <div class="img-gradient-<?php echo e(($loop->index % 8) + 1); ?> yt-thumbnail-bg"></div>
+                                <?php endif; ?>
+                                <div class="yt-play">
+                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                        <circle cx="24" cy="24" r="24" fill="rgba(255, 255, 255, 0.95)"/>
+                                        <path d="M19 15l15 9-15 9V15z" fill="#ef4444"/>
+                                    </svg>
+                                </div>
+                                <h3 class="yt-title"><?php echo e($post->title); ?></h3>
+                            </a>
+                        </article>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                </div>
+
+                <button class="youtube-nav-btn next-youtube" aria-label="Növbəti">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- News Grid -->
+    <section class="news-grid-section">
+        <div class="container">
+            <div class="grid-layout">
+                <div class="main-column">
+                    <div class="section-header">
+                        <h2 class="section-title">Son xəbərlər</h2>
+                    </div>
+
+                    <div class="news-cards-grid">
+                <?php $__currentLoopData = $latestPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <article class="news-card">
+                    <a href="<?php echo e($post->url); ?>">
+                        <div class="card-image">
+                            <?php if($post->featured_image_thumb): ?>
+                                <img src="<?php echo e($post->featured_image_thumb); ?>" alt="<?php echo e($post->title); ?>" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                            <?php else: ?>
+                                <div class="img-gradient-<?php echo e(($loop->index % 8) + 1); ?>" style="width: 100%; height: 100%;"></div>
+                            <?php endif; ?>
+                            <span class="news-card-date">
+                                <?php if($post->published_at->isToday()): ?>
+                                    <?php echo e($post->published_at->format('H:i')); ?>
+
+                                <?php else: ?>
+                                    <?php echo e(format_date_az($post->published_at, 'd M H:i')); ?>
+
+                                <?php endif; ?>
+                            </span>
                         </div>
-                        <?php endif; ?>
 
                         <?php if($post->main_category): ?>
-                        <span class="category-badge" data-category-id="<?php echo e($post->main_category->id); ?>" style="background-color: <?php echo e($post->main_category->color); ?>;">
+                        <span class="category-badge category-<?php echo e($post->main_category->id); ?>">
                             <?php echo e($post->main_category->name); ?>
 
                         </span>
                         <?php endif; ?>
-                    </div>
-                    <div class="feed-content">
-                        <h3 class="feed-title">
-                            <a href="<?php echo e($post->url); ?>"><?php echo e($post->title); ?></a>
-                        </h3>
-                        <?php if($post->author): ?>
-                        <div class="news-author">
-                            <img src="<?php echo e($post->author->avatar_thumb); ?>" alt="<?php echo e($post->author->name); ?>" class="author-avatar" loading="lazy">
-                            <div class="author-info">
-                                <span class="author-name"><?php echo e($post->author->name); ?></span>
-                                <span class="publish-date"><?php echo e($post->published_at->translatedFormat('d F Y')); ?></span>
-                            </div>
+
+                        <div class="card-content">
+                            <h3 class="card-title"><?php echo e($post->title); ?></h3>
                         </div>
-                        <?php endif; ?>
-                    </div>
+                    </a>
                 </article>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
@@ -393,39 +331,81 @@
             <?php if($latestPosts->hasPages()): ?>
             <div class="pagination">
                 <?php if($latestPosts->onFirstPage()): ?>
-                    <button class="pagination-btn pagination-prev" disabled>‹ Əvvəlki</button>
+                    <button class="pagination-btn pagination-prev" disabled>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M10 12l-4-4 4-4"/>
+                        </svg>
+                    </button>
                 <?php else: ?>
-                    <a href="<?php echo e($latestPosts->previousPageUrl()); ?>" class="pagination-btn pagination-prev">‹ Əvvəlki</a>
+                    <a href="<?php echo e($latestPosts->previousPageUrl()); ?>" class="pagination-btn pagination-prev">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M10 12l-4-4 4-4"/>
+                        </svg>
+                    </a>
                 <?php endif; ?>
 
-                <div class="pagination-numbers">
-                    <?php $__currentLoopData = range(1, $latestPosts->lastPage()); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $page): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <?php if($page == 1 || $page == $latestPosts->lastPage() || abs($page - $latestPosts->currentPage()) <= 1): ?>
-                            <?php if($page == $latestPosts->currentPage()): ?>
-                                <button class="pagination-num active"><?php echo e($page); ?></button>
-                            <?php else: ?>
-                                <a href="<?php echo e($latestPosts->url($page)); ?>" class="pagination-num"><?php echo e($page); ?></a>
-                            <?php endif; ?>
-                        <?php elseif($page == 2 && $latestPosts->currentPage() > 3): ?>
-                            <span class="pagination-dots">...</span>
-                        <?php elseif($page == $latestPosts->lastPage() - 1 && $latestPosts->currentPage() < $latestPosts->lastPage() - 2): ?>
-                            <span class="pagination-dots">...</span>
-                        <?php endif; ?>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </div>
+                <?php
+                    $currentPage = $latestPosts->currentPage();
+                    $lastPage = $latestPosts->lastPage();
+
+                    // Показываем 5 страниц: текущую, 2 до и 2 после
+                    $start = max(1, $currentPage - 2);
+                    $end = min($lastPage, $currentPage + 2);
+
+                    // Корректируем если близко к началу или концу
+                    if ($end - $start < 4) {
+                        if ($start == 1) {
+                            $end = min($lastPage, 5);
+                        } else {
+                            $start = max(1, $lastPage - 4);
+                        }
+                    }
+                ?>
+
+                <?php if($start > 1): ?>
+                    <a href="<?php echo e($latestPosts->url(1)); ?>" class="pagination-btn pagination-page">1</a>
+                    <?php if($start > 2): ?>
+                        <span class="pagination-dots">...</span>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+                <?php for($page = $start; $page <= $end; $page++): ?>
+                    <?php if($page == $currentPage): ?>
+                        <button class="pagination-btn pagination-page active"><?php echo e($page); ?></button>
+                    <?php else: ?>
+                        <a href="<?php echo e($latestPosts->url($page)); ?>" class="pagination-btn pagination-page"><?php echo e($page); ?></a>
+                    <?php endif; ?>
+                <?php endfor; ?>
+
+                <?php if($end < $lastPage): ?>
+                    <?php if($end < $lastPage - 1): ?>
+                        <span class="pagination-dots">...</span>
+                    <?php endif; ?>
+                    <a href="<?php echo e($latestPosts->url($lastPage)); ?>" class="pagination-btn pagination-page"><?php echo e($lastPage); ?></a>
+                <?php endif; ?>
 
                 <?php if($latestPosts->hasMorePages()): ?>
-                    <a href="<?php echo e($latestPosts->nextPageUrl()); ?>" class="pagination-btn pagination-next">Növbəti ›</a>
+                    <a href="<?php echo e($latestPosts->nextPageUrl()); ?>" class="pagination-btn pagination-next">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M6 12l4-4-4-4"/>
+                        </svg>
+                    </a>
                 <?php else: ?>
-                    <button class="pagination-btn pagination-next" disabled>Növbəti ›</button>
+                    <button class="pagination-btn pagination-next" disabled>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M6 12l4-4-4-4"/>
+                        </svg>
+                    </button>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
+                </div>
+                
+            </div>
+            
         </div>
     </section>
 </main>
-
-<script src="/js/slider.js"></script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/html/resources/views/home.blade.php ENDPATH**/ ?>

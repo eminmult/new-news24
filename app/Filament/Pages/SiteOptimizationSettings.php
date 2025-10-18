@@ -6,6 +6,7 @@ use App\Models\Setting;
 use App\Models\User;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -52,6 +53,9 @@ class SiteOptimizationSettings extends Page implements HasForms
             'slider_posts_count' => Setting::get('slider_posts_count', 5),
             'related_posts_count' => Setting::get('related_posts_count', 6),
             'trending_posts_count' => Setting::get('trending_posts_count', 5),
+            'popular_posts_count' => Setting::get('popular_posts_count', 5),
+            'popular_posts_days' => Setting::get('popular_posts_days', 7),
+            'weather_city' => Setting::get('weather_city', 'Baku'),
         ]);
     }
 
@@ -126,6 +130,27 @@ class SiteOptimizationSettings extends Page implements HasForms
                             ->minValue(1)
                             ->maxValue(20)
                             ->default(5),
+
+                        TextInput::make('popular_posts_count')
+                            ->label(__('optimization.fields.popular_posts_count'))
+                            ->numeric()
+                            ->required()
+                            ->minValue(1)
+                            ->maxValue(20)
+                            ->default(5),
+
+                        TextInput::make('popular_posts_days')
+                            ->label(__('optimization.fields.popular_posts_days'))
+                            ->numeric()
+                            ->required()
+                            ->minValue(1)
+                            ->maxValue(90)
+                            ->default(7),
+
+                        TextInput::make('weather_city')
+                            ->label(__('optimization.fields.weather_city'))
+                            ->required()
+                            ->default('Baku'),
                     ])->columns(2),
             ])
             ->statePath('data');
@@ -142,6 +167,9 @@ class SiteOptimizationSettings extends Page implements HasForms
         Setting::set('slider_posts_count', $data['slider_posts_count'], 'numeric');
         Setting::set('related_posts_count', $data['related_posts_count'], 'numeric');
         Setting::set('trending_posts_count', $data['trending_posts_count'], 'numeric');
+        Setting::set('popular_posts_count', $data['popular_posts_count'], 'numeric');
+        Setting::set('popular_posts_days', $data['popular_posts_days'], 'numeric');
+        Setting::set('weather_city', $data['weather_city'], 'text');
 
         Notification::make()
             ->success()

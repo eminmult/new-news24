@@ -27,7 +27,10 @@ class ViewServiceProvider extends ServiceProvider
                 'youtube' => config_value('YOUTUBE'),
                 'tiktok' => config_value('TIKTOK'),
                 'telegram' => config_value('TELEGRAM'),
+                'twitter' => config_value('TWITTER'),
+                'whatsapp' => config_value('WHATSAPP'),
                 'phone' => config_value('PHONE'),
+                'live' => config_value('LIVE'),
             ];
 
             // Main site info (кешируется навсегда в модели)

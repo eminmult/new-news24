@@ -1,11 +1,23 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# News24.az - Laravel Filament News Portal
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Новостной портал на Laravel 11 с админ-панелью Filament 3.
+
+## Особенности проекта
+
+### Автоматическая генерация изображений
+
+При загрузке изображений в галерею постов автоматически создаются следующие конверсии:
+
+- **thumb** - 450x300px (качество 78%) - для карточек новостей
+- **medium** - 700x467px (качество 80%) - для средних блоков
+- **large** - 1200x800px (качество 85%) - для слайдеров на главной странице
+- **webp** - макс 1000px (качество 82%) - оптимизированная версия
+
+Все конверсии создаются в формате WebP для оптимальной производительности.
+
+### Миграция из DLE
+
+Команда `php artisan migrate:dle-posts` автоматически мигрирует посты из DataLife Engine и генерирует все необходимые размеры изображений.
 
 ## About Laravel
 

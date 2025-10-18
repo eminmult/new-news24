@@ -62,6 +62,8 @@ return [
         'show_in_types_block_helper' => 'Xəbər əsas səhifədə post növləri blokunda göstəriləcək',
         'show_in_important_today' => 'Vacib xəbərlərə əlavə et',
         'show_in_important_today_helper' => 'Xəbər "Bugünkü əsas xəbərlər" blokunda görünəcək',
+        'show_in_main_featured' => 'Əsas blokda göstər',
+        'show_in_main_featured_helper' => 'Xəbər əsas səhifədə əsas blokda görünəcək (yan tərəfdə şəkil olan böyük kart)',
         'is_published' => 'Dərc edilib',
         'is_published_helper' => 'Aktiv olduqda xəbər saytda göstəriləcək. Deaktiv olduqda - yalnız qaralama',
         'is_hidden' => 'Gizli xəbər',

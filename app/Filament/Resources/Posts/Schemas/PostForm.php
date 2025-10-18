@@ -403,6 +403,11 @@ class PostForm
                             ->default(false)
                             ->helperText(__('posts.fields.show_in_important_today_helper'))
                             ->columnSpanFull(),
+                        Toggle::make('show_in_main_featured')
+                            ->label(__('posts.fields.show_in_main_featured'))
+                            ->default(false)
+                            ->helperText(__('posts.fields.show_in_main_featured_helper'))
+                            ->columnSpanFull(),
                         Toggle::make('is_hidden')
                             ->label(__('posts.fields.is_hidden'))
                             ->default(false)

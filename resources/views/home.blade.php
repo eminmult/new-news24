@@ -13,7 +13,7 @@
         :description="$mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.'"
         :keywords="$mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman'"
         :ogType="'website'"
-        :ogImage="asset('images/logo-cropped.png')"
+        :ogImage="asset('images/newslogo3.svg')"
         :canonical="route('home')"
     />
 @endsection
@@ -40,298 +40,234 @@
 
 @section('content')
 <main class="main">
-    <!-- Hero Slider -->
-    @if($sliderPosts->isNotEmpty())
-    <section class="hero-slider">
-        <div class="slider-container">
-            @foreach($sliderPosts as $post)
-            <div class="slide {{ $loop->first ? 'active' : '' }}">
-                @php
-                    $firstMedia = $post->getMedia('post-gallery')->first();
-                    $imageUrl = $firstMedia ? $firstMedia->getUrl('webp') : asset('images/placeholder.jpg');
-                @endphp
-                <img src="{{ $imageUrl }}" alt="{{ $post->title }}">
-                <div class="slide-overlay"></div>
-                <div class="slide-content">
-                    <div class="container">
-                        @if($post->main_category)
-                        <span class="category-badge" data-category-id="{{ $post->main_category->id }}" style="background-color: {{ $post->main_category->color }};">{{ $post->main_category->name }}</span>
-                        @endif
-                        <h1 class="slide-title"><a href="{{ $post->url }}">{{ $post->title }}</a></h1>
-                        @if($post->author)
-                        <div class="news-author">
-                            <img src="{{ $post->author->avatar_thumb }}" alt="{{ $post->author->name }}" class="author-avatar" loading="lazy">
-                            <div class="author-info">
-                                <span class="author-name">{{ $post->author->name }}</span>
-                                <span class="publish-date">{{ $post->published_at->translatedFormat('d F Y, H:i') }}</span>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-
-        <!-- Slider Navigation -->
-        <button class="slider-arrow slider-prev" aria-label="Əvvəlki slayd">‹</button>
-        <button class="slider-arrow slider-next" aria-label="Növbəti slayd">›</button>
-
-        <!-- Slider Dots -->
-        <div class="slider-dots">
-            @foreach($sliderPosts as $post)
-            <span class="dot {{ $loop->first ? 'active' : '' }}" data-slide="{{ $loop->index }}"></span>
-            @endforeach
-        </div>
-    </section>
-    @endif
-
-    <!-- Today's Important News Section -->
-    @if($importantPosts->isNotEmpty())
-    <section class="section-highlights">
+    <!-- Trending Topics Carousel -->
+    @if(request()->get('page', 1) == 1 && $importantPosts && $importantPosts->isNotEmpty())
+    <section class="trending-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">⭐ BUGÜNÜN ƏN ÖNƏMLİ XƏBƏRLƏRİ</h2>
-            </div>
-
-            <div class="today-grid">
-                @php
-                    $mainPost = $importantPosts->first();
-                    $smallPosts = $importantPosts->slice(1, 3);
-                @endphp
-
-                {{-- Main Large Card --}}
-                @if($mainPost)
-                <article class="today-card-large">
-                    <div class="today-image">
-                        @php
-                            $mainMedia = $mainPost->getMedia('post-gallery')->first();
-                            $mainImageUrl = $mainMedia ? $mainMedia->getUrl('medium') : '/images/placeholder.jpg';
-                        @endphp
-                        <img src="{{ $mainImageUrl }}" alt="{{ $mainPost->title }}" loading="lazy">
-                        @if($mainPost->main_category)
-                        <span class="category-badge" data-category-id="{{ $mainPost->main_category->id }}" style="background-color: {{ $mainPost->main_category->color }};">
-                            {{ $mainPost->main_category->name }}
-                        </span>
-                        @endif
-                    </div>
-                    <div class="today-content">
-                        <h2 class="today-title-large">
-                            <a href="{{ $mainPost->url }}">{{ $mainPost->title }}</a>
-                        </h2>
-                        @if($mainPost->author)
-                        <div class="news-author">
-                            <img src="{{ $mainPost->author->avatar_thumb }}"
-                                 alt="{{ $mainPost->author->name }}"
-                                 class="author-avatar" loading="lazy">
-                            <div class="author-info">
-                                <span class="author-name">{{ $mainPost->author->name }}</span>
-                                <span class="publish-date">{{ $mainPost->published_at->translatedFormat('d F Y, H:i') }}</span>
+            <div class="trending-wrapper">
+                <div class="trending-nav-buttons">
+                    <button class="trending-nav-btn prev-trending" aria-label="Əvvəlki">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12 15l-5-5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="trending-nav-btn next-trending" aria-label="Növbəti">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M8 15l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="trending-carousel">
+                    <div class="trending-track">
+                        @foreach($importantPosts as $index => $post)
+                        <div class="trending-card">
+                            <div class="trending-image @if(!$post->featured_image_thumb) img-gradient-{{ ($index % 8) + 1 }} @endif">
+                                @if($post->featured_image_thumb)
+                                <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" loading="lazy">
+                                @endif
+                                <span class="trending-number">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
                             </div>
-                        </div>
-                        @endif
-                    </div>
-                </article>
-                @endif
-
-                {{-- Small Cards Grid --}}
-                @if($smallPosts->isNotEmpty())
-                <div class="today-grid-small">
-                    @foreach($smallPosts as $post)
-                    <article class="today-card-small">
-                        <div class="today-image-small">
-                            @if($post->featured_image_thumb)
-                                <img src="{{ $post->featured_image_thumb }}"
-                                     alt="{{ $post->title }}" loading="lazy">
-                            @else
-                                <img src="/images/placeholder.jpg" alt="{{ $post->title }}" loading="lazy">
-                            @endif
-                            @if($post->main_category)
-                            <span class="category-badge" data-category-id="{{ $post->main_category->id }}" style="background-color: {{ $post->main_category->color }};">
-                                {{ $post->main_category->name }}
-                            </span>
-                            @endif
-                        </div>
-                        <div class="today-content-small">
-                            <h3 class="today-title-small">
-                                <a href="{{ $post->url }}">{{ $post->title }}</a>
-                            </h3>
-                            @if($post->author)
-                            <div class="news-author">
-                                <img src="{{ $post->author->avatar_thumb }}"
-                                     alt="{{ $post->author->name }}"
-                                     class="author-avatar" loading="lazy">
-                                <div class="author-info">
-                                    <span class="author-name">{{ $post->author->name }}</span>
-                                    <span class="publish-date">{{ $post->published_at->translatedFormat('d F Y') }}</span>
+                            <div class="trending-content">
+                                @if($post->main_category)
+                                <span class="category-tag category-{{ $post->main_category->id }}">
+                                    {{ $post->main_category->name }}
+                                </span>
+                                @endif
+                                <h3><a href="{{ $post->url }}">{{ $post->title }}</a></h3>
+                                <div class="card-meta">
+                                    <span>📈 {{ number_format($post->views) }} baxış</span>
+                                    <span>{{ $post->published_at->diffForHumans() }}</span>
                                 </div>
                             </div>
-                            @endif
                         </div>
-                    </article>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-                @endif
             </div>
         </div>
     </section>
     @endif
 
-    <!-- Media Section (FOTO-VIDEO) -->
-    @if($mediaPosts->isNotEmpty())
-    <section class="section-media">
+    <!-- Main Featured Section -->
+    @if(request()->get('page', 1) == 1 && $mainFeaturedPosts && $mainFeaturedPosts->isNotEmpty())
+    <section class="main-featured-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">📸 FOTO-VİDEO</h2>
-            </div>
+            <div class="main-featured-wrapper">
+                <!-- Featured Slider (75%) -->
+                <div class="main-featured-slider-wrapper">
+                    <button class="main-featured-nav-btn prev-main-featured" aria-label="Əvvəlki">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
 
-            <div class="media-showcase">
+                    <div class="main-featured-slider">
+                        <div class="main-featured-track">
+                            @foreach($mainFeaturedPosts as $post)
+                            <article class="main-featured-card">
+                                <div class="card-image">
+                                    @if($post->featured_image_large)
+                                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                                    @else
+                                        <div class="img-gradient-{{ ($loop->index % 8) + 1 }}" style="width: 100%; height: 100%;"></div>
+                                    @endif
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-header">
+                                        @if($post->main_category)
+                                        <span class="category-badge category-{{ $post->main_category->id }}">
+                                            {{ $post->main_category->name }}
+                                        </span>
+                                        @endif
+                                    </div>
+                                    <h3 class="card-title"><a href="{{ $post->url }}">{{ $post->title }}</a></h3>
+                                    <span class="card-date">{{ format_date_az($post->published_at, 'd F Y, H:i') }}</span>
+                                </div>
+                            </article>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <button class="main-featured-nav-btn next-main-featured" aria-label="Növbəti">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Side Image (25%) - Advertising Banner -->
                 @php
-                    // Первый пост - featured (большая карточка)
-                    $featuredPost = $mediaPosts->first();
-                    // Остальные - маленькие карточки
-                    $smallMediaPosts = $mediaPosts->slice(1, 4);
+                    $adBanner = config_value('MAIN_FEATURED_AD_BANNER', '/images/ad-banner-264x528.png');
                 @endphp
-
-                <!-- Main Featured Video/Photo -->
-                @if($featuredPost)
-                <article class="media-featured">
-                    <div class="media-featured-image">
-                        @php
-                            $featuredMedia = $featuredPost->getMedia('post-gallery')->first();
-                            $featuredImageUrl = $featuredMedia ? $featuredMedia->getUrl('medium') : '/images/placeholder.jpg';
-                        @endphp
-                        <img src="{{ $featuredImageUrl }}" alt="{{ $featuredPost->title }}" loading="lazy">
-                        <div class="featured-gradient"></div>
-
-                        @if($featuredPost->types->contains('slug', 'video'))
-                        <div class="featured-play">
-                            <svg width="80" height="80" viewBox="0 0 80 80">
-                                <circle cx="40" cy="40" r="40" fill="white" opacity="0.95"/>
-                                <path d="M32 24v32l28-16z" fill="#ef4444"/>
-                            </svg>
-                        </div>
-                        @endif
-                    </div>
-                    <div class="media-featured-content">
-                        <span class="featured-tag">
-                            @if($featuredPost->types->contains('slug', 'video'))
-                                VİDEO
-                            @else
-                                FOTO
-                            @endif
-                        </span>
-                        <h3 class="featured-title">
-                            <a href="{{ $featuredPost->url }}">{{ $featuredPost->title }}</a>
-                        </h3>
-                        @if($featuredPost->author)
-                        <div class="featured-author">
-                            <img src="{{ $featuredPost->author->avatar_thumb }}" alt="{{ $featuredPost->author->name }}" loading="lazy">
-                            <div>
-                                <span class="featured-author-name">{{ $featuredPost->author->name }}</span>
-                                <span class="featured-date">{{ $featuredPost->published_at->translatedFormat('d F Y') }}</span>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </article>
-                @endif
-
-                <!-- Photos/Videos Grid -->
-                @if($smallMediaPosts->isNotEmpty())
-                <div class="media-photos">
-                    @foreach($smallMediaPosts as $mediaPost)
-                    <article class="photo-item">
-                        <div class="photo-wrapper">
-                            @if($mediaPost->featured_image_thumb)
-                                <img src="{{ $mediaPost->featured_image_thumb }}" alt="{{ $mediaPost->title }}" loading="lazy">
-                            @else
-                                <img src="/images/placeholder.jpg" alt="{{ $mediaPost->title }}" loading="lazy">
-                            @endif
-                            <div class="photo-gradient"></div>
-
-                            @if($mediaPost->types->contains('slug', 'video'))
-                            <div class="photo-icon">
-                                <svg width="40" height="40" viewBox="0 0 40 40">
-                                    <circle cx="20" cy="20" r="20" fill="white" opacity="0.95"/>
-                                    <path d="M16 12v16l14-8z" fill="#ef4444"/>
-                                </svg>
-                            </div>
-                            @else
-                            <div class="photo-icon">
-                                <svg width="40" height="40" viewBox="0 0 40 40">
-                                    <circle cx="20" cy="20" r="20" fill="white" opacity="0.95"/>
-                                    <path d="M26 14H14c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V16c0-1.1-.9-2-2-2zm-10 11l-2-2.5 2-2 1.5 1.5 4-5 5 6v3H16z" fill="#ec4899"/>
-                                </svg>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="photo-content">
-                            <h4 class="photo-title">
-                                <a href="{{ $mediaPost->url }}">{{ $mediaPost->title }}</a>
-                            </h4>
-                            @if($mediaPost->author)
-                            <div class="photo-author">
-                                <img src="{{ $mediaPost->author->avatar_thumb }}" alt="{{ $mediaPost->author->name }}" loading="lazy">
-                                <span class="photo-author-name">{{ $mediaPost->author->name }}</span>
-                            </div>
-                            @endif
-                        </div>
-                    </article>
-                    @endforeach
-                </div>
+                @if($adBanner)
+                <a href="{{ config_value('MAIN_FEATURED_AD_BANNER_LINK', '#') }}" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
+                    <img src="{{ $adBanner }}" alt="Reklam" class="main-featured-side-image" style="width: 100%; height: 100%; object-fit: fill; border-radius: 20px;" loading="lazy">
+                </a>
                 @endif
             </div>
         </div>
     </section>
     @endif
 
-    <!-- All News Section -->
-    <section class="section-all-news">
+    <!-- Breaking News Ticker -->
+    @if($latestPosts && $latestPosts->count() > 0)
+    <section class="breaking-news" @if(request()->get('page', 1) != 1) style="margin-top: 40px;" @endif>
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">📰 BÜTÜN XƏBƏRLƏR</h2>
+            <div class="ticker-wrapper">
+                <span class="ticker-label">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M9 0L3 9h4l-1 7 6-9H8l1-7z"/>
+                    </svg>
+                    Təcili xəbərlər
+                </span>
+                <div class="ticker-overflow">
+                    <div class="ticker-content">
+                        @foreach($latestPosts->take(10) as $post)
+                            <span class="ticker-item">
+                                <a href="{{ $post->url }}">{{ $post->title }}</a>
+                            </span>
+                        @endforeach
+                        {{-- Дублируем контент для бесконечного скролла --}}
+                        @foreach($latestPosts->take(10) as $post)
+                            <span class="ticker-item">
+                                <a href="{{ $post->url }}">{{ $post->title }}</a>
+                            </span>
+                        @endforeach
+                    </div>
+                </div>
             </div>
-            <div class="feed-grid">
-                @foreach($latestPosts as $post)
-                <article class="feed-card">
-                    <div class="feed-image">
-                        @if($post->featured_image_thumb)
-                            <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" loading="lazy">
-                        @else
-                            <img src="/images/placeholder.jpg" alt="{{ $post->title }}" loading="lazy">
-                        @endif
+        </div>
+    </section>
+    @endif
 
-                        @if($post->hasMedia('gallery'))
-                        <div class="gallery-icon">
-                            <svg width="32" height="32" viewBox="0 0 32 32">
-                                <rect width="32" height="32" rx="8" fill="url(#galleryGradient)"/>
-                                <path d="M24 10H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2zm-14 12l-2-2.5 2-2 1.5 1.5 4.5-6 5 6.5v3H10z" fill="white"/>
-                                <circle cx="11" cy="15" r="1.5" fill="white"/>
-                            </svg>
+    <!-- YouTube Carousel Section -->
+    @if(request()->get('page', 1) == 1 && $videoPosts && $videoPosts->isNotEmpty())
+    <section class="youtube-carousel-section">
+        <div class="container">
+            <div class="youtube-carousel-header">
+                <h2 class="section-title">
+                    Video xəbərlər
+                </h2>
+            </div>
+
+            <div class="youtube-carousel-wrapper">
+                <button class="youtube-nav-btn prev-youtube" aria-label="Əvvəlki">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+
+                <div class="youtube-carousel">
+                    <div class="youtube-carousel-track">
+                        @foreach($videoPosts as $post)
+                        <article class="yt-card">
+                            <a href="{{ $post->url }}" class="yt-thumbnail">
+                                @if($post->featured_image_thumb)
+                                    <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" class="yt-thumbnail-bg" loading="lazy">
+                                @else
+                                    <div class="img-gradient-{{ ($loop->index % 8) + 1 }} yt-thumbnail-bg"></div>
+                                @endif
+                                <div class="yt-play">
+                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                        <circle cx="24" cy="24" r="24" fill="rgba(255, 255, 255, 0.95)"/>
+                                        <path d="M19 15l15 9-15 9V15z" fill="#ef4444"/>
+                                    </svg>
+                                </div>
+                                <h3 class="yt-title">{{ $post->title }}</h3>
+                            </a>
+                        </article>
+                        @endforeach
+                    </div>
+                </div>
+
+                <button class="youtube-nav-btn next-youtube" aria-label="Növbəti">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+    @endif
+
+    <!-- News Grid -->
+    <section class="news-grid-section">
+        <div class="container">
+            <div class="grid-layout">
+                <div class="main-column">
+                    <div class="section-header">
+                        <h2 class="section-title">Son xəbərlər</h2>
+                    </div>
+
+                    <div class="news-cards-grid">
+                @foreach($latestPosts as $post)
+                <article class="news-card">
+                    <a href="{{ $post->url }}">
+                        <div class="card-image">
+                            @if($post->featured_image_thumb)
+                                <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                            @else
+                                <div class="img-gradient-{{ ($loop->index % 8) + 1 }}" style="width: 100%; height: 100%;"></div>
+                            @endif
+                            <span class="news-card-date">
+                                @if($post->published_at->isToday())
+                                    {{ $post->published_at->format('H:i') }}
+                                @else
+                                    {{ format_date_az($post->published_at, 'd M H:i') }}
+                                @endif
+                            </span>
                         </div>
-                        @endif
 
                         @if($post->main_category)
-                        <span class="category-badge" data-category-id="{{ $post->main_category->id }}" style="background-color: {{ $post->main_category->color }};">
+                        <span class="category-badge category-{{ $post->main_category->id }}">
                             {{ $post->main_category->name }}
                         </span>
                         @endif
-                    </div>
-                    <div class="feed-content">
-                        <h3 class="feed-title">
-                            <a href="{{ $post->url }}">{{ $post->title }}</a>
-                        </h3>
-                        @if($post->author)
-                        <div class="news-author">
-                            <img src="{{ $post->author->avatar_thumb }}" alt="{{ $post->author->name }}" class="author-avatar" loading="lazy">
-                            <div class="author-info">
-                                <span class="author-name">{{ $post->author->name }}</span>
-                                <span class="publish-date">{{ $post->published_at->translatedFormat('d F Y') }}</span>
-                            </div>
+
+                        <div class="card-content">
+                            <h3 class="card-title">{{ $post->title }}</h3>
                         </div>
-                        @endif
-                    </div>
+                    </a>
                 </article>
                 @endforeach
             </div>
@@ -340,37 +276,79 @@
             @if($latestPosts->hasPages())
             <div class="pagination">
                 @if($latestPosts->onFirstPage())
-                    <button class="pagination-btn pagination-prev" disabled>‹ Əvvəlki</button>
+                    <button class="pagination-btn pagination-prev" disabled>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M10 12l-4-4 4-4"/>
+                        </svg>
+                    </button>
                 @else
-                    <a href="{{ $latestPosts->previousPageUrl() }}" class="pagination-btn pagination-prev">‹ Əvvəlki</a>
+                    <a href="{{ $latestPosts->previousPageUrl() }}" class="pagination-btn pagination-prev">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M10 12l-4-4 4-4"/>
+                        </svg>
+                    </a>
                 @endif
 
-                <div class="pagination-numbers">
-                    @foreach(range(1, $latestPosts->lastPage()) as $page)
-                        @if($page == 1 || $page == $latestPosts->lastPage() || abs($page - $latestPosts->currentPage()) <= 1)
-                            @if($page == $latestPosts->currentPage())
-                                <button class="pagination-num active">{{ $page }}</button>
-                            @else
-                                <a href="{{ $latestPosts->url($page) }}" class="pagination-num">{{ $page }}</a>
-                            @endif
-                        @elseif($page == 2 && $latestPosts->currentPage() > 3)
-                            <span class="pagination-dots">...</span>
-                        @elseif($page == $latestPosts->lastPage() - 1 && $latestPosts->currentPage() < $latestPosts->lastPage() - 2)
-                            <span class="pagination-dots">...</span>
-                        @endif
-                    @endforeach
-                </div>
+                @php
+                    $currentPage = $latestPosts->currentPage();
+                    $lastPage = $latestPosts->lastPage();
+
+                    // Показываем 5 страниц: текущую, 2 до и 2 после
+                    $start = max(1, $currentPage - 2);
+                    $end = min($lastPage, $currentPage + 2);
+
+                    // Корректируем если близко к началу или концу
+                    if ($end - $start < 4) {
+                        if ($start == 1) {
+                            $end = min($lastPage, 5);
+                        } else {
+                            $start = max(1, $lastPage - 4);
+                        }
+                    }
+                @endphp
+
+                @if($start > 1)
+                    <a href="{{ $latestPosts->url(1) }}" class="pagination-btn pagination-page">1</a>
+                    @if($start > 2)
+                        <span class="pagination-dots">...</span>
+                    @endif
+                @endif
+
+                @for($page = $start; $page <= $end; $page++)
+                    @if($page == $currentPage)
+                        <button class="pagination-btn pagination-page active">{{ $page }}</button>
+                    @else
+                        <a href="{{ $latestPosts->url($page) }}" class="pagination-btn pagination-page">{{ $page }}</a>
+                    @endif
+                @endfor
+
+                @if($end < $lastPage)
+                    @if($end < $lastPage - 1)
+                        <span class="pagination-dots">...</span>
+                    @endif
+                    <a href="{{ $latestPosts->url($lastPage) }}" class="pagination-btn pagination-page">{{ $lastPage }}</a>
+                @endif
 
                 @if($latestPosts->hasMorePages())
-                    <a href="{{ $latestPosts->nextPageUrl() }}" class="pagination-btn pagination-next">Növbəti ›</a>
+                    <a href="{{ $latestPosts->nextPageUrl() }}" class="pagination-btn pagination-next">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M6 12l4-4-4-4"/>
+                        </svg>
+                    </a>
                 @else
-                    <button class="pagination-btn pagination-next" disabled>Növbəti ›</button>
+                    <button class="pagination-btn pagination-next" disabled>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M6 12l4-4-4-4"/>
+                        </svg>
+                    </button>
                 @endif
             </div>
             @endif
+                </div>
+                {{-- End main-column --}}
+            </div>
+            {{-- End grid-layout --}}
         </div>
     </section>
 </main>
-
-<script src="/js/slider.js"></script>
 @endsection
