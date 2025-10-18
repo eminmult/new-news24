@@ -33,6 +33,7 @@ class MainInfo extends Model
         'founder_description',
         'founder_image',
         'cooperation_text',
+        'default_avatar',
     ];
 
     protected $casts = [

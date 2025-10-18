@@ -151,7 +151,7 @@
                 <div class="team-member">
                     <div class="member-photo">
                         <div class="photo-placeholder">
-                            <img src="{{ $author->avatar_thumb }}" alt="{{ $author->name }}" loading="lazy">
+                            <img src="{{ $author->avatar_thumb ?: ($mainInfo->default_avatar ?? 'https://yt3.googleusercontent.com/ytc/AIdro_k0BJd2thJeEGwy_PrM_4iMwymMx6fHlwATWpjiKsZV6Vk=s900-c-k-c0x00ffffff-no-rj') }}" alt="{{ $author->name }}" loading="lazy">
                         </div>
                     </div>
                     <h3 class="member-name">{{ $author->name }}</h3>
@@ -161,7 +161,7 @@
                 <div class="team-member">
                     <div class="member-photo">
                         <div class="photo-placeholder">
-                            <img src="{{ asset('images/default-avatar.png') }}" alt="Redaksiya" loading="lazy">
+                            <img src="{{ $mainInfo->default_avatar ?? 'https://yt3.googleusercontent.com/ytc/AIdro_k0BJd2thJeEGwy_PrM_4iMwymMx6fHlwATWpjiKsZV6Vk=s900-c-k-c0x00ffffff-no-rj' }}" alt="Redaksiya" loading="lazy">
                         </div>
                     </div>
                     <h3 class="member-name">Redaksiya heyəti</h3>
