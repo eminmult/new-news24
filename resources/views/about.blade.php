@@ -151,8 +151,8 @@
     <!-- Editorial Team Section -->
     <section class="team-section">
         <div class="container">
-            <h2 class="section-title">{{ $page->getContent('team.title', 'Redaksiya heyəti') }}</h2>
-            <p class="team-subtitle" style="text-align: left;">{{ $page->getContent('team.description', 'Peşəkar jurnalistlərdən ibarət komandamız') }}</p>
+            <h2 class="section-title" style="margin-bottom: 15px;">{{ $page->getContent('team.title', 'Redaksiya heyəti') }}</h2>
+            <p class="team-subtitle" style="text-align: left; margin-top: 0; margin-bottom: 30px;">{{ $page->getContent('team.description', 'Peşəkar jurnalistlərdən ibarət komandamız') }}</p>
 
             <div class="team-grid">
                 @forelse($authors as $author)

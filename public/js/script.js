@@ -483,9 +483,9 @@ class ThemeToggle {
         const logoImages = document.querySelectorAll('.logo-img');
         logoImages.forEach(img => {
             if (theme === 'dark') {
-                img.src = '/images/logoag1-dark.svg?v=2';
+                img.src = '/images/logoag1-dark.svg';
             } else {
-                img.src = '/images/newslogo3.svg?v=2';
+                img.src = '/images/newslogo3.svg';
             }
         });
 
@@ -962,8 +962,8 @@ class YouTubeCarousel {
     constructor() {
         this.track = document.querySelector('.youtube-carousel-track');
         this.cards = document.querySelectorAll('.yt-card');
-        this.prevBtn = document.querySelector('.youtube-prev');
-        this.nextBtn = document.querySelector('.youtube-next');
+        this.prevBtn = document.querySelector('.prev-youtube');
+        this.nextBtn = document.querySelector('.next-youtube');
         this.currentPosition = 0;
         this.currentIndex = 0;
         this.autoPlayInterval = null;
@@ -1405,7 +1405,7 @@ class MobileMenu {
             <div class="mobile-menu-content">
                 <div class="mobile-menu-header">
                     <div class="logo">
-                        <img src="/images/newslogo3.svg?v=2" alt="News24" class="logo-img">
+                        <img src="/images/newslogo3.svg" alt="News24" class="logo-img">
                     </div>
                     <button class="mobile-menu-close">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

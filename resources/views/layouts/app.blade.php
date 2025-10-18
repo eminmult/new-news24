@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Variant1 Design CSS -->
-    <link rel="stylesheet" href="{{ asset('css/style.css?v=37') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css?v=41') }}">
     @yield('styles')
 
     {{-- Google Analytics --}}
@@ -85,7 +85,7 @@
             <!-- Верхний блок -->
             <div class="header-top">
                 <a href="{{ route('home') }}" class="logo">
-                    <img src="{{ asset('images/newslogo3.svg?v=2') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" class="logo-img">
+                    <img src="{{ asset('images/newslogo3.svg') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" class="logo-img">
                 </a>
 
                 <div class="header-right">
@@ -200,7 +200,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <a href="{{ route('home') }}" class="footer-logo">
-                        <img src="{{ asset('images/newslogo3.svg?v=2') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" class="logo-img">
+                        <img src="{{ asset('images/newslogo3.svg') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" class="logo-img">
                     </a>
                     <p class="footer-desc">Aktual xəbərlərin 24/7 mənbəyi. Azərbaycanda və dünyada baş verən hadisələri işıqlandırırıq.</p>
                     <div class="social-links">
@@ -288,7 +288,7 @@
     </footer>
 
     <!-- Variant1 JavaScript -->
-    <script src="{{ asset('js/script.js?v=31') }}"></script>
+    <script src="{{ asset('js/script.js?v=33') }}"></script>
     @yield('scripts')
 </body>
 </html>
