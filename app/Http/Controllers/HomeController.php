@@ -223,7 +223,15 @@ class HomeController extends Controller
                 ->get();
         });
 
-        return view('about', compact('page', 'categories'));
+        // Кешируем авторов на 1 час
+        $authors = Cache::remember('about_page_authors', 3600, function() {
+            return \App\Models\User::where('role', 'author')
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->get();
+        });
+
+        return view('about', compact('page', 'categories', 'authors'));
     }
 
     public function contact()
