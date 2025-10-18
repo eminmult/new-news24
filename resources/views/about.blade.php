@@ -94,7 +94,7 @@
                 </div>
 
                 <div class="about-values">
-                    <h2 class="section-title">Bizim dəyərlərimiz</h2>
+                    <h2 class="section-title">{{ $page->getContent('mission.title', 'Bizim dəyərlərimiz') }}</h2>
                     <div class="values-grid">
                         @foreach($page->getContent('mission.cards', []) as $index => $card)
                         <div class="value-card">
@@ -122,7 +122,7 @@
     <!-- Founder Section -->
     <section class="team-section">
         <div class="container">
-            <h2 class="section-title">Təsisçi</h2>
+            <h2 class="section-title">{{ $page->getContent('founder.title', 'Təsisçi') }}</h2>
             <div class="founder-card">
                 <div class="founder-photo">
                     <div class="photo-placeholder">
@@ -143,8 +143,8 @@
     <!-- Editorial Team Section -->
     <section class="team-section">
         <div class="container">
-            <h2 class="section-title">Redaksiya heyəti</h2>
-            <p class="team-subtitle">Peşəkar jurnalistlərdən ibarət komandamız</p>
+            <h2 class="section-title">{{ $page->getContent('team.title', 'Redaksiya heyəti') }}</h2>
+            <p class="team-subtitle">{{ $page->getContent('team.description', 'Peşəkar jurnalistlərdən ibarət komandamız') }}</p>
 
             <div class="team-grid">
                 @forelse($authors as $author)
@@ -175,7 +175,7 @@
     <!-- Contact Section -->
     <section class="contact-section">
         <div class="container">
-            <h2 class="section-title">Bizimlə əlaqə</h2>
+            <h2 class="section-title">{{ $page->getContent('contact.title', 'Bizimlə əlaqə') }}</h2>
             <div class="contact-grid">
                 <div class="contact-card">
                     <div class="contact-icon">
@@ -184,7 +184,7 @@
                             <circle cx="12" cy="10" r="3"></circle>
                         </svg>
                     </div>
-                    <h3>Ünvan</h3>
+                    <h3>{{ $page->getContent('contact.address_label', 'Ünvan') }}</h3>
                     <p>{!! $mainInfo->address ?? 'Nəriman rayonu, Mixail Koveroçkin küçəsi 38<br>(Hərbi Prokurorluğun yanı)' !!}</p>
                 </div>
 
@@ -194,7 +194,7 @@
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                         </svg>
                     </div>
-                    <h3>Telefon</h3>
+                    <h3>{{ $page->getContent('contact.phone_label', 'Telefon') }}</h3>
                     <p>
                         @if($mainInfo && $mainInfo->phones)
                             @foreach($mainInfo->phones as $phone)
@@ -213,7 +213,7 @@
                             <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
                     </div>
-                    <h3>E-mail</h3>
+                    <h3>{{ $page->getContent('contact.email_label', 'E-mail') }}</h3>
                     <p>
                         @if($mainInfo && $mainInfo->emails)
                             @foreach($mainInfo->emails as $email)
@@ -228,7 +228,7 @@
 
             <!-- Map Section -->
             <div class="map-section">
-                <h3 class="section-title">Ofisimizin yeri</h3>
+                <h3 class="section-title">{{ $page->getContent('contact.map_title', 'Ofisimizin yeri') }}</h3>
                 <div class="map-container">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3039.0876582088947!2d49.83873731562238!3d40.38294207936527!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307d9c8c6c5555%3A0x1234567890abcdef!2sMikhail%20Koverochkin%20Street%2038%2C%20Baku%2C%20Azerbaijan!5e0!3m2!1sen!2saz!4v1234567890123!5m2!1sen!2saz"
@@ -243,7 +243,7 @@
             </div>
 
             <div class="cooperation-info">
-                <h3>Əməkdaşlıq</h3>
+                <h3>{{ $page->getContent('contact.cooperation_title', 'Əməkdaşlıq') }}</h3>
                 @if($mainInfo && $mainInfo->cooperation_text)
                     {!! $mainInfo->cooperation_text !!}
                 @else
@@ -257,7 +257,7 @@
                         <li>Hazır materialı olmayan şirkətlər üçün reklam xidmətləri</li>
                     </ul>
                 @endif
-                <p><strong>Qeyd:</strong> Saytdakı bütün materialların müəllif hüquqları qorunur. Materiallardan istifadə edərkən mənbəyə istinad mütləqdir.</p>
+                <p>{!! $page->getContent('contact.copyright_note', '<strong>Qeyd:</strong> Saytdakı bütün materialların müəllif hüquqları qorunur. Materiallardan istifadə edərkən mənbəyə istinad mütləqdir.') !!}</p>
             </div>
         </div>
     </section>
