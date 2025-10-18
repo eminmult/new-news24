@@ -132,7 +132,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
      */
     public function registerMediaCollections(): void
     {
-        $defaultAvatar = MainInfo::getInstance()?->default_avatar ?? 'https://yt3.googleusercontent.com/ytc/AIdro_k0BJd2thJeEGwy_PrM_4iMwymMx6fHlwATWpjiKsZV6Vk=s900-c-k-c0x00ffffff-no-rj';
+        $defaultAvatar = MainInfo::getInstance()?->default_avatar ?? '/images/default-avatar.jpg';
 
         $this->addMediaCollection('avatar')
             ->useDisk('public')
@@ -173,7 +173,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
             return $media->getUrl('thumb');
         }
 
-        $defaultAvatar = MainInfo::getInstance()?->default_avatar ?? 'https://yt3.googleusercontent.com/ytc/AIdro_k0BJd2thJeEGwy_PrM_4iMwymMx6fHlwATWpjiKsZV6Vk=s900-c-k-c0x00ffffff-no-rj';
+        $defaultAvatar = MainInfo::getInstance()?->default_avatar ?? '/images/default-avatar.jpg';
         return $defaultAvatar;
     }
 
