@@ -262,7 +262,6 @@
                     <h4 class="footer-title">Məlumat</h4>
                     <ul class="footer-links">
                         <li><a href="{{ route('about') }}">Haqqımızda</a></li>
-                        <li><a href="{{ route('contact') }}">Əlaqə</a></li>
                     </ul>
                 </div>
 
@@ -282,7 +281,7 @@
 
             <div class="footer-bottom">
                 <p>&copy; {{ date('Y') }} {{ $mainInfo?->site_name ?? 'News24.az' }}. Bütün hüquqlar qorunur.</p>
-                <p>Azərbaycanda ❤️ ilə hazırlanıb</p>
+                <p>Created by <a href="https://gasimov.az" target="_blank" rel="noopener">GASIMOV.AZ</a></p>
             </div>
         </div>
     </footer>

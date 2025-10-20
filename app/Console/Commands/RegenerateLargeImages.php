@@ -18,7 +18,7 @@ class RegenerateLargeImages extends Command
 
         $this->info("Checking for posts with missing large conversions...");
 
-        // Подсчитываем общее количество медиа
+        // Подсчитываем общее количество медиа (post-gallery)
         $totalMedia = Media::where('collection_name', 'post-gallery')->count();
 
         $this->info("Total media items to check: {$totalMedia}");
@@ -38,33 +38,18 @@ class RegenerateLargeImages extends Command
                     $bar->advance();
 
                     try {
-                        // Проверяем существует ли large конверсия
-                        $largePath = $media->getPath('large');
+                        // Проверяем существует ли large конверсия в БД
+                        $hasLarge = $media->hasGeneratedConversion('large');
 
-                        if (!file_exists($largePath)) {
-                            // Загружаем модель если не загружена
-                            if (!$media->model) {
-                                $media->load('model');
-                            }
+                        if (!$hasLarge) {
+                            // Генерируем large конверсию напрямую
+                            \App\Jobs\GenerateLargeConversion::dispatch($media->id);
 
-                            // Генерируем только large конверсию
-                            $media->manipulations = [];
+                            $created++;
 
-                            // Получаем конверсию из модели
-                            if ($media->model && method_exists($media->model, 'getMediaConversion')) {
-                                $conversion = $media->model->getMediaConversion('large');
-
-                                if ($conversion) {
-                                    app(\Spatie\MediaLibrary\Conversions\FileManipulator::class)
-                                        ->createDerivedFiles($media, [$conversion]);
-
-                                    $created++;
-
-                                    if ($created % 100 == 0) {
-                                        $this->newLine();
-                                        $this->info("Created {$created} large conversions so far...");
-                                    }
-                                }
+                            if ($created % 1000 == 0) {
+                                $this->newLine();
+                                $this->info("Queued {$created} large conversions so far...");
                             }
                         } else {
                             $skipped++;
