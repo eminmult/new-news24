@@ -58,6 +58,8 @@ return [
         'show_on_homepage_helper' => 'Aktiv olduqda, xəbər əsas səhifədə göstəriləcək',
         'show_in_slider' => 'Slayderdə göstər',
         'show_in_slider_helper' => 'Aktiv olduqda, xəbər əsas səhifədəki slayderdə çıxacaq',
+        'show_in_video_section' => 'Video bölməsində göstər',
+        'show_in_video_section_helper' => 'Aktiv olduqda, xəbər əsas səhifədəki video bölməsində çıxacaq',
         'show_in_types_block' => 'Növlər blokunda göstər',
         'show_in_types_block_helper' => 'Xəbər əsas səhifədə post növləri blokunda göstəriləcək',
         'show_in_important_today' => 'Vacib xəbərlərə əlavə et',

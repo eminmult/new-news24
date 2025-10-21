@@ -53,7 +53,7 @@
         <div class="container">
             <div class="category-header">
                 <div class="category-header-content">
-                    <span class="category-badge {{ $category->slug }} large">{{ $category->name }}</span>
+                    <span class="category-badge category-{{ $category->id }} large">{{ $category->name }}</span>
                     <h1 class="category-title">{{ $category->name }} xəbərləri</h1>
                     @if($category->description)
                     <p class="category-description">{{ $category->description }}</p>
@@ -96,8 +96,10 @@
                                     <span class="news-card-date">
                                         @if($post->published_at->isToday())
                                             {{ $post->published_at->format('H:i') }}
-                                        @else
+                                        @elseif($post->published_at->year == now()->year)
                                             {{ format_date_az($post->published_at, 'd M H:i') }}
+                                        @else
+                                            {{ format_date_az($post->published_at, 'd M H:i, Y') }}
                                         @endif
                                     </span>
                                 </div>

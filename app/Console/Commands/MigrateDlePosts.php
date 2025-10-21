@@ -299,7 +299,7 @@ class MigrateDlePosts extends Command
         }
 
         $imagePath = $parts[0];
-        return 'http://178.63.72.226:8083/uploads/posts/' . $imagePath;
+        return 'http://nginx-new1:8090/posts/' . $imagePath;
     }
 
     protected function parseGalleryField(string $galleryData): array
@@ -321,7 +321,7 @@ class MigrateDlePosts extends Command
             foreach ($items as $item) {
                 $item = trim($item);
                 if (!empty($item)) {
-                    $images[] = 'http://178.63.72.226:8083/uploads/posts/' . $item;
+                    $images[] = 'http://nginx-new1:8090/posts/' . $item;
                 }
             }
         }

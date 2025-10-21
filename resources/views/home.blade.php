@@ -89,7 +89,7 @@
     @endif
 
     <!-- Main Featured Section -->
-    @if(request()->get('page', 1) == 1 && $mainFeaturedPosts && $mainFeaturedPosts->isNotEmpty())
+    @if(request()->get('page', 1) == 1 && $sliderPosts && $sliderPosts->isNotEmpty())
     <section class="main-featured-section">
         <div class="container">
             <div class="main-featured-wrapper">
@@ -103,7 +103,7 @@
 
                     <div class="main-featured-slider">
                         <div class="main-featured-track">
-                            @foreach($mainFeaturedPosts as $post)
+                            @foreach($sliderPosts as $post)
                             <article class="main-featured-card">
                                 <div class="card-image">
                                     @if($post->featured_image_large)
@@ -252,8 +252,10 @@
                             <span class="news-card-date">
                                 @if($post->published_at->isToday())
                                     {{ $post->published_at->format('H:i') }}
-                                @else
+                                @elseif($post->published_at->year == now()->year)
                                     {{ format_date_az($post->published_at, 'd M H:i') }}
+                                @else
+                                    {{ format_date_az($post->published_at, 'd M H:i, Y') }}
                                 @endif
                             </span>
                         </div>

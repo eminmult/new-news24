@@ -779,57 +779,57 @@ body.dark-theme .mobile-menu-content {
     color: white;
 }
 
-/* Category styles by ID - 50 categories */
+/* Category styles by ID - 50 unique categories */
 .category-badge.category-1, .category-tag.category-1 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
 .category-badge.category-2, .category-tag.category-2 { background: linear-gradient(135deg, #dc2626, #991b1b); }
 .category-badge.category-3, .category-tag.category-3 { background: linear-gradient(135deg, #10b981, #059669); }
 .category-badge.category-4, .category-tag.category-4 { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.category-badge.category-5, .category-tag.category-5 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.category-badge.category-5, .category-tag.category-5 { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 .category-badge.category-6, .category-tag.category-6 { background: linear-gradient(135deg, #ec4899, #db2777); }
 .category-badge.category-7, .category-tag.category-7 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
 .category-badge.category-8, .category-tag.category-8 { background: linear-gradient(135deg, #6366f1, #4f46e5); }
 .category-badge.category-9, .category-tag.category-9 { background: linear-gradient(135deg, #a855f7, #9333ea); }
-.category-badge.category-10, .category-tag.category-10 { background: linear-gradient(135deg, #ef4444, #dc2626); }
-.category-badge.category-11, .category-tag.category-11 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.category-badge.category-10, .category-tag.category-10 { background: linear-gradient(135deg, #fb923c, #f97316); }
+.category-badge.category-11, .category-tag.category-11 { background: linear-gradient(135deg, #eab308, #ca8a04); }
 .category-badge.category-12, .category-tag.category-12 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-.category-badge.category-13, .category-tag.category-13 { background: linear-gradient(135deg, #ef4444, #dc2626); }
-.category-badge.category-14, .category-tag.category-14 { background: linear-gradient(135deg, #10b981, #059669); }
-.category-badge.category-15, .category-tag.category-15 { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-.category-badge.category-16, .category-tag.category-16 { background: linear-gradient(135deg, #ef4444, #dc2626); }
-.category-badge.category-17, .category-tag.category-17 { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.category-badge.category-18, .category-tag.category-18 { background: linear-gradient(135deg, #10b981, #059669); }
-.category-badge.category-19, .category-tag.category-19 { background: linear-gradient(135deg, #ec4899, #db2777); }
-.category-badge.category-20, .category-tag.category-20 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.category-badge.category-13, .category-tag.category-13 { background: linear-gradient(135deg, #f87171, #ef4444); }
+.category-badge.category-14, .category-tag.category-14 { background: linear-gradient(135deg, #34d399, #10b981); }
+.category-badge.category-15, .category-tag.category-15 { background: linear-gradient(135deg, #818cf8, #6366f1); }
+.category-badge.category-16, .category-tag.category-16 { background: linear-gradient(135deg, #be123c, #9f1239); }
+.category-badge.category-17, .category-tag.category-17 { background: linear-gradient(135deg, #fdba74, #fb923c); }
+.category-badge.category-18, .category-tag.category-18 { background: linear-gradient(135deg, #6ee7b7, #34d399); }
+.category-badge.category-19, .category-tag.category-19 { background: linear-gradient(135deg, #f472b6, #ec4899); }
+.category-badge.category-20, .category-tag.category-20 { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
 .category-badge.category-21, .category-tag.category-21 { background: linear-gradient(135deg, #f43f5e, #e11d48); }
 .category-badge.category-22, .category-tag.category-22 { background: linear-gradient(135deg, #14b8a6, #0d9488); }
-.category-badge.category-23, .category-tag.category-23 { background: linear-gradient(135deg, #eab308, #ca8a04); }
-.category-badge.category-24, .category-tag.category-24 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-.category-badge.category-25, .category-tag.category-25 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
-.category-badge.category-26, .category-tag.category-26 { background: linear-gradient(135deg, #f97316, #ea580c); }
+.category-badge.category-23, .category-tag.category-23 { background: linear-gradient(135deg, #facc15, #eab308); }
+.category-badge.category-24, .category-tag.category-24 { background: linear-gradient(135deg, #c084fc, #a855f7); }
+.category-badge.category-25, .category-tag.category-25 { background: linear-gradient(135deg, #22d3ee, #06b6d4); }
+.category-badge.category-26, .category-tag.category-26 { background: linear-gradient(135deg, #fb7185, #f43f5e); }
 .category-badge.category-27, .category-tag.category-27 { background: linear-gradient(135deg, #84cc16, #65a30d); }
-.category-badge.category-28, .category-tag.category-28 { background: linear-gradient(135deg, #a855f7, #9333ea); }
+.category-badge.category-28, .category-tag.category-28 { background: linear-gradient(135deg, #d946ef, #a855f7); }
 .category-badge.category-29, .category-tag.category-29 { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
-.category-badge.category-30, .category-tag.category-30 { background: linear-gradient(135deg, #ec4899, #db2777); }
-.category-badge.category-31, .category-tag.category-31 { background: linear-gradient(135deg, #ef4444, #dc2626); }
-.category-badge.category-32, .category-tag.category-32 { background: linear-gradient(135deg, #10b981, #059669); }
-.category-badge.category-33, .category-tag.category-33 { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.category-badge.category-34, .category-tag.category-34 { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-.category-badge.category-35, .category-tag.category-35 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-.category-badge.category-36, .category-tag.category-36 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
-.category-badge.category-37, .category-tag.category-37 { background: linear-gradient(135deg, #f43f5e, #e11d48); }
-.category-badge.category-38, .category-tag.category-38 { background: linear-gradient(135deg, #14b8a6, #0d9488); }
-.category-badge.category-39, .category-tag.category-39 { background: linear-gradient(135deg, #eab308, #ca8a04); }
-.category-badge.category-40, .category-tag.category-40 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-.category-badge.category-41, .category-tag.category-41 { background: linear-gradient(135deg, #ec4899, #db2777); }
-.category-badge.category-42, .category-tag.category-42 { background: linear-gradient(135deg, #f97316, #ea580c); }
-.category-badge.category-43, .category-tag.category-43 { background: linear-gradient(135deg, #84cc16, #65a30d); }
-.category-badge.category-44, .category-tag.category-44 { background: linear-gradient(135deg, #a855f7, #9333ea); }
-.category-badge.category-45, .category-tag.category-45 { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
-.category-badge.category-46, .category-tag.category-46 { background: linear-gradient(135deg, #ef4444, #dc2626); }
-.category-badge.category-47, .category-tag.category-47 { background: linear-gradient(135deg, #10b981, #059669); }
-.category-badge.category-48, .category-tag.category-48 { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.category-badge.category-49, .category-tag.category-49 { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-.category-badge.category-50, .category-tag.category-50 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.category-badge.category-30, .category-tag.category-30 { background: linear-gradient(135deg, #e879f9, #d946ef); }
+.category-badge.category-31, .category-tag.category-31 { background: linear-gradient(135deg, #fca5a5, #f87171); }
+.category-badge.category-32, .category-tag.category-32 { background: linear-gradient(135deg, #86efac, #4ade80); }
+.category-badge.category-33, .category-tag.category-33 { background: linear-gradient(135deg, #fde047, #facc15); }
+.category-badge.category-34, .category-tag.category-34 { background: linear-gradient(135deg, #a5b4fc, #818cf8); }
+.category-badge.category-35, .category-tag.category-35 { background: linear-gradient(135deg, #e9d5ff, #d8b4fe); }
+.category-badge.category-36, .category-tag.category-36 { background: linear-gradient(135deg, #67e8f9, #22d3ee); }
+.category-badge.category-37, .category-tag.category-37 { background: linear-gradient(135deg, #fda4af, #fb7185); }
+.category-badge.category-38, .category-tag.category-38 { background: linear-gradient(135deg, #5eead4, #2dd4bf); }
+.category-badge.category-39, .category-tag.category-39 { background: linear-gradient(135deg, #fef08a, #fde047); }
+.category-badge.category-40, .category-tag.category-40 { background: linear-gradient(135deg, #93c5fd, #60a5fa); }
+.category-badge.category-41, .category-tag.category-41 { background: linear-gradient(135deg, #fbcfe8, #f9a8d4); }
+.category-badge.category-42, .category-tag.category-42 { background: linear-gradient(135deg, #fed7aa, #fdba74); }
+.category-badge.category-43, .category-tag.category-43 { background: linear-gradient(135deg, #bef264, #a3e635); }
+.category-badge.category-44, .category-tag.category-44 { background: linear-gradient(135deg, #ddd6fe, #c4b5fd); }
+.category-badge.category-45, .category-tag.category-45 { background: linear-gradient(135deg, #7dd3fc, #38bdf8); }
+.category-badge.category-46, .category-tag.category-46 { background: linear-gradient(135deg, #fecaca, #fca5a5); }
+.category-badge.category-47, .category-tag.category-47 { background: linear-gradient(135deg, #bbf7d0, #86efac); }
+.category-badge.category-48, .category-tag.category-48 { background: linear-gradient(135deg, #fef9c3, #fef08a); }
+.category-badge.category-49, .category-tag.category-49 { background: linear-gradient(135deg, #c7d2fe, #a5b4fc); }
+.category-badge.category-50, .category-tag.category-50 { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
 
 .hero-title {
     font-size: 48px;

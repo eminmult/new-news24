@@ -113,12 +113,12 @@ class MigrateDleAuthors extends Command
 
         // Если путь начинается с uploads/, формируем полный URL
         if (strpos($foto, 'uploads/') === 0) {
-            return 'http://178.63.72.226:8083/' . $foto;
+            return 'http://91.98.202.222:8080/' . $foto;
         }
 
         // Если это просто имя файла, добавляем путь
         if (!str_contains($foto, '/')) {
-            return 'http://178.63.72.226:8083/uploads/fotos/' . $foto;
+            return 'http://91.98.202.222:8080/uploads/fotos/' . $foto;
         }
 
         return $foto;

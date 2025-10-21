@@ -55,10 +55,7 @@ class HomeController extends Controller
         // Видео посты для youtube-carousel - кеш 10 минут
         $videoPosts = Cache::remember('home_video_posts', 600, function() {
             return Post::published()
-                ->where('show_in_types_block', true)
-                ->whereHas('types', function($query) {
-                    $query->where('slug', 'video');
-                })
+                ->where('show_in_video_section', true)
                 ->with(['categories', 'category', 'author', 'types'])
                 ->latest('published_at')
                 ->take(6)

@@ -116,7 +116,7 @@
                         <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
                         @endif
                         @if($post->main_category)
-                        <span class="category-badge {{ $post->main_category->slug }}">{{ $post->main_category->name }}</span>
+                        <span class="category-badge category-{{ $post->main_category->id }}">{{ $post->main_category->name }}</span>
                         @endif
                     </div>
 
@@ -365,8 +365,10 @@
                             <span class="news-card-date">
                                 @if($relatedPost->published_at->isToday())
                                     {{ $relatedPost->published_at->format('H:i') }}
-                                @else
+                                @elseif($relatedPost->published_at->year == now()->year)
                                     {{ format_date_az($relatedPost->published_at, 'd M H:i') }}
+                                @else
+                                    {{ format_date_az($relatedPost->published_at, 'd M H:i, Y') }}
                                 @endif
                             </span>
                         </div>

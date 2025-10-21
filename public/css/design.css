@@ -509,104 +509,154 @@ section {
     color: var(--color-white);
 }
 
-/* Category colors by ID (1-20) */
+/* Category colors by ID (1-20) - Unique colors for each category */
 .category-1 {
-    background: linear-gradient(135deg, #FF6B9D, #C44569);
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
     color: var(--color-white);
 }
 
 .category-2 {
-    background: linear-gradient(135deg, #FFA502, #FF6348);
+    background: linear-gradient(135deg, #dc2626, #991b1b);
     color: var(--color-white);
 }
 
 .category-3 {
-    background: linear-gradient(135deg, #4ECDC4, #44A08D);
+    background: linear-gradient(135deg, #10b981, #059669);
     color: var(--color-white);
 }
 
 .category-4 {
-    background: linear-gradient(135deg, #A29BFE, #6C5CE7);
+    background: linear-gradient(135deg, #f59e0b, #d97706);
     color: var(--color-white);
 }
 
 .category-5 {
-    background: linear-gradient(135deg, #FD79A8, #E84393);
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
     color: var(--color-white);
 }
 
 .category-6 {
-    background: linear-gradient(135deg, #FDCB6E, #E17055);
-    color: var(--color-dark);
+    background: linear-gradient(135deg, #ec4899, #db2777);
+    color: var(--color-white);
 }
 
 .category-7 {
-    background: linear-gradient(135deg, #74B9FF, #0984E3);
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
     color: var(--color-white);
 }
 
 .category-8 {
-    background: linear-gradient(135deg, #55EFC4, #00B894);
-    color: var(--color-dark);
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: var(--color-white);
 }
 
 .category-9 {
-    background: linear-gradient(135deg, #A29BFE, #74B9FF);
+    background: linear-gradient(135deg, #a855f7, #9333ea);
     color: var(--color-white);
 }
 
 .category-10 {
-    background: linear-gradient(135deg, #FF7675, #D63031);
+    background: linear-gradient(135deg, #fb923c, #f97316);
     color: var(--color-white);
 }
 
 .category-11 {
-    background: linear-gradient(135deg, #DFE6E9, #636E72);
-    color: var(--color-dark);
+    background: linear-gradient(135deg, #eab308, #ca8a04);
+    color: var(--color-white);
 }
 
 .category-12 {
-    background: linear-gradient(135deg, #FD79A8, #FDCB6E);
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: var(--color-white);
 }
 
 .category-13 {
-    background: linear-gradient(135deg, #00B894, #00CEC9);
+    background: linear-gradient(135deg, #f87171, #ef4444);
     color: var(--color-white);
 }
 
 .category-14 {
-    background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+    background: linear-gradient(135deg, #34d399, #10b981);
     color: var(--color-white);
 }
 
 .category-15 {
-    background: linear-gradient(135deg, #E17055, #FDCB6E);
+    background: linear-gradient(135deg, #818cf8, #6366f1);
     color: var(--color-white);
 }
 
 .category-16 {
-    background: linear-gradient(135deg, #0984E3, #74B9FF);
+    background: linear-gradient(135deg, #be123c, #9f1239);
     color: var(--color-white);
 }
 
 .category-17 {
-    background: linear-gradient(135deg, #E84393, #FD79A8);
+    background: linear-gradient(135deg, #fdba74, #fb923c);
     color: var(--color-white);
 }
 
 .category-18 {
-    background: linear-gradient(135deg, #00CEC9, #55EFC4);
-    color: var(--color-dark);
+    background: linear-gradient(135deg, #6ee7b7, #34d399);
+    color: var(--color-white);
 }
 
 .category-19 {
-    background: linear-gradient(135deg, #636E72, #2D3436);
+    background: linear-gradient(135deg, #f472b6, #ec4899);
     color: var(--color-white);
 }
 
 .category-20 {
-    background: linear-gradient(135deg, #FF6348, #FFA502);
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    color: var(--color-white);
+}
+
+.category-21 {
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    color: var(--color-white);
+}
+
+.category-22 {
+    background: linear-gradient(135deg, #14b8a6, #0d9488);
+    color: var(--color-white);
+}
+
+.category-23 {
+    background: linear-gradient(135deg, #facc15, #eab308);
+    color: var(--color-white);
+}
+
+.category-24 {
+    background: linear-gradient(135deg, #c084fc, #a855f7);
+    color: var(--color-white);
+}
+
+.category-25 {
+    background: linear-gradient(135deg, #22d3ee, #06b6d4);
+    color: var(--color-white);
+}
+
+.category-26 {
+    background: linear-gradient(135deg, #fb7185, #f43f5e);
+    color: var(--color-white);
+}
+
+.category-27 {
+    background: linear-gradient(135deg, #84cc16, #65a30d);
+    color: var(--color-white);
+}
+
+.category-28 {
+    background: linear-gradient(135deg, #d946ef, #a855f7);
+    color: var(--color-white);
+}
+
+.category-29 {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: var(--color-white);
+}
+
+.category-30 {
+    background: linear-gradient(135deg, #e879f9, #d946ef);
     color: var(--color-white);
 }
 

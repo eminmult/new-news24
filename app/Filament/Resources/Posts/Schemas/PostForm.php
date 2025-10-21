@@ -393,6 +393,11 @@ class PostForm
                             ->default(false)
                             ->helperText(__('posts.fields.show_in_slider_helper'))
                             ->columnSpanFull(),
+                        Toggle::make('show_in_video_section')
+                            ->label(__('posts.fields.show_in_video_section'))
+                            ->default(false)
+                            ->helperText(__('posts.fields.show_in_video_section_helper'))
+                            ->columnSpanFull(),
                         Toggle::make('show_in_types_block')
                             ->label(__('posts.fields.show_in_types_block'))
                             ->default(false)
