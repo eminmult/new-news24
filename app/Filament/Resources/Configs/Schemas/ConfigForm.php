@@ -39,6 +39,7 @@ class ConfigForm
                         'email' => __('configs.types.email'),
                         'phone' => __('configs.types.phone'),
                         'textarea' => __('configs.types.textarea'),
+                        'ad' => __('configs.types.ad'),
                     ])
                     ->default('text')
                     ->required(),

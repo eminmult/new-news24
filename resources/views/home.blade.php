@@ -88,6 +88,21 @@
     </section>
     @endif
 
+    <!-- Top Banner Ad Section -->
+    @if(request()->get('page', 1) == 1)
+    <section class="top-banner-ad-section" style="padding: 20px 0;">
+        <div class="container">
+            @php
+                $topBannerAd = config_value('TOP_BANNER_AD_DESKTOP', '/images/ad-banner-1080x160.svg');
+                $topBannerAdLink = config_value('TOP_BANNER_AD_LINK_DESKTOP', '#');
+            @endphp
+            <a href="{{ $topBannerAdLink }}" target="_blank" rel="noopener" style="display: block; max-width: 1080px; margin: 0 auto;">
+                <img src="{{ $topBannerAd }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+            </a>
+        </div>
+    </section>
+    @endif
+
     <!-- Main Featured Section -->
     @if(request()->get('page', 1) == 1 && $sliderPosts && $sliderPosts->isNotEmpty())
     <section class="main-featured-section">
@@ -137,10 +152,10 @@
 
                 <!-- Side Image (25%) - Advertising Banner -->
                 @php
-                    $adBanner = config_value('MAIN_FEATURED_AD_BANNER', '/images/ad-banner-264x528.png');
+                    $adBanner = config_value('MAIN_FEATURED_AD_BANNER_DESKTOP', '/images/ad-banner-264x528.png');
                 @endphp
                 @if($adBanner)
-                <a href="{{ config_value('MAIN_FEATURED_AD_BANNER_LINK', '#') }}" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
+                <a href="{{ config_value('MAIN_FEATURED_AD_BANNER_LINK_DESKTOP', '#') }}" class="side-banner-wrapper" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
                     <img src="{{ $adBanner }}" alt="Reklam" class="main-featured-side-image" style="width: 100%; height: 100%; object-fit: fill; border-radius: 20px;" loading="lazy">
                 </a>
                 @endif

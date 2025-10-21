@@ -22,6 +22,7 @@ return [
         'email' => 'Email',
         'phone' => 'Telefon',
         'textarea' => 'Çoxsətirli mətn',
+        'ad' => 'Reklam',
     ],
 
     'table' => [
