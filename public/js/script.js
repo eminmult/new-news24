@@ -99,12 +99,22 @@ class TrendingCarousel {
         this.prevBtn = document.querySelector('.prev-trending');
         this.nextBtn = document.querySelector('.next-trending');
         this.currentPage = 0;
-        this.cardsPerPage = 3;
-        this.totalPages = 2; // 6 cards / 3 per page = 2 pages
         this.isTransitioning = false;
 
         if (!this.track || this.cards.length === 0) return;
         this.init();
+    }
+
+    getCardsPerPage() {
+        const width = window.innerWidth;
+        if (width <= 640) return 2; // Mobile: 2 cards
+        if (width <= 768) return 2; // Tablet: 2 cards
+        return 3; // Desktop: 3 cards
+    }
+
+    getTotalPages() {
+        const cardsPerPage = this.getCardsPerPage();
+        return Math.ceil(this.cards.length / cardsPerPage);
     }
 
     init() {
@@ -133,6 +143,7 @@ class TrendingCarousel {
 
         // Update on resize
         window.addEventListener('resize', () => {
+            this.currentPage = 0; // Reset to first page on resize
             this.updatePosition(false);
         });
 
@@ -149,7 +160,8 @@ class TrendingCarousel {
         if (this.isTransitioning) return;
         this.isTransitioning = true;
 
-        this.currentPage = (this.currentPage + 1) % this.totalPages;
+        const totalPages = this.getTotalPages();
+        this.currentPage = (this.currentPage + 1) % totalPages;
         this.updatePosition(true);
     }
 
@@ -157,7 +169,8 @@ class TrendingCarousel {
         if (this.isTransitioning) return;
         this.isTransitioning = true;
 
-        this.currentPage = (this.currentPage - 1 + this.totalPages) % this.totalPages;
+        const totalPages = this.getTotalPages();
+        this.currentPage = (this.currentPage - 1 + totalPages) % totalPages;
         this.updatePosition(true);
     }
 

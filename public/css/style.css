@@ -3337,8 +3337,8 @@ body.dark-theme .mobile-menu-content {
     }
 
     .trending-card {
-        flex: 0 0 100%;
-        max-width: 100%;
+        flex: 0 0 calc((100% - 24px) / 2);
+        max-width: calc((100% - 24px) / 2);
         flex-direction: column;
     }
 
@@ -3348,7 +3348,8 @@ body.dark-theme .mobile-menu-content {
     }
 
     .trending-content h3 {
-        font-size: 15px;
+        font-size: 14px;
+        line-height: 1.3;
     }
 
     .sidebar {
