@@ -204,10 +204,16 @@ class HomeController extends Controller
         return view('search', compact('query', 'categories', 'posts'));
     }
 
+    public function popularSearches()
+    {
+        $queries = \App\Models\SearchQuery::getTopQueries(5);
+        return response()->json($queries);
+    }
+
     public function about()
     {
-        // Кешируем статическую страницу "О нас" на 1 час
-        $page = Cache::remember('static_page_haqqimizda', 3600, function() {
+        // Кешируем статическую страницу "О нас" на 7 дней (604800 секунд)
+        $page = Cache::remember('static_page_haqqimizda', 604800, function() {
             return StaticPage::active()
                 ->where('slug', 'haqqimizda')
                 ->firstOrFail();
@@ -220,8 +226,8 @@ class HomeController extends Controller
                 ->get();
         });
 
-        // Кешируем авторов на 1 час
-        $authors = Cache::remember('about_page_authors', 3600, function() {
+        // Кешируем авторов на 24 часа (86400 секунд)
+        $authors = Cache::remember('about_page_authors', 86400, function() {
             return \App\Models\User::where('role', 'author')
                 ->where('is_active', true)
                 ->orderBy('name')

@@ -61,3 +61,29 @@
 <meta http-equiv="content-language" content="az">
 <meta name="geo.region" content="AZ">
 <meta name="geo.placename" content="Azerbaijan">
+
+{{-- Facebook Meta Tags --}}
+<meta property="fb:app_id" content="{{ config_value('FACEBOOK_APP_ID') }}">
+
+{{-- Additional Open Graph Tags --}}
+@if(isset($ogPublishedTime))
+<meta property="article:published_time" content="{{ $ogPublishedTime }}">
+@endif
+@if(isset($ogModifiedTime))
+<meta property="article:modified_time" content="{{ $ogModifiedTime }}">
+@endif
+@if(isset($ogAuthor))
+<meta property="article:author" content="{{ $ogAuthor }}">
+@endif
+
+{{-- Mobile App Meta Tags --}}
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="{{ $siteName }}">
+
+{{-- News Specific Meta Tags --}}
+<meta name="news_keywords" content="{{ $keywords ?? $siteKeywords }}">
+@if(isset($publishedTime))
+<meta name="article:published_time" content="{{ $publishedTime }}">
+<meta name="publication_date" content="{{ $publishedTime }}">
+@endif

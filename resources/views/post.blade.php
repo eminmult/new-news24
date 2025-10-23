@@ -15,12 +15,20 @@
         :ogTitle="$post->title"
         :ogDescription="$post->meta_description"
         :ogImage="$post->featured_image"
+        :ogUrl="$post->url"
         :canonical="$post->url"
         :publishedTime="$post->published_at->toIso8601String()"
         :modifiedTime="$post->updated_at->toIso8601String()"
+        :ogPublishedTime="$post->published_at->toIso8601String()"
+        :ogModifiedTime="$post->updated_at->toIso8601String()"
+        :ogAuthor="$post->author?->name"
         :section="$post->main_category?->name"
         :tags="$post->tags->pluck('name')->toArray()"
+        :twitterCard="'summary_large_image'"
         :twitterSite="'@news24_az'"
+        :twitterTitle="$post->title"
+        :twitterDescription="$post->meta_description"
+        :twitterCreator="$post->author ? '@news24_az' : null"
     />
 @endsection
 
@@ -41,25 +49,94 @@
         :article="$post"
     />
 
+    {{-- WebPage Schema --}}
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "WebPage",
+      "name": "{{ $post->title }}",
+      "description": "{{ $post->meta_description }}",
+      "url": "{{ $post->url }}",
+      "inLanguage": "az",
+      "isPartOf": {
+        "@@type": "WebSite",
+        "name": "News24.az",
+        "url": "{{ config('app.url') }}"
+      },
+      "primaryImageOfPage": {
+        "@@type": "ImageObject",
+        "url": "{{ $post->featured_image }}",
+        "width": 1200,
+        "height": 630
+      },
+      "datePublished": "{{ $post->published_at->toIso8601String() }}",
+      "dateModified": "{{ $post->updated_at->toIso8601String() }}",
+      "author": {
+        "@@type": "Person",
+        "name": "{{ $post->author->name ?? 'News24.az' }}"
+      }
+    }
+    </script>
+
+    {{-- Person Schema (Author) --}}
+    @if($post->author)
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "Person",
+      "name": "{{ $post->author->name }}",
+      "url": "{{ route('search', ['q' => $post->author->name]) }}",
+      @if($post->author->avatar_thumb)
+      "image": {
+        "@@type": "ImageObject",
+        "url": "{{ $post->author->avatar_thumb }}"
+      },
+      @endif
+      "jobTitle": "Jurnalist",
+      "worksFor": {
+        "@@type": "NewsMediaOrganization",
+        "name": "News24.az",
+        "url": "{{ config('app.url') }}"
+      }
+    }
+    </script>
+    @endif
+
     {{-- ImageGallery Schema (если есть галерея) --}}
     @if($post->hasMedia('post-gallery') && $post->getMedia('post-gallery')->count() > 1)
     <script type="application/ld+json">
     {
       "@@context": "https://schema.org",
       "@@type": "ImageGallery",
-      "name": "{{ $post->title }} - Фотогалерея",
+      "name": "{{ $post->title }} - Foto qalereya",
       "description": "{{ $post->meta_description }}",
-      "image": [
+      "url": "{{ $post->url }}",
+      "associatedMedia": [
         @foreach($post->getMedia('post-gallery') as $media)
         {
           "@@type": "ImageObject",
+          "contentUrl": "{{ $media->getFullUrl('webp') }}",
           "url": "{{ $media->getFullUrl('webp') }}",
           "width": 1200,
           "height": 800,
-          "caption": "{{ $post->title }}"
+          "caption": "{{ $post->title }}",
+          "encodingFormat": "image/webp",
+          "uploadDate": "{{ $post->published_at->toIso8601String() }}"
         }@if(!$loop->last),@endif
         @endforeach
-      ]
+      ],
+      "author": {
+        "@@type": "Person",
+        "name": "{{ $post->author->name ?? 'News24.az' }}"
+      },
+      "publisher": {
+        "@@type": "Organization",
+        "name": "News24.az",
+        "logo": {
+          "@@type": "ImageObject",
+          "url": "{{ asset('images/logo-cropped.png') }}"
+        }
+      }
     }
     </script>
     @endif
@@ -72,16 +149,53 @@
       "@@type": "VideoObject",
       "name": "{{ $post->title }}",
       "description": "{{ $post->meta_description }}",
-      "thumbnailUrl": "{{ $post->featured_image }}",
+      "thumbnailUrl": [
+        "{{ $post->featured_image }}"
+      ],
       "uploadDate": "{{ $post->published_at->toIso8601String() }}",
       @if($videoWidget->type === 'youtube')
       "embedUrl": "https://www.youtube.com/embed/{{ $videoWidget->content }}",
-      "contentUrl": "https://www.youtube.com/watch?v={{ $videoWidget->content }}"
+      "contentUrl": "https://www.youtube.com/watch?v={{ $videoWidget->content }}",
       @else
-      "embedUrl": "https://ok.ru/videoembed/{{ $videoWidget->content }}"
+      "embedUrl": "https://ok.ru/videoembed/{{ $videoWidget->content }}",
       @endif
+      "publisher": {
+        "@@type": "Organization",
+        "name": "News24.az",
+        "logo": {
+          "@@type": "ImageObject",
+          "url": "{{ asset('images/logo-cropped.png') }}"
+        }
+      },
+      "author": {
+        "@@type": "Person",
+        "name": "{{ $post->author->name ?? 'News24.az' }}"
+      },
+      "inLanguage": "az"
     }
     </script>
+    @endforeach
+
+    {{-- MediaObject для других типов виджетов --}}
+    @foreach($post->widgets->whereIn('type', ['image', 'audio']) as $widget)
+    @if($widget->type === 'image')
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "ImageObject",
+      "contentUrl": "{{ $widget->content }}",
+      "caption": "{{ $post->title }}",
+      "author": {
+        "@@type": "Person",
+        "name": "{{ $post->author->name ?? 'News24.az' }}"
+      },
+      "copyrightHolder": {
+        "@@type": "Organization",
+        "name": "News24.az"
+      }
+    }
+    </script>
+    @endif
     @endforeach
 @endsection
 
@@ -98,6 +212,26 @@
                 <span class="breadcrumb-separator">›</span>
                 <span class="breadcrumb-item active">{{ $post->title }}</span>
             </div>
+        </div>
+    </section>
+
+    <!-- Top Banner Ad Section -->
+    <section class="top-banner-ad-section" style="padding: 20px 0;">
+        <div class="container">
+            @php
+                $topBannerAd = config_value('TOP_BANNER_AD_DESKTOP', '/images/ad-banner-1080x160.svg');
+                $topBannerAdLink = config_value('TOP_BANNER_AD_LINK_DESKTOP', '#');
+                $mobileBanner = config_value('TOP_BANNER_MOBILE', '/images/ad-banner-430x200.svg');
+                $mobileBannerLink = config_value('TOP_BANNER_MOBILE_LINK', '#');
+            @endphp
+            <!-- Desktop Banner -->
+            <a href="{{ $topBannerAdLink }}" target="_blank" rel="noopener" class="top-banner-desktop" style="display: block; max-width: 1080px; margin: 0 auto;">
+                <img src="{{ $topBannerAd }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+            </a>
+            <!-- Mobile Banner -->
+            <a href="{{ $mobileBannerLink }}" target="_blank" rel="noopener" class="top-banner-mobile" style="display: none; max-width: 430px; margin: 0 auto;">
+                <img src="{{ $mobileBanner }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+            </a>
         </div>
     </section>
 
@@ -147,6 +281,28 @@
                         </div>
                     </div>
 
+                    <!-- Post Content Banner Desktop -->
+                    <div class="post-content-banner-desktop" style="margin: 30px 0;">
+                        @php
+                            $postBanner = config_value('POST_CONTENT_BANNER_DESKTOP', '/images/ad-post-639x80.svg');
+                            $postBannerLink = config_value('POST_CONTENT_BANNER_LINK_DESKTOP', '#');
+                        @endphp
+                        <a href="{{ $postBannerLink }}" target="_blank" rel="noopener" style="display: block; max-width: 639px;">
+                            <img src="{{ $postBanner }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                        </a>
+                    </div>
+
+                    <!-- Post Content Banner Mobile -->
+                    <div class="post-content-banner-mobile" style="margin: 30px 0; display: none;">
+                        @php
+                            $postBannerMobile = config_value('POST_CONTENT_BANNER_MOBILE', '/images/ad-post-mobile-277x60.svg');
+                            $postBannerMobileLink = config_value('POST_CONTENT_BANNER_MOBILE_LINK', '#');
+                        @endphp
+                        <a href="{{ $postBannerMobileLink }}" target="_blank" rel="noopener" style="display: block; max-width: 277px; margin: 0 auto;">
+                            <img src="{{ $postBannerMobile }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                        </a>
+                    </div>
+
                     <div class="article-content">
                         {!! $post->content !!}
 
@@ -176,11 +332,35 @@
                                 </div>
                                 @elseif($widget->type === 'instagram')
                                 <div class="widget-item widget-instagram" style="margin: 32px 0;">
-                                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/{{ $widget->content }}/" data-instgrm-version="14"></blockquote>
+                                    <blockquote class="instagram-media" data-instgrm-permalink="{{ $widget->content }}" data-instgrm-version="14"></blockquote>
+                                </div>
+                                @elseif($widget->type === 'telegram')
+                                <div class="article-video" style="margin: 32px 0;">
+                                    <div class="video-wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px;">
+                                        <iframe src="{{ $widget->content }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                                @elseif($widget->type === 'fbvideo')
+                                <div class="article-video" style="margin: 32px 0;">
+                                    <div class="video-wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px;">
+                                        <iframe src="https://www.facebook.com/plugins/video.php?href={{ urlencode($widget->content) }}&show_text=false" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                                    </div>
+                                </div>
+                                @elseif($widget->type === 'x')
+                                <div class="widget-item widget-twitter" style="margin: 32px 0;">
+                                    <blockquote class="twitter-tweet" data-theme="light"><a href="{{ $widget->content }}"></a></blockquote>
                                 </div>
                                 @else
                                 <div class="widget-item widget-embed" style="margin: 32px 0;">
-                                    {!! $widget->content !!}
+                                    @if(filter_var($widget->content, FILTER_VALIDATE_URL))
+                                        {{-- Если content это URL, создаем iframe --}}
+                                        <div class="video-wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px;">
+                                            <iframe src="{{ $widget->content }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                                        </div>
+                                    @else
+                                        {{-- Иначе выводим как HTML --}}
+                                        {!! $widget->content !!}
+                                    @endif
                                 </div>
                                 @endif
                             @endforeach

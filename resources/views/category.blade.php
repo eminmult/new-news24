@@ -7,17 +7,35 @@
 @section('title', $category->name . ' - ' . $siteName)
 
 @section('seo')
+    @php
+        $categoryTitle = $category->name . ' xəbərləri - ' . $siteName;
+        $categoryDescription = $category->description ?: $category->name . ' kateqoriyasından ən son və aktual xəbərlər. ' . $siteName . ' - Azərbaycanın aparıcı xəbər portalı.';
+        $categoryKeywords = $category->name . ', ' . $category->name . ' xəbərləri, azərbaycan ' . strtolower($category->name) . ', son xəbərlər, ' . strtolower($siteName);
+    @endphp
     <x-seo
-        :title="$category->name . ' - ' . $siteName"
-        :description="$category->description ?: $category->name . ' kateqoriyasından ən son xəbərlər. ' . $siteName . ' - Azərbaycanın aparıcı xəbər portalı.'"
-        :keywords="$category->name . ', ' . $category->name . ' xəbərləri, azərbaycan xəbərləri, son xəbərlər, ' . strtolower($siteName)"
+        :title="$categoryTitle"
+        :description="$categoryDescription"
+        :keywords="$categoryKeywords"
         :ogType="'website'"
-        :ogImage="asset('images/logo-cropped.png')"
+        :ogTitle="$category->name . ' - Son xəbərlər | ' . $siteName"
+        :ogDescription="$categoryDescription"
+        :ogImage="$category->image ? $category->image : asset('images/logo-cropped.png')"
+        :ogUrl="route('category', $category->slug)"
         :canonical="route('category', $category->slug)"
+        :twitterCard="'summary_large_image'"
+        :twitterTitle="$category->name . ' xəbərləri'"
+        :twitterDescription="$category->name . ' kateqoriyasından ən son xəbərlər'"
+        :section="$category->name"
     />
 @endsection
 
 @section('schema')
+    {{-- Category CollectionPage Schema --}}
+    <x-schema
+        type="category"
+        :category="$category"
+    />
+
     {{-- BreadcrumbList Schema --}}
     <x-schema
         type="breadcrumb"
@@ -27,7 +45,17 @@
         ]"
     />
 
-    {{-- ItemList Schema (список постов в категории) --}}
+    {{-- CollectionPage Schema with Category Posts --}}
+    @if($posts->isNotEmpty())
+    <x-schema
+        type="collectionpage"
+        :posts="$posts"
+        :pageTitle="$category->name . ' - Son xəbərlər'"
+        :pageDescription="$category->name . ' kateqoriyasından ən son və aktual xəbərlər'"
+    />
+    @endif
+
+    {{-- ItemList Schema --}}
     @if($posts->isNotEmpty())
     <x-schema
         type="itemlist"
@@ -45,6 +73,26 @@
                 <span class="breadcrumb-separator">›</span>
                 <span class="breadcrumb-item active">{{ $category->name }}</span>
             </div>
+        </div>
+    </section>
+
+    <!-- Top Banner Ad Section -->
+    <section class="top-banner-ad-section" style="padding: 20px 0;">
+        <div class="container">
+            @php
+                $topBannerAd = config_value('TOP_BANNER_AD_DESKTOP', '/images/ad-banner-1080x160.svg');
+                $topBannerAdLink = config_value('TOP_BANNER_AD_LINK_DESKTOP', '#');
+                $mobileBanner = config_value('TOP_BANNER_MOBILE', '/images/ad-banner-430x200.svg');
+                $mobileBannerLink = config_value('TOP_BANNER_MOBILE_LINK', '#');
+            @endphp
+            <!-- Desktop Banner -->
+            <a href="{{ $topBannerAdLink }}" target="_blank" rel="noopener" class="top-banner-desktop" style="display: block; max-width: 1080px; margin: 0 auto;">
+                <img src="{{ $topBannerAd }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+            </a>
+            <!-- Mobile Banner -->
+            <a href="{{ $mobileBannerLink }}" target="_blank" rel="noopener" class="top-banner-mobile" style="display: none; max-width: 430px; margin: 0 auto;">
+                <img src="{{ $mobileBanner }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+            </a>
         </div>
     </section>
 

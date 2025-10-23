@@ -334,16 +334,19 @@ class SearchModal {
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
                     <input type="text" placeholder="Hansı xəbəri axtarırsınız?" class="search-input" autofocus>
+                    <button class="search-submit-btn" type="button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        Tap
+                    </button>
                 </div>
 
                 <div class="search-popular">
                     <div class="search-popular-title">🔥 Populyar axtarışlar:</div>
                     <div class="search-tags">
-                        <button class="search-tag">Siyasət</button>
-                        <button class="search-tag">Texnologiya</button>
-                        <button class="search-tag">İdman</button>
-                        <button class="search-tag">İqtisadiyyat</button>
-                        <button class="search-tag">Mədəniyyət</button>
+                        <div class="search-tags-loading">Yüklənir...</div>
                     </div>
                 </div>
 
@@ -400,7 +403,36 @@ class SearchModal {
 
         // Get elements
         const searchInput = modal.querySelector('.search-input');
-        const searchTags = modal.querySelectorAll('.search-tag');
+        const searchTagsContainer = modal.querySelector('.search-tags');
+        const searchSubmitBtn = modal.querySelector('.search-submit-btn');
+
+        // Load popular searches from API
+        fetch('/api/popular-searches')
+            .then(response => response.json())
+            .then(queries => {
+                // Clear loading message
+                searchTagsContainer.innerHTML = '';
+
+                if (queries.length > 0) {
+                    // Create button for each popular query
+                    queries.forEach(query => {
+                        const button = document.createElement('button');
+                        button.className = 'search-tag';
+                        button.textContent = query;
+                        button.addEventListener('click', () => {
+                            window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                        });
+                        searchTagsContainer.appendChild(button);
+                    });
+                } else {
+                    // If no popular searches, show default message
+                    searchTagsContainer.innerHTML = '<div class="search-tags-empty">Məlumat yoxdur</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading popular searches:', error);
+                searchTagsContainer.innerHTML = '<div class="search-tags-empty">Yüklənmə xətası</div>';
+            });
 
         // Close on click outside or ESC
         modal.addEventListener('click', (e) => {
@@ -419,17 +451,22 @@ class SearchModal {
             }
         });
 
-        // Search tags functionality
-        searchTags.forEach(tag => {
-            tag.addEventListener('click', () => {
-                searchInput.value = tag.textContent;
-                searchInput.focus();
-                // Add pulse animation
-                searchInput.style.animation = 'pulse 0.3s ease';
-                setTimeout(() => {
-                    searchInput.style.animation = '';
-                }, 300);
-            });
+        // Search submit button click
+        searchSubmitBtn.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (query.length >= 1) {
+                window.location.href = `/search?q=${encodeURIComponent(query)}`;
+            }
+        });
+
+        // Enter key to search - redirect to search page
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query.length >= 1) {
+                    window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                }
+            }
         });
 
         // Focus input
@@ -1212,6 +1249,9 @@ style.textContent = `
     .search-input-wrapper {
         position: relative;
         margin-bottom: 32px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
     }
 
     .search-input-icon {
@@ -1225,7 +1265,7 @@ style.textContent = `
     }
 
     .search-input {
-        width: 100%;
+        flex: 1;
         padding: 18px 20px 18px 56px;
         background: rgba(58, 145, 255, 0.05);
         border: 2px solid rgba(58, 145, 255, 0.15);
@@ -1235,6 +1275,38 @@ style.textContent = `
         font-weight: 500;
         outline: none;
         transition: all 0.3s ease;
+    }
+
+    .search-submit-btn {
+        padding: 18px 28px;
+        background: linear-gradient(135deg, #3a91ff, #1e6fd9);
+        border: none;
+        border-radius: 16px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(58, 145, 255, 0.3);
+    }
+
+    .search-submit-btn:hover {
+        background: linear-gradient(135deg, #1e6fd9, #1557b0);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(58, 145, 255, 0.4);
+    }
+
+    .search-submit-btn:active {
+        transform: translateY(0);
+    }
+
+    .search-submit-btn svg {
+        width: 18px;
+        height: 18px;
     }
 
     .search-input::placeholder {
@@ -1339,6 +1411,16 @@ style.textContent = `
                     0 8px 24px rgba(99, 102, 241, 0.3);
     }
 
+    body.dark-theme .search-submit-btn {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    body.dark-theme .search-submit-btn:hover {
+        background: linear-gradient(135deg, #4f46e5, #4338ca);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
+    }
+
     body.dark-theme .search-popular-title {
         color: #b4b4c8;
     }
@@ -1398,182 +1480,98 @@ class MobileMenu {
     }
 
     openMenu() {
-        // Create mobile menu overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'mobile-menu-overlay';
-        overlay.innerHTML = `
-            <div class="mobile-menu-content">
-                <div class="mobile-menu-header">
-                    <div class="logo">
-                        <img src="/images/newslogo3.svg" alt="News24" class="logo-img">
-                    </div>
-                    <button class="mobile-menu-close">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
+        const overlay = document.getElementById('mobileMenuOverlay');
+        const closeBtn = document.getElementById('mobileMenuClose');
+        const themeBtn = document.getElementById('mobileThemeToggle');
 
-                <nav class="mobile-nav">
-                    <a href="index.html" class="mobile-nav-link active">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                        Ana səhifə
-                    </a>
-                    <a href="category.html" class="mobile-nav-link">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        Siyasət
-                    </a>
-                    <a href="category.html" class="mobile-nav-link">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="1" x2="12" y2="23"></line>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>
-                        İqtisadiyyat
-                    </a>
-                    <a href="category.html" class="mobile-nav-link">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 6v6l4 2"></path>
-                        </svg>
-                        İdman
-                    </a>
-                    <a href="category.html" class="mobile-nav-link">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                            <path d="M16 3h2v4"></path>
-                            <path d="M6 3h2v4"></path>
-                        </svg>
-                        Texnologiya
-                    </a>
-                    <a href="category.html" class="mobile-nav-link">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                        </svg>
-                        Mədəniyyət
-                    </a>
-                    <a href="category.html" class="mobile-nav-link">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                        </svg>
-                        Dünya
-                    </a>
-                    <a href="about.html" class="mobile-nav-link">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                        Haqqımızda
-                    </a>
-                </nav>
+        if (!overlay) return;
 
-                <div class="mobile-menu-footer">
-                    <div class="mobile-menu-theme">
-                        <span>Tema:</span>
-                        <button class="mobile-theme-btn">
-                            <svg class="sun-icon-mobile" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="5"></circle>
-                                <line x1="12" y1="1" x2="12" y2="3"></line>
-                                <line x1="12" y1="21" x2="12" y2="23"></line>
-                            </svg>
-                            <svg class="moon-icon-mobile" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="mobile-menu-socials">
-                        <a href="#" class="mobile-social-link" title="Facebook">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="mobile-social-link" title="Instagram">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="mobile-social-link" title="Telegram">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="mobile-social-link" title="YouTube">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // Style the overlay
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            z-index: 9999;
-            animation: fadeIn 0.3s ease;
-        `;
-
-        document.body.appendChild(overlay);
+        // Show overlay
+        overlay.style.display = 'block';
+        overlay.style.animation = 'fadeIn 0.3s ease';
 
         // Animate menu button to X
         this.menuBtn.classList.add('active');
 
-        // Add close handlers
+        // Close on overlay click
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
                 this.closeMenu();
             }
         });
 
-        overlay.querySelector('.mobile-menu-close').addEventListener('click', () => {
-            this.closeMenu();
-        });
+        // Close button
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeMenu();
+            });
+        }
 
-        // Theme toggle in mobile menu
-        const mobileThemeBtn = overlay.querySelector('.mobile-theme-btn');
-        if (mobileThemeBtn) {
-            mobileThemeBtn.addEventListener('click', () => {
+        // Theme toggle
+        if (themeBtn) {
+            themeBtn.addEventListener('click', () => {
                 document.querySelector('.theme-toggle-btn')?.click();
             });
         }
 
         // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('menu-open');
     }
 
     closeMenu() {
-        const overlay = document.querySelector('.mobile-menu-overlay');
-        if (overlay) {
-            overlay.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => {
-                overlay.remove();
-            }, 300);
-        }
+        const overlay = document.getElementById('mobileMenuOverlay');
+        if (!overlay) return;
+
+        overlay.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 300);
 
         // Animate menu button back to hamburger
         this.menuBtn.classList.remove('active');
 
         // Restore body scroll
-        document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
 
         this.isOpen = false;
+    }
+}
+
+// ==================== Sidebar Banners Footer Control ====================
+class SidebarBannersControl {
+    constructor() {
+        this.banners = document.querySelectorAll('.side-banner');
+        this.footer = document.querySelector('.footer');
+
+        if (this.banners.length === 0 || !this.footer) return;
+
+        this.init();
+    }
+
+    init() {
+        window.addEventListener('scroll', () => this.handleScroll());
+        // Initial check
+        this.handleScroll();
+    }
+
+    handleScroll() {
+        const scrolled = window.pageYOffset;
+        const windowHeight = window.innerHeight;
+        const footerTop = this.footer.getBoundingClientRect().top + scrolled;
+
+        this.banners.forEach(banner => {
+            const bannerHeight = 580; // Height of banner
+            const bannerBottom = scrolled + windowHeight - (windowHeight - 160 - bannerHeight); // 160 is top offset
+
+            // Hide banners when they would overlap with footer
+            if (bannerBottom + 20 >= footerTop) {
+                banner.style.opacity = '0';
+                banner.style.visibility = 'hidden';
+            } else {
+                banner.style.opacity = '1';
+                banner.style.visibility = 'visible';
+            }
+        });
     }
 }
 
@@ -1594,6 +1592,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new Pagination();
     new YouTubeCarousel();
     new MobileMenu();
+    new SidebarBannersControl();
 
     // Add smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

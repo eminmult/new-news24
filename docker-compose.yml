@@ -5,16 +5,24 @@ services:
     image: nginx:alpine
     container_name: nginx-new1
     ports:
-      - "8085:80"
-      - "8445:443"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./:/var/www/html
-      - ./docker/nginx-temp.conf:/etc/nginx/conf.d/default.conf
+      # - ./docker/nginx-temp.conf:/etc/nginx/conf.d/default.conf
+      # SSL enabled for Cloudflare:
+      - ./docker/nginx-ssl.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/ssl:/etc/nginx/ssl:ro
     depends_on:
       - php-fpm-new1
     networks:
       - new1-network
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   php-fpm-new1:
     build:
@@ -23,13 +31,17 @@ services:
     container_name: php-fpm-new1
     volumes:
       - ./:/var/www/html
-      - /root/sites/dle/public_html/uploads:/var/www/dle-uploads:ro
     depends_on:
       - mysql-new1
       - redis-new1
     networks:
       - new1-network
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   queue-worker-new1:
     build:
@@ -46,6 +58,11 @@ services:
       - new1-network
     restart: unless-stopped
     command: php /var/www/html/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   mysql-new1:
     image: mysql:8.0
@@ -60,6 +77,11 @@ services:
     networks:
       - new1-network
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     # Порт закрыт для внешнего доступа (доступен только внутри Docker сети)
 
   minio-new1:
@@ -73,24 +95,33 @@ services:
     networks:
       - new1-network
     restart: unless-stopped
-    # Порты закрыты для внешнего доступа (доступны только внутри Docker сети)
     command: server /data --console-address ":9001"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Порты закрыты для внешнего доступа (доступны только внутри Docker сети)
 
   redis-new1:
     image: redis:7-alpine
     container_name: redis-new1
-    # Порт закрыт для внешнего доступа (доступен только внутри Docker сети)
     volumes:
       - redis-new1-data:/data
     networks:
       - new1-network
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Порт закрыт для внешнего доступа (доступен только внутри Docker сети)
 
   meilisearch-new1:
     image: getmeili/meilisearch:v1.5
     container_name: meilisearch-new1
-    # Порт закрыт для внешнего доступа (доступен только внутри Docker сети)
     environment:
       MEILI_MASTER_KEY: your_master_key_here_change_it
       MEILI_ENV: production
@@ -99,6 +130,12 @@ services:
     networks:
       - new1-network
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Порт закрыт для внешнего доступа (доступен только внутри Docker сети)
 
 networks:
   new1-network:

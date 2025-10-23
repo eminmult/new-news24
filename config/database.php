@@ -64,6 +64,8 @@ return [
             ]) : [],
         ],
 
+        // DLE database connection removed - migration completed
+        /*
         'dle_mysql' => [
             'driver' => 'mysql',
             'host' => env('DLE_DB_HOST', '127.0.0.1'),
@@ -82,6 +84,7 @@ return [
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
             ]) : [],
         ],
+        */
 
         'mariadb' => [
             'driver' => 'mariadb',

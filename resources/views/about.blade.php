@@ -8,18 +8,27 @@
 @section('title', 'Haqqımızda - ' . $siteName)
 
 @section('seo')
+    @php
+        $aboutDescription = $siteName . ' - Azərbaycanın aparıcı xəbər portalı. Bizim missiyamız, tariximiz və komandamız haqqında ətraflı məlumat.';
+    @endphp
     <x-seo
         :title="'Haqqımızda - ' . $siteName"
-        :description="$siteName . ' - Azərbaycanın aparıcı xəbər portalı. Bizim missiyamız, tariximiz və komandamız haqqında ətraflı məlumat.'"
-        :keywords="'haqqımızda, ' . strtolower($siteName) . ', azərbaycan media, xəbər portalı, komandamız, missiya'"
+        :description="$aboutDescription"
+        :keywords="'haqqımızda, ' . strtolower($siteName) . ', azərbaycan media, xəbər portalı, komandamız, missiya, jurnalistlər'"
         :ogType="'website'"
+        :ogTitle="'Haqqımızda - ' . $siteName"
+        :ogDescription="$aboutDescription"
         :ogImage="asset('images/logo-cropped.png')"
+        :ogUrl="route('about')"
         :canonical="route('about')"
+        :twitterCard="'summary'"
+        :twitterTitle="'Haqqımızda - ' . $siteName"
+        :twitterDescription="$aboutDescription"
     />
 @endsection
 
 @section('schema')
-    {{-- Organization Schema --}}
+    {{-- AboutPage Schema --}}
     <script type="application/ld+json">
     {
       "@@context": "https://schema.org",
@@ -27,6 +36,12 @@
       "name": "Haqqımızda - News24.az",
       "description": "News24.az - Azərbaycanın aparıcı xəbər portalı. Bizim missiyamız, tariximiz və komandamız haqqında ətraflı məlumat.",
       "url": "{{ route('about') }}",
+      "inLanguage": "az",
+      "isPartOf": {
+        "@@type": "WebSite",
+        "name": "News24.az",
+        "url": "{{ config('app.url') }}"
+      },
       "mainEntity": {
         "@@type": "NewsMediaOrganization",
         "name": "News24.az",
@@ -40,23 +55,118 @@
         },
         "description": "Azərbaycanın aparıcı xəbər portalı",
         "foundingDate": "2018",
+        "foundingLocation": {
+          "@@type": "Place",
+          "address": {
+            "@@type": "PostalAddress",
+            "addressCountry": "AZ",
+            "addressLocality": "Bakı"
+          }
+        },
+        "areaServed": {
+          "@@type": "Country",
+          "name": "Azerbaijan"
+        },
         "sameAs": [
-          "{{ config_value('INSTAGRAM') }}",
-          "{{ config_value('FACEBOOK') }}",
-          "{{ config_value('YOUTUBE') }}",
-          "{{ config_value('TELEGRAM') }}",
-          "{{ config_value('TIKTOK') }}"
+          @php
+            $socials = array_filter([
+              config_value('INSTAGRAM'),
+              config_value('FACEBOOK'),
+              config_value('YOUTUBE'),
+              config_value('TELEGRAM'),
+              config_value('TIKTOK')
+            ]);
+          @endphp
+          {!! '"' . implode('","', $socials) . '"' !!}
         ],
         "contactPoint": {
           "@@type": "ContactPoint",
           "telephone": "{{ config_value('PHONE') }}",
           "contactType": "Customer Service",
           "areaServed": "AZ",
-          "availableLanguage": ["Azerbaijani", "Russian"]
+          "availableLanguage": ["Azerbaijani", "Russian"],
+          "email": "{{ config_value('EMAIL') ?? 'info@news24.az' }}"
+        }@if($authors && $authors->count() > 0),
+        "employee": [
+          @foreach($authors as $author)
+          {
+            "@@type": "Person",
+            "name": "{{ $author->name }}",
+            "jobTitle": "Jurnalist",
+            @if($author->avatar_thumb)
+            "image": {
+              "@@type": "ImageObject",
+              "url": "{{ $author->avatar_thumb }}"
+            },
+            @endif
+            "worksFor": {
+              "@@type": "NewsMediaOrganization",
+              "name": "News24.az"
+            }
+          }@if(!$loop->last),@endif
+          @endforeach
+        ]
+        @endif
+      }
+    }
+    </script>
+
+    {{-- WebPage Schema --}}
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "WebPage",
+      "name": "Haqqımızda - News24.az",
+      "description": "News24.az haqqında ətraflı məlumat",
+      "url": "{{ route('about') }}",
+      "inLanguage": "az",
+      "isPartOf": {
+        "@@type": "WebSite",
+        "name": "News24.az",
+        "url": "{{ config('app.url') }}"
+      },
+      "publisher": {
+        "@@type": "Organization",
+        "name": "News24.az",
+        "logo": {
+          "@@type": "ImageObject",
+          "url": "{{ asset('images/logo-cropped.png') }}"
         }
       }
     }
     </script>
+
+    {{-- Person Schema for each team member --}}
+    @if($authors && $authors->count() > 0)
+      @foreach($authors as $author)
+      <script type="application/ld+json">
+      {
+        "@@context": "https://schema.org",
+        "@@type": "Person",
+        "name": "{{ $author->name }}",
+        "jobTitle": "Jurnalist",
+        @if($author->email)
+        "email": "{{ $author->email }}",
+        @endif
+        @if($author->avatar_thumb)
+        "image": {
+          "@@type": "ImageObject",
+          "url": "{{ $author->avatar_thumb }}"
+        },
+        @endif
+        "worksFor": {
+          "@@type": "NewsMediaOrganization",
+          "name": "News24.az",
+          "url": "{{ config('app.url') }}"
+        },
+        "nationality": {
+          "@@type": "Country",
+          "name": "Azerbaijan"
+        }
+      }
+      </script>
+      @endforeach
+    @endif
 
     {{-- BreadcrumbList Schema --}}
     <x-schema

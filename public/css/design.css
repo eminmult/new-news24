@@ -5389,6 +5389,261 @@ section {
     }
 }
 
+/* ==================== Additional Responsive Breakpoints for Homepage ==================== */
+
+/* Tablets and small laptops (768px - 992px) */
+@media (max-width: 992px) and (min-width: 769px) {
+    .container {
+        padding: 0 24px;
+    }
+
+    .trending-card {
+        flex: 0 0 calc((100% - 32px) / 3);
+        max-width: calc((100% - 32px) / 3);
+    }
+
+    .news-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+/* Medium tablets (640px - 768px) */
+@media (max-width: 768px) and (min-width: 641px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    .section-title {
+        font-size: 26px;
+    }
+}
+
+/* Large phones (480px - 640px) */
+@media (max-width: 640px) and (min-width: 481px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    .main-featured-card .card-title {
+        font-size: 18px;
+    }
+}
+
+/* Additional Mobile Improvements (360px - 480px) */
+@media (max-width: 480px) and (min-width: 361px) {
+    .section-title {
+        font-size: 26px;
+    }
+
+    .trending-section {
+        padding: 16px 0;
+    }
+
+    .trending-content h3 {
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    .main-featured-card .card-content {
+        padding: 16px;
+    }
+
+    .main-featured-card .card-title {
+        font-size: 18px;
+        line-height: 1.4;
+    }
+
+    .card-date {
+        font-size: 12px;
+    }
+
+    .breaking-news {
+        padding: 12px 0;
+    }
+
+    .ticker-label {
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+
+    .youtube-carousel-section {
+        padding: 24px 0;
+    }
+
+    .youtube-carousel-header {
+        margin-bottom: 16px;
+    }
+
+    .yt-title {
+        font-size: 18px;
+        line-height: 1.4;
+    }
+
+    .news-grid-section {
+        padding: 24px 0;
+    }
+
+    .news-card .card-title {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .news-card-date {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+
+    .category-badge {
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+
+    .pagination {
+        gap: 6px;
+    }
+
+    .pagination-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+
+    /* Footer Mobile Compact */
+    .footer {
+        padding: 30px 0 20px;
+    }
+
+    .footer-content {
+        gap: 0;
+        margin-bottom: 20px;
+        grid-template-columns: 1fr;
+    }
+
+    /* Hide Bölmələr, Məlumat, Əlaqə sections on mobile */
+    .footer-section:nth-child(2),
+    .footer-section:nth-child(3),
+    .footer-section:nth-child(4) {
+        display: none;
+    }
+
+    .footer-logo {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .footer-desc {
+        font-size: 13px;
+        margin-bottom: 16px;
+        line-height: 1.5;
+    }
+
+    .social-links {
+        gap: 8px;
+    }
+
+    .social-link {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .footer-bottom {
+        padding-top: 20px;
+        font-size: 12px;
+    }
+}
+
+/* Small phones (max 360px) */
+@media (max-width: 360px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .logo-img {
+        height: 20px;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    .trending-content h3 {
+        font-size: 15px;
+    }
+
+    .main-featured-card .card-title {
+        font-size: 17px;
+    }
+
+    .trending-nav-btn,
+    .youtube-nav-btn,
+    .main-featured-nav-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .yt-title {
+        font-size: 16px;
+    }
+
+    .news-card .card-title {
+        font-size: 16px;
+    }
+
+    .pagination-btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .pagination-dots {
+        font-size: 12px;
+    }
+
+    /* Footer Extra Compact */
+    .footer {
+        padding: 24px 0 16px;
+    }
+
+    .footer-content {
+        gap: 0;
+        margin-bottom: 16px;
+    }
+
+    /* Hide Bölmələr, Məlumat, Əlaqə sections on small phones */
+    .footer-section:nth-child(2),
+    .footer-section:nth-child(3),
+    .footer-section:nth-child(4) {
+        display: none;
+    }
+
+    .footer-logo {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .footer-desc {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .social-links {
+        gap: 6px;
+    }
+
+    .social-link {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .footer-bottom {
+        padding-top: 16px;
+        font-size: 11px;
+    }
+}
+
 /* Extra Small Mobile (320px and below) */
 @media (max-width: 320px) {
     .container {
@@ -5421,6 +5676,78 @@ section {
 
     .featured-title {
         font-size: 14px;
+    }
+}
+
+/* Sidebar Fixed Banners */
+.side-banner {
+    position: fixed;
+    top: 160px;
+    width: 160px;
+    height: 580px;
+    z-index: 100;
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.left-banner {
+    left: calc((100vw - 1120px) / 2 - 180px);
+}
+
+.right-banner {
+    right: calc((100vw - 1120px) / 2 - 180px);
+}
+
+.side-banner a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.side-banner img {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.side-banner:hover img {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Show sidebar banners on screens larger than 1400px */
+@media (min-width: 1400px) {
+    .side-banner {
+        display: block !important;
+    }
+}
+
+/* Show mobile banner only on mobile */
+@media (max-width: 992px) {
+    .mobile-top-banner,
+    .post-content-banner-mobile {
+        display: block !important;
+    }
+}
+
+/* Hide desktop ads on mobile and tablets */
+@media (max-width: 992px) {
+    .top-banner-ad-section,
+    .post-content-banner-desktop {
+        display: none !important;
+    }
+
+    .side-banner-wrapper,
+    .main-featured-side-image {
+        display: none !important;
+    }
+
+    .main-featured-slider-wrapper {
+        width: 100% !important;
     }
 }
 

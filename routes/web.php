@@ -26,6 +26,7 @@ Route::get('/livewire/preview-file/{filename}', function ($filename) {
 // Фронтенд маршруты
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::get('/api/popular-searches', [HomeController::class, 'popularSearches'])->name('api.popular-searches');
 Route::get('/haqqimizda', [HomeController::class, 'about'])->name('about');
 Route::get('/elaqe', [HomeController::class, 'contact'])->name('contact');
 
@@ -39,8 +40,33 @@ Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sit
 // Роут для постов (с категорией в URL)
 Route::get('/{category}/{slug}', [HomeController::class, 'show'])->name('post');
 
-// Роут для категорий (должен быть последним)
-Route::get('/{slug}', [HomeController::class, 'category'])->name('category');
+// Роут для категорий и старых DLE URL-ов (должен быть последним)
+Route::get('/{slug}', function ($slug) {
+    // Проверяем, является ли это старым DLE URL (формат: /ID-slug.html)
+    if (preg_match('/^(\d+)-(.*?)\.html$/', $slug, $matches)) {
+        $oldSlug = $matches[2]; // Извлекаем slug без ID и .html
+
+        // Ищем пост по старому URL
+        $post = \App\Models\Post::where('old_url', $oldSlug)
+            ->with('categories')
+            ->first();
+
+        if ($post && $post->categories->isNotEmpty()) {
+            $firstCategory = $post->categories->first();
+            // Делаем 301 редирект на новый URL
+            return redirect()->route('post', [
+                'category' => $firstCategory->slug,
+                'slug' => $post->slug
+            ], 301);
+        }
+
+        // Если пост не найден, возвращаем 404
+        abort(404);
+    }
+
+    // Если это не старый URL, обрабатываем как категорию
+    return app()->make(\App\Http\Controllers\HomeController::class)->category($slug);
+})->name('category');
 
 // Heartbeat endpoint для поддержания блокировки поста
 Route::post('/admin/post-lock/heartbeat/{postId}', function ($postId) {

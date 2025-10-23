@@ -13,8 +13,14 @@
         :description="$mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çox.'"
         :keywords="$mainInfo?->meta_keywords ?? 'xəbərlər, azərbaycan xəbərləri, son xəbərlər, günün xəbərləri, news24.az, siyasət, iqtisadiyyat, idman'"
         :ogType="'website'"
-        :ogImage="asset('images/newslogo3.svg')"
+        :ogTitle="$siteName . ' - Azərbaycanın aparıcı xəbər portalı'"
+        :ogDescription="'Azərbaycanın ən son və etibarlı xəbər mənbəyi. Siyasət, iqtisadiyyat, idman, mədəniyyət və daha çoxu haqqında gündəlik yeniliklər.'"
+        :ogImage="asset('images/logo-cropped.png')"
+        :ogUrl="route('home')"
         :canonical="route('home')"
+        :twitterCard="'summary_large_image'"
+        :twitterTitle="$siteName . ' - Son xəbərlər'"
+        :twitterDescription="'Azərbaycanın ən son xəbərləri bir yerdə'"
     />
 @endsection
 
@@ -34,6 +40,31 @@
             'telegram' => config_value('TELEGRAM'),
             'tiktok' => config_value('TIKTOK'),
             'phone' => config_value('PHONE'),
+        ]"
+    />
+
+    {{-- WebPage Schema --}}
+    <x-schema
+        type="webpage"
+        :pageTitle="$siteName . ' - Azərbaycanın aparıcı xəbər portalı'"
+        :pageDescription="$mainInfo?->meta_description ?? 'Azərbaycanın ən son xəbərləri, analitika və eksklüziv materiallar'"
+    />
+
+    {{-- CollectionPage Schema with Latest Posts --}}
+    @if($latestPosts && $latestPosts->isNotEmpty())
+    <x-schema
+        type="collectionpage"
+        :posts="$latestPosts"
+        :pageTitle="$siteName . ' - Son xəbərlər'"
+        :pageDescription="'Azərbaycanın ən son və aktual xəbərləri'"
+    />
+    @endif
+
+    {{-- Breadcrumb Schema --}}
+    <x-schema
+        type="breadcrumb"
+        :breadcrumbs="[
+            ['name' => 'Əsas səhifə', 'url' => route('home')]
         ]"
     />
 @endsection
@@ -89,7 +120,6 @@
     @endif
 
     <!-- Top Banner Ad Section -->
-    @if(request()->get('page', 1) == 1)
     <section class="top-banner-ad-section" style="padding: 20px 0;">
         <div class="container">
             @php
@@ -101,7 +131,19 @@
             </a>
         </div>
     </section>
-    @endif
+
+    <!-- Mobile Top Banner -->
+    <section class="mobile-top-banner" style="padding: 20px 0; display: none;">
+        <div class="container">
+            @php
+                $mobileBanner = config_value('TOP_BANNER_MOBILE', '/images/ad-banner-430x200.svg');
+                $mobileBannerLink = config_value('TOP_BANNER_MOBILE_LINK', '#');
+            @endphp
+            <a href="{{ $mobileBannerLink }}" target="_blank" rel="noopener" style="display: block; max-width: 430px; margin: 0 auto;">
+                <img src="{{ $mobileBanner }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 12px; display: block;" loading="lazy">
+            </a>
+        </div>
+    </section>
 
     <!-- Main Featured Section -->
     @if(request()->get('page', 1) == 1 && $sliderPosts && $sliderPosts->isNotEmpty())

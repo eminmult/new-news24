@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Cache;
 class PostObserver
 {
     /**
+     * Handle the Post "saving" event (before any save).
+     */
+    public function saving(Post $post): void
+    {
+        // Очищаем кеш перед любым сохранением
+        if ($post->exists) {
+            $this->clearPostCaches($post);
+        }
+    }
+
+    /**
      * Handle the Post "created" event.
      */
     public function created(Post $post): void
@@ -81,9 +92,11 @@ class PostObserver
             Cache::forget("home_latest_posts_page_{$i}");
         }
 
-        // Очищаем кеш поста
-        if ($post->slug && $post->category) {
-            Cache::forget("post_{$post->category->slug}_{$post->slug}");
+        // Очищаем кеш поста для всех категорий, к которым он принадлежит
+        if ($post->slug) {
+            foreach ($post->categories as $category) {
+                Cache::forget("post_{$category->slug}_{$post->slug}");
+            }
         }
 
         // Очищаем кеш похожих постов
