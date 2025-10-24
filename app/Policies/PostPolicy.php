@@ -22,13 +22,8 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        // Admin and Editor can view all posts
-        if ($user->isAdmin() || $user->isEditor()) {
-            return true;
-        }
-
-        // Author can only view their own posts
-        return $user->id === $post->author_id;
+        // All authenticated users can view all posts
+        return true;
     }
 
     /**
@@ -45,13 +40,8 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        // Admin and Editor can update all posts
-        if ($user->isAdmin() || $user->isEditor()) {
-            return true;
-        }
-
-        // Author can only update their own posts
-        return $user->id === $post->author_id;
+        // All authenticated users can update all posts
+        return true;
     }
 
     /**
@@ -59,13 +49,8 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        // Admin and Editor can delete all posts
-        if ($user->isAdmin() || $user->isEditor()) {
-            return true;
-        }
-
-        // Author can only delete their own posts
-        return $user->id === $post->author_id;
+        // All authenticated users can delete all posts
+        return true;
     }
 
     /**
@@ -73,13 +58,8 @@ class PostPolicy
      */
     public function restore(User $user, Post $post): bool
     {
-        // Admin and Editor can restore all posts
-        if ($user->isAdmin() || $user->isEditor()) {
-            return true;
-        }
-
-        // Author can only restore their own posts
-        return $user->id === $post->author_id;
+        // All authenticated users can restore all posts
+        return true;
     }
 
     /**
@@ -87,7 +67,7 @@ class PostPolicy
      */
     public function forceDelete(User $user, Post $post): bool
     {
-        // Only Admin can permanently delete posts
-        return $user->isAdmin();
+        // Nobody can permanently delete posts - they must go to trash
+        return false;
     }
 }
