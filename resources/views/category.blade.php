@@ -116,7 +116,7 @@
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
-                        <span class="stat-number">{{ $posts->where('published_at', '>=', now()->startOfDay())->count() }}</span>
+                        <span class="stat-number">{{ $todayPostsCount }}</span>
                         <span class="stat-label">Bu gün</span>
                     </div>
                 </div>

@@ -65,7 +65,9 @@ class Post extends Model implements HasMedia
 
     public function getMainCategoryAttribute()
     {
-        return $this->categories()->first() ?? $this->category;
+        // Используем ->categories (без скобок) чтобы использовать eager loaded relationship
+        // Это избежит N+1 проблему при генерации sitemap
+        return $this->categories->first() ?? $this->category;
     }
 
     public function author(): BelongsTo
@@ -143,35 +145,35 @@ class Post extends Model implements HasMedia
 
     public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
     {
-        // Маленькие превью для карточек - 450x300px (пропорции 3:2)
+        // Маленькие превью для карточек - 450x300px (пропорции 3:2) - ОПТИМИЗИРОВАНО
         $this->addMediaConversion('thumb')
             ->format('webp')
             ->fit(\Spatie\Image\Enums\Fit::Crop, 450, 300)
-            ->quality(78)
+            ->quality(70)
             ->performOnCollections('post-gallery', 'post-content-images')
             ->nonQueued();
 
-        // Средние превью - 700x467px (пропорции 3:2)
+        // Средние превью - 700x467px (пропорции 3:2) - ОПТИМИЗИРОВАНО
         $this->addMediaConversion('medium')
             ->format('webp')
             ->fit(\Spatie\Image\Enums\Fit::Crop, 700, 467)
-            ->quality(80)
+            ->quality(72)
             ->performOnCollections('post-gallery', 'post-content-images')
             ->nonQueued();
 
-        // Большие превью для слайдеров - 1200x800px (пропорции 3:2)
+        // Большие превью для слайдеров - 1200x800px (пропорции 3:2) - ОПТИМИЗИРОВАНО
         $this->addMediaConversion('large')
             ->format('webp')
             ->fit(\Spatie\Image\Enums\Fit::Crop, 1200, 800)
-            ->quality(85)
+            ->quality(75)
             ->performOnCollections('post-gallery', 'post-content-images')
             ->nonQueued();
 
-        // Большая версия в WebP - максимум 1000px (оригинальные пропорции)
+        // Большая версия в WebP - максимум 1000px (оригинальные пропорции) - ОПТИМИЗИРОВАНО
         $this->addMediaConversion('webp')
             ->format('webp')
             ->fit(\Spatie\Image\Enums\Fit::Max, 1000, 1000)
-            ->quality(82)
+            ->quality(73)
             ->performOnCollections('post-gallery', 'post-content-images')
             ->nonQueued();
     }

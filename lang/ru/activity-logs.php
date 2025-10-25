@@ -89,6 +89,7 @@ return [
     'no' => 'Нет',
 
     'descriptions' => [
+        'post_created' => 'Пост ":title" создан',
         'post_gallery_changed' => ':model ":name" галерея изменена',
         'post_categories_changed' => ':model ":name" категории изменены',
         'post_types_changed' => ':model ":name" типы изменены',

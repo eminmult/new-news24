@@ -24,7 +24,9 @@ Route::get('/livewire/preview-file/{filename}', function ($filename) {
 })->where('filename', '.*')->name('livewire.preview-file');
 
 // Фронтенд маршруты
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])
+    ->name('home')
+    ->middleware(\Spatie\ResponseCache\Middlewares\CacheResponse::class);
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/api/popular-searches', [HomeController::class, 'popularSearches'])->name('api.popular-searches');
 Route::get('/haqqimizda', [HomeController::class, 'about'])->name('about');
@@ -33,7 +35,8 @@ Route::get('/elaqe', [HomeController::class, 'contact'])->name('contact');
 // Sitemap маршруты (ДОЛЖНЫ БЫТЬ ПЕРЕД catch-all роутом!)
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
 Route::get('/sitemap-news.xml', [SitemapController::class, 'news'])->name('sitemap.news');
-Route::get('/sitemap-posts.xml', [SitemapController::class, 'posts'])->name('sitemap.posts');
+Route::get('/sitemap-posts-{year}-{month}.xml', [SitemapController::class, 'postsByMonth'])->name('sitemap.posts.month')->where(['year' => '[0-9]{4}', 'month' => '[0-9]{2}']);
+Route::get('/sitemap-posts-{year}.xml', [SitemapController::class, 'postsByYear'])->name('sitemap.posts.year')->where(['year' => '[0-9]{4}']);
 Route::get('/sitemap-categories.xml', [SitemapController::class, 'categories'])->name('sitemap.categories');
 Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sitemap.pages');
 
@@ -66,7 +69,7 @@ Route::get('/{slug}', function ($slug) {
 
     // Если это не старый URL, обрабатываем как категорию
     return app()->make(\App\Http\Controllers\HomeController::class)->category($slug);
-})->name('category');
+})->name('category')->middleware(\Spatie\ResponseCache\Middlewares\CacheResponse::class);
 
 // Heartbeat endpoint для поддержания блокировки поста
 Route::post('/admin/post-lock/heartbeat/{postId}', function ($postId) {

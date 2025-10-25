@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -26,6 +27,13 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\RedirectOldDleUrls::class,
             \App\Http\Middleware\AdminRobotsTxt::class,
         ]);
+    })
+    ->withSchedule(function (Schedule $schedule): void {
+        // Генерация sitemap каждые 10 минут
+        $schedule->command('sitemap:generate --type=all')
+            ->everyTenMinutes()
+            ->withoutOverlapping()
+            ->runInBackground();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

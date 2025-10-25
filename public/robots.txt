@@ -1,5 +1,5 @@
-# robots.txt для OLAY.az
-# Обновлено: 2025-10-09
+# robots.txt для NEWS24.az
+# Обновлено: 2025-10-25
 
 # Правила для всех поисковых роботов
 User-agent: *
@@ -23,4 +23,4 @@ Disallow: /search*
 Clean-param: page&sort&filter /category/
 
 # Карта сайта
-Sitemap: https://fila.olay.az/sitemap.xml
+Sitemap: https://news24.az/sitemap.xml

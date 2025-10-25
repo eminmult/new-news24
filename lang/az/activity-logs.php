@@ -89,6 +89,7 @@ return [
     'no' => 'Xeyr',
 
     'descriptions' => [
+        'post_created' => 'Yazı ":title" yaradıldı',
         'post_gallery_changed' => ':model ":name" qalereya dəyişdirildi',
         'post_categories_changed' => ':model ":name" kateqoriyalar dəyişdirildi',
         'post_types_changed' => ':model ":name" tiplər dəyişdirildi',

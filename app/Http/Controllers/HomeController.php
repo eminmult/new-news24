@@ -15,15 +15,15 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Категории кешируются на 1 час
-        $categories = Cache::remember('all_categories', 3600, function() {
+        // Категории кешируются на 1 год (инвалидация через Observer)
+        $categories = Cache::remember('all_categories', 31536000, function() {
             return Category::where('is_active', true)
                 ->orderBy('order')
                 ->get();
         });
 
-        // Посты для слайдера - кеш 5 минут
-        $sliderPosts = Cache::remember('home_slider_posts', 300, function() {
+        // Посты для слайдера - кеш 1 год (инвалидация через Observer)
+        $sliderPosts = Cache::remember('home_slider_posts', 31536000, function() {
             return Post::published()
                 ->where('show_in_slider', true)
                 ->with(['categories', 'category', 'author'])
@@ -32,8 +32,8 @@ class HomeController extends Controller
                 ->get();
         });
 
-        // Важные новости сегодня - кеш 5 минут
-        $importantPosts = Cache::remember('home_important_posts', 300, function() {
+        // Важные новости сегодня - кеш 1 год (инвалидация через Observer)
+        $importantPosts = Cache::remember('home_important_posts', 31536000, function() {
             return Post::published()
                 ->where('show_in_important_today', true)
                 ->with(['categories', 'category', 'author'])
@@ -42,8 +42,8 @@ class HomeController extends Controller
                 ->get();
         });
 
-        // Главные новости для главного блока - кеш 5 минут
-        $mainFeaturedPosts = Cache::remember('home_main_featured_posts', 300, function() {
+        // Главные новости для главного блока - кеш 1 год (инвалидация через Observer)
+        $mainFeaturedPosts = Cache::remember('home_main_featured_posts', 31536000, function() {
             return Post::published()
                 ->where('show_in_main_featured', true)
                 ->with(['categories', 'category', 'author'])
@@ -52,8 +52,8 @@ class HomeController extends Controller
                 ->get();
         });
 
-        // Видео посты для youtube-carousel - кеш 10 минут
-        $videoPosts = Cache::remember('home_video_posts', 600, function() {
+        // Видео посты для youtube-carousel - кеш 1 год (инвалидация через Observer)
+        $videoPosts = Cache::remember('home_video_posts', 31536000, function() {
             return Post::published()
                 ->where('show_in_video_section', true)
                 ->with(['categories', 'category', 'author', 'types'])
@@ -62,8 +62,8 @@ class HomeController extends Controller
                 ->get();
         });
 
-        // Фото посты - кеш 10 минут
-        $photoPosts = Cache::remember('home_photo_posts', 600, function() {
+        // Фото посты - кеш 1 год (инвалидация через Observer)
+        $photoPosts = Cache::remember('home_photo_posts', 31536000, function() {
             return Post::published()
                 ->where('show_in_types_block', true)
                 ->whereHas('types', function($query) {
@@ -75,9 +75,9 @@ class HomeController extends Controller
                 ->get();
         });
 
-        // Последние посты - кешируем на 3 минуты с учетом страницы
+        // Последние посты - кешируем на 1 год с учетом страницы (инвалидация через Observer)
         $page = request()->get('page', 1);
-        $latestPosts = Cache::remember("home_latest_posts_page_{$page}", 180, function() {
+        $latestPosts = Cache::remember("home_latest_posts_page_{$page}", 31536000, function() {
             return Post::published()
                 ->with(['categories', 'category', 'author'])
                 ->latest('published_at')
@@ -89,45 +89,36 @@ class HomeController extends Controller
 
     public function category($slug)
     {
-        // Кешируем категорию на 1 час
-        $category = Cache::remember("category_{$slug}", 3600, function() use ($slug) {
+        // Кешируем категорию на 1 год (инвалидация через Observer)
+        $category = Cache::remember("category_{$slug}", 31536000, function() use ($slug) {
             return Category::where('slug', $slug)
                 ->where('is_active', true)
                 ->firstOrFail();
         });
 
-        // Кешируем список категорий с количеством постов на 30 минут
-        $categories = Cache::remember('categories_with_posts_count', 1800, function() {
-            return Category::where('is_active', true)
-                ->withCount(['posts' => function($query) {
-                    $query->published();
-                }])
-                ->orderBy('order')
-                ->get();
-        });
-
-        // Посты категории кешируем на 5 минут с учетом страницы
+        // Посты категории кешируем на 1 год с учетом страницы (инвалидация через Observer)
         $page = request()->get('page', 1);
-        $posts = Cache::remember("category_{$category->id}_posts_page_{$page}", 300, function() use ($category) {
+        $posts = Cache::remember("category_{$category->id}_posts_page_{$page}", 31536000, function() use ($category) {
             return Post::published()
                 ->whereHas('categories', function($q) use ($category) {
                     $q->where('categories.id', $category->id);
                 })
-                ->with(['categories', 'category', 'author'])
+                ->with(['category', 'author'])
                 ->latest('published_at')
                 ->paginate(Setting::get('category_posts_count', 12));
         });
 
-        // Общие просмотры категории кешируем на 10 минут
-        $totalViews = Cache::remember("category_{$category->id}_total_views", 600, function() use ($category) {
+        // Кешируем количество постов за сегодня на 1 день (обновляется каждый день автоматически)
+        $todayPostsCount = Cache::remember("category_{$category->id}_today_posts_count", 86400, function() use ($category) {
             return Post::published()
                 ->whereHas('categories', function($q) use ($category) {
                     $q->where('categories.id', $category->id);
                 })
-                ->sum('views');
+                ->where('published_at', '>=', now()->startOfDay())
+                ->count();
         });
 
-        return view('category', compact('category', 'categories', 'posts', 'totalViews'));
+        return view('category', compact('category', 'posts', 'todayPostsCount'));
     }
 
     public function show($category, $slug)

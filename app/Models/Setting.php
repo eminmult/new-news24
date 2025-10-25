@@ -46,12 +46,14 @@ class Setting extends Model
     }
 
     /**
-     * Get setting value by name
+     * Get setting value by name (with 1 year cache)
      */
     public static function get(string $name, mixed $default = null): mixed
     {
-        $setting = self::getByName($name);
-        return $setting ? $setting->getValue() : $default;
+        return \Illuminate\Support\Facades\Cache::remember("setting_{$name}", 31536000, function() use ($name, $default) {
+            $setting = self::getByName($name);
+            return $setting ? $setting->getValue() : $default;
+        });
     }
 
     /**
@@ -62,5 +64,22 @@ class Setting extends Model
         $setting = self::firstOrCreate(['name' => $name], ['type' => $type]);
         $setting->setValue($value);
         $setting->save();
+
+        // Очищаем кеш настройки
+        \Illuminate\Support\Facades\Cache::forget("setting_{$name}");
+    }
+
+    /**
+     * Boot the model
+     */
+    protected static function booted(): void
+    {
+        static::saved(function ($setting) {
+            \Illuminate\Support\Facades\Cache::forget("setting_{$setting->name}");
+        });
+
+        static::deleted(function ($setting) {
+            \Illuminate\Support\Facades\Cache::forget("setting_{$setting->name}");
+        });
     }
 }

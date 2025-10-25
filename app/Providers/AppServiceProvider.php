@@ -4,11 +4,14 @@ namespace App\Providers;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Setting;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\PostType;
 use App\Models\StaticPage;
 use App\Observers\PostObserver;
+use App\Observers\CategoryObserver;
+use App\Observers\SettingObserver;
 use App\Observers\ActivityLogObserver;
 use App\Observers\MediaObserver;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -34,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Регистрируем Observer для автоматической очистки кеша sitemap
         Post::observe(PostObserver::class);
+        Category::observe(CategoryObserver::class);
+        Setting::observe(SettingObserver::class);
 
         // Регистрируем ActivityLogObserver для всех моделей
         Post::observe(ActivityLogObserver::class);
