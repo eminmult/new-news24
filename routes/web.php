@@ -39,6 +39,9 @@ Route::get('/sitemap-posts-{year}-{month}.xml', [SitemapController::class, 'post
 Route::get('/sitemap-posts-{year}.xml', [SitemapController::class, 'postsByYear'])->name('sitemap.posts.year')->where(['year' => '[0-9]{4}']);
 Route::get('/sitemap-categories.xml', [SitemapController::class, 'categories'])->name('sitemap.categories');
 Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sitemap.pages');
+Route::get('/sitemap-images.xml', [SitemapController::class, 'imagesIndex'])->name('sitemap.images');
+Route::get('/sitemap-images-{year}-{month}.xml', [SitemapController::class, 'imagesByMonth'])->name('sitemap.images.month')->where(['year' => '[0-9]{4}', 'month' => '[0-9]{2}']);
+Route::get('/sitemap-images-{year}.xml', [SitemapController::class, 'imagesByYear'])->name('sitemap.images.year')->where(['year' => '[0-9]{4}']);
 
 // Роут для постов (с категорией в URL)
 Route::get('/{category}/{slug}', [HomeController::class, 'show'])->name('post');

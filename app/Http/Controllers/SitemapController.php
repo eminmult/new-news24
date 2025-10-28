@@ -69,6 +69,12 @@ class SitemapController extends Controller
         $xml .= '<lastmod>' . now()->toAtomString() . '</lastmod>';
         $xml .= '</sitemap>';
 
+        // Sitemap для изображений
+        $xml .= '<sitemap>';
+        $xml .= '<loc>' . route('sitemap.images') . '</loc>';
+        $xml .= '<lastmod>' . now()->toAtomString() . '</lastmod>';
+        $xml .= '</sitemap>';
+
         $xml .= '</sitemapindex>';
 
         return $xml;
@@ -503,6 +509,174 @@ class SitemapController extends Controller
     }
 
     /**
+     * Images Sitemap Index - индекс с разделением по месяцам
+     * ЧИТАЕТ ИЗ REDIS
+     */
+    public function imagesIndex(): Response
+    {
+        $xml = Redis::get('sitemap:images:index');
+
+        if (!$xml) {
+            $xml = $this->generateImagesIndexXml();
+            Redis::setex('sitemap:images:index', 900, $xml);
+        }
+
+        return response($xml, 200)
+            ->header('Content-Type', 'application/xml')
+            ->header('Cache-Control', 'public, max-age=900');
+    }
+
+    /**
+     * ПУБЛИЧНЫЙ метод генерации Images Index XML
+     */
+    public function generateImagesIndexXml(): string
+    {
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+        // Получаем периоды с постами (используем тот же метод)
+        $periods = $this->getPostsPeriods();
+
+        foreach ($periods as $period) {
+            $xml .= '<sitemap>';
+            if (isset($period['month'])) {
+                $xml .= '<loc>' . route('sitemap.images.month', ['year' => $period['year'], 'month' => $period['month']]) . '</loc>';
+            } else {
+                $xml .= '<loc>' . route('sitemap.images.year', ['year' => $period['year']]) . '</loc>';
+            }
+            $xml .= '<lastmod>' . $period['lastmod']->toAtomString() . '</lastmod>';
+            $xml .= '</sitemap>';
+        }
+
+        $xml .= '</sitemapindex>';
+
+        return $xml;
+    }
+
+    /**
+     * Images Sitemap по месяцам - ЧИТАЕТ ИЗ REDIS
+     */
+    public function imagesByMonth(int $year, string $month): Response
+    {
+        $xml = Redis::get("sitemap:images:{$year}-{$month}");
+
+        if (!$xml) {
+            $xml = $this->generateImagesXmlDirect($year, $month);
+            $isCurrentMonth = ($year == now()->year && $month == now()->format('m'));
+            $ttl = $isCurrentMonth ? 300 : 43200;
+            Redis::setex("sitemap:images:{$year}-{$month}", $ttl, $xml);
+        }
+
+        $isCurrentMonth = ($year == now()->year && $month == now()->format('m'));
+        $cacheDuration = $isCurrentMonth ? 300 : 43200;
+
+        return response($xml, 200)
+            ->header('Content-Type', 'application/xml')
+            ->header('Cache-Control', "public, max-age={$cacheDuration}");
+    }
+
+    /**
+     * Images Sitemap по годам - ЧИТАЕТ ИЗ REDIS
+     */
+    public function imagesByYear(int $year): Response
+    {
+        $xml = Redis::get("sitemap:images:{$year}");
+
+        if (!$xml) {
+            $xml = $this->generateImagesXmlDirect($year);
+            Redis::setex("sitemap:images:{$year}", 86400, $xml);
+        }
+
+        return response($xml, 200)
+            ->header('Content-Type', 'application/xml')
+            ->header('Cache-Control', 'public, max-age=86400');
+    }
+
+    /**
+     * ПУБЛИЧНЫЙ метод генерации Images XML
+     * Только изображения, без текста статей
+     */
+    public function generateImagesXmlDirect(int $year, ?string $month = null): string
+    {
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
+        $xml .= ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"';
+        $xml .= ' xmlns:xhtml="http://www.w3.org/1999/xhtml">';
+
+        // SQL запрос для получения постов с изображениями из таблицы media
+        $sql = "
+            SELECT
+                p.slug,
+                p.title,
+                p.updated_at,
+                p.published_at,
+                c.slug as category_slug,
+                m.id as media_id,
+                m.file_name,
+                m.disk
+            FROM posts p
+            INNER JOIN (
+                SELECT post_id, MIN(category_id) as category_id
+                FROM category_post
+                GROUP BY post_id
+            ) cp ON p.id = cp.post_id
+            INNER JOIN categories c ON cp.category_id = c.id
+            INNER JOIN (
+                SELECT model_id, MIN(id) as min_id
+                FROM media
+                WHERE model_type = ?
+                    AND collection_name = 'post-gallery'
+                GROUP BY model_id
+            ) m_first ON p.id = m_first.model_id
+            INNER JOIN media m ON m_first.min_id = m.id
+            WHERE p.published_at IS NOT NULL
+                AND p.published_at <= NOW()
+                AND p.is_published = 1
+                AND p.deleted_at IS NULL
+                AND YEAR(p.published_at) = ?
+        ";
+
+        $params = ['App\Models\Post', $year];
+
+        if ($month) {
+            $sql .= " AND MONTH(p.published_at) = ?";
+            $params[] = (int)$month;
+        }
+
+        $sql .= " ORDER BY p.published_at DESC";
+
+        $posts = \DB::select($sql, $params);
+
+        $nowTimestamp = time();
+        $baseUrl = config('app.url');
+        $storageUrl = config('app.url') . '/storage';
+
+        foreach ($posts as $post) {
+            // Формируем URL webp версии изображения
+            $fileNameWithoutExt = pathinfo($post->file_name, PATHINFO_FILENAME);
+            $imageUrl = $storageUrl . '/' . $post->media_id . '/conversions/' . $fileNameWithoutExt . '-webp.webp';
+
+            $xml .= '<url>';
+            $xml .= '<loc>' . htmlspecialchars($baseUrl . '/' . $post->category_slug . '/' . $post->slug) . '</loc>';
+            $xml .= '<lastmod>' . date('c', strtotime($post->updated_at)) . '</lastmod>';
+            $xml .= '<changefreq>monthly</changefreq>';
+            $xml .= '<priority>0.6</priority>';
+
+            // Изображение
+            $xml .= '<image:image>';
+            $xml .= '<image:loc>' . htmlspecialchars($imageUrl) . '</image:loc>';
+            $xml .= '<image:title>' . htmlspecialchars($post->title) . '</image:title>';
+            $xml .= '</image:image>';
+
+            $xml .= '</url>';
+        }
+
+        $xml .= '</urlset>';
+
+        return $xml;
+    }
+
+    /**
      * Очистка кеша всех sitemap (Redis)
      */
     public static function clearCache(): void
@@ -512,6 +686,7 @@ class SitemapController extends Controller
         Redis::del('sitemap:news');
         Redis::del('sitemap:categories');
         Redis::del('sitemap:pages');
+        Redis::del('sitemap:images:index');
 
         // Очищаем все sitemap постов по периодам (2021-2025 по месяцам)
         $currentYear = now()->year;
@@ -519,12 +694,14 @@ class SitemapController extends Controller
             for ($month = 1; $month <= 12; $month++) {
                 $monthStr = str_pad($month, 2, '0', STR_PAD_LEFT);
                 Redis::del("sitemap:posts:{$year}-{$monthStr}");
+                Redis::del("sitemap:images:{$year}-{$monthStr}");
             }
         }
 
         // Очищаем sitemap постов по годам (2018-2020)
         for ($year = 2020; $year >= 2018; $year--) {
             Redis::del("sitemap:posts:{$year}");
+            Redis::del("sitemap:images:{$year}");
         }
     }
 }

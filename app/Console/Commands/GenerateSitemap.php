@@ -8,7 +8,7 @@ use App\Http\Controllers\SitemapController;
 
 class GenerateSitemap extends Command
 {
-    protected $signature = 'sitemap:generate {--type=all : all, index, posts, categories, pages, news}';
+    protected $signature = 'sitemap:generate {--type=all : all, index, posts, categories, pages, news, images}';
     protected $description = 'Генерация sitemap в Redis (без запросов к БД при загрузке)';
 
     public function handle()
@@ -35,10 +35,14 @@ class GenerateSitemap extends Command
             case 'news':
                 $this->generateNews();
                 break;
+            case 'images':
+                $this->generateAllImages();
+                break;
             case 'all':
             default:
                 $this->generateNews();
                 $this->generateAllPosts();
+                $this->generateAllImages();
                 $this->generateCategories();
                 $this->generatePages();
                 $this->generateIndex();
@@ -128,5 +132,62 @@ class GenerateSitemap extends Command
         $xml = app(SitemapController::class)->generateNewsXml();
         Redis::setex('sitemap:news', 300, $xml); // 5 минут
         $this->line('   ✓ sitemap-news.xml');
+    }
+
+    private function generateAllImages()
+    {
+        $this->info('🖼️  Генерирую images sitemap...');
+
+        // Получаем все периоды с изображениями из таблицы media
+        $periodsData = \DB::table('posts')
+            ->join('media', function($join) {
+                $join->on('posts.id', '=', 'media.model_id')
+                     ->where('media.model_type', '=', 'App\\Models\\Post')
+                     ->where('media.collection_name', '=', 'post-gallery');
+            })
+            ->selectRaw('YEAR(posts.published_at) as year, MONTH(posts.published_at) as month, COUNT(DISTINCT posts.id) as count')
+            ->whereNotNull('posts.published_at')
+            ->where('posts.published_at', '<=', now())
+            ->where('posts.is_published', true)
+            ->whereNull('posts.deleted_at')
+            ->groupBy('year', 'month')
+            ->orderByDesc('year')
+            ->orderByDesc('month')
+            ->get();
+
+        $bar = $this->output->createProgressBar($periodsData->count());
+        $bar->start();
+
+        foreach ($periodsData as $data) {
+            // 2021-2025: по месяцам
+            if ($data->year >= 2021) {
+                $month = str_pad($data->month, 2, '0', STR_PAD_LEFT);
+                $xml = app(SitemapController::class)->generateImagesXmlDirect($data->year, $month);
+
+                $isCurrentMonth = ($data->year == now()->year && $data->month == now()->month);
+                $ttl = $isCurrentMonth ? 300 : 43200; // 5 минут или 12 часов
+
+                Redis::setex("sitemap:images:{$data->year}-{$month}", $ttl, $xml);
+            }
+            // 2018-2020: по годам
+            else if ($data->year >= 2018) {
+                $key = "sitemap:images:{$data->year}";
+                // Генерируем только если еще не сгенерировано для этого года
+                if (!Redis::exists($key)) {
+                    $xml = app(SitemapController::class)->generateImagesXmlDirect($data->year);
+                    Redis::setex($key, 86400, $xml); // 24 часа
+                }
+            }
+
+            $bar->advance();
+        }
+
+        $bar->finish();
+        $this->newLine();
+
+        // Генерируем индекс images sitemap
+        $xml = app(SitemapController::class)->generateImagesIndexXml();
+        Redis::setex('sitemap:images:index', 900, $xml); // 15 минут
+        $this->line('   ✓ sitemap-images.xml');
     }
 }
