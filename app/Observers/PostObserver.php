@@ -24,6 +24,9 @@ class PostObserver
      */
     public function created(Post $post): void
     {
+        // Debug log
+        file_put_contents(storage_path('logs/observer-debug.log'), date('Y-m-d H:i:s') . " - POST CREATED: {$post->id} - {$post->title}\n", FILE_APPEND);
+
         // Автоматически устанавливаем первую картинку галереи как главную, если главная не установлена
         if (!$post->featured_media_id) {
             $firstGalleryImage = $post->getFirstMedia('post-gallery');
@@ -43,6 +46,9 @@ class PostObserver
      */
     public function updated(Post $post): void
     {
+        // Debug log
+        file_put_contents(storage_path('logs/observer-debug.log'), date('Y-m-d H:i:s') . " - POST UPDATED: {$post->id} - {$post->title}\n", FILE_APPEND);
+
         // Автоматически устанавливаем первую картинку галереи как главную, если главная не установлена
         if (!$post->featured_media_id) {
             $firstGalleryImage = $post->getFirstMedia('post-gallery');
