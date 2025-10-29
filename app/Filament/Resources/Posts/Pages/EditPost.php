@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Posts\Pages;
 use App\Filament\Resources\Posts\PostResource;
 use App\Models\ActivityLog;
 use App\Models\PostLock;
+use App\Observers\PostObserver;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -185,6 +186,12 @@ class EditPost extends EditRecord
         session()->forget('post_' . $this->record->id . '_original_categories');
         session()->forget('post_' . $this->record->id . '_original_types');
         session()->forget('post_' . $this->record->id . '_original_widgets');
+
+        // ВАЖНО: Очищаем кеш немедленно после обновления поста
+        $observer = new PostObserver();
+        $observer->updated($this->record);
+
+        file_put_contents(storage_path('logs/observer-debug.log'), date('Y-m-d H:i:s') . " - FILAMENT POST UPDATED: {$this->record->id} - {$this->record->title}\n", FILE_APPEND);
 
         // Снимаем блокировку после сохранения
         PostLock::where('post_id', $this->record->id)

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Posts\Pages;
 
 use App\Filament\Resources\Posts\PostResource;
 use App\Models\ActivityLog;
+use App\Observers\PostObserver;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,5 +31,11 @@ class CreatePost extends CreateRecord
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);
+
+        // ВАЖНО: Очищаем кеш немедленно после создания поста
+        $observer = new PostObserver();
+        $observer->created($this->record);
+
+        file_put_contents(storage_path('logs/observer-debug.log'), date('Y-m-d H:i:s') . " - FILAMENT POST CREATED: {$this->record->id} - {$this->record->title}\n", FILE_APPEND);
     }
 }
