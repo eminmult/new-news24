@@ -87,11 +87,11 @@
             @endphp
             <!-- Desktop Banner -->
             <a href="{{ $topBannerAdLink }}" target="_blank" rel="noopener" class="top-banner-desktop" style="display: block; max-width: 1080px; margin: 0 auto;">
-                <img src="{{ $topBannerAd }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                <img src="{{ $topBannerAd }}" alt="Reklam" width="1080" height="160" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
             </a>
             <!-- Mobile Banner -->
             <a href="{{ $mobileBannerLink }}" target="_blank" rel="noopener" class="top-banner-mobile" style="display: none; max-width: 430px; margin: 0 auto;">
-                <img src="{{ $mobileBanner }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                <img src="{{ $mobileBanner }}" alt="Reklam" width="430" height="200" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
             </a>
         </div>
     </section>

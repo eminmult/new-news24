@@ -199,6 +199,13 @@
     @endforeach
 @endsection
 
+@section('preload')
+    {{-- Preload LCP image for faster loading --}}
+    @if($post->featured_image_large)
+    <link rel="preload" as="image" href="{{ $post->featured_image_large }}" fetchpriority="high">
+    @endif
+@endsection
+
 @section('content')
     <!-- Breadcrumbs -->
     <section class="breadcrumbs-section">
@@ -226,11 +233,11 @@
             @endphp
             <!-- Desktop Banner -->
             <a href="{{ $topBannerAdLink }}" target="_blank" rel="noopener" class="top-banner-desktop" style="display: block; max-width: 1080px; margin: 0 auto;">
-                <img src="{{ $topBannerAd }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                <img src="{{ $topBannerAd }}" alt="Reklam" width="1080" height="160" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
             </a>
             <!-- Mobile Banner -->
             <a href="{{ $mobileBannerLink }}" target="_blank" rel="noopener" class="top-banner-mobile" style="display: none; max-width: 430px; margin: 0 auto;">
-                <img src="{{ $mobileBanner }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                <img src="{{ $mobileBanner }}" alt="Reklam" width="430" height="200" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
             </a>
         </div>
     </section>
@@ -247,7 +254,7 @@
 
                     <div class="article-image">
                         @if($post->featured_image_large)
-                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" fetchpriority="high" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
                         @endif
                         @if($post->main_category)
                         <span class="category-badge category-{{ $post->main_category->id }}">{{ $post->main_category->name }}</span>
@@ -288,7 +295,7 @@
                             $postBannerLink = config_value('POST_CONTENT_BANNER_LINK_DESKTOP', '#');
                         @endphp
                         <a href="{{ $postBannerLink }}" target="_blank" rel="noopener" style="display: block; max-width: 639px;">
-                            <img src="{{ $postBanner }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                            <img src="{{ $postBanner }}" alt="Reklam" width="639" height="80" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
                         </a>
                     </div>
 
@@ -299,7 +306,7 @@
                             $postBannerMobileLink = config_value('POST_CONTENT_BANNER_MOBILE_LINK', '#');
                         @endphp
                         <a href="{{ $postBannerMobileLink }}" target="_blank" rel="noopener" style="display: block; max-width: 277px; margin: 0 auto;">
-                            <img src="{{ $postBannerMobile }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                            <img src="{{ $postBannerMobile }}" alt="Reklam" width="277" height="60" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
                         </a>
                     </div>
 
@@ -332,7 +339,14 @@
                                 </div>
                                 @elseif($widget->type === 'instagram')
                                 <div class="widget-item widget-instagram" style="margin: 32px 0;">
-                                    <blockquote class="instagram-media" data-instgrm-permalink="{{ $widget->content }}" data-instgrm-version="14"></blockquote>
+                                    @php
+                                        // Если в content только ID, формируем полный URL
+                                        $instagramUrl = $widget->content;
+                                        if (!str_starts_with($widget->content, 'http')) {
+                                            $instagramUrl = 'https://www.instagram.com/p/' . trim($widget->content, '/') . '/';
+                                        }
+                                    @endphp
+                                    <blockquote class="instagram-media" data-instgrm-permalink="{{ $instagramUrl }}" data-instgrm-version="14"></blockquote>
                                 </div>
                                 @elseif($widget->type === 'telegram')
                                 <div class="article-video" style="margin: 32px 0;">

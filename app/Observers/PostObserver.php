@@ -13,17 +13,8 @@ class PostObserver
      */
     public function saving(Post $post): void
     {
-        // Очищаем кеш ТОЛЬКО если изменились важные поля
-        if ($post->exists && $post->isDirty([
-            'is_published',
-            'published_at',
-            'show_in_slider',
-            'show_in_important_today',
-            'show_in_main_featured',
-            'show_in_video_section',
-            'show_in_types_block',
-            'deleted_at'
-        ])) {
+        // Очищаем кеш при ЛЮБОМ изменении существующего поста
+        if ($post->exists && $post->isDirty()) {
             $this->clearPostCaches($post);
         }
     }
@@ -91,6 +82,14 @@ class PostObserver
      */
     protected function clearPostCaches(Post $post): void
     {
+        $startTime = microtime(true);
+
+        \Log::info('PostObserver: Начало очистки кеша', [
+            'post_id' => $post->id,
+            'post_slug' => $post->slug ?? 'N/A',
+            'post_title' => $post->title ?? 'N/A',
+        ]);
+
         // Очищаем кеш главной страницы
         Cache::forget('home_slider_posts');
         Cache::forget('home_important_posts');
@@ -132,8 +131,46 @@ class PostObserver
         Cache::forget('categories_with_posts_count');
 
         // Очищаем Response Cache (Full Page Cache)
+        $responseCacheCleared = false;
         if (class_exists('\Spatie\ResponseCache\Facades\ResponseCache')) {
             \Spatie\ResponseCache\Facades\ResponseCache::clear();
+            $responseCacheCleared = true;
+        }
+
+        // Очищаем nginx fastcgi_cache
+        $this->clearNginxCache();
+
+        $duration = round((microtime(true) - $startTime) * 1000, 2);
+
+        \Log::info('PostObserver: Кеш успешно очищен', [
+            'post_id' => $post->id,
+            'duration_ms' => $duration,
+            'response_cache_cleared' => $responseCacheCleared,
+        ]);
+    }
+
+    /**
+     * Очистка nginx fastcgi_cache
+     */
+    protected function clearNginxCache(): void
+    {
+        try {
+            $startTime = microtime(true);
+
+            // Используем exec вместо shell_exec для синхронного выполнения
+            $output = [];
+            $returnVar = 0;
+            exec('docker exec nginx-new1 find /var/cache/nginx/fastcgi -type f -delete 2>&1', $output, $returnVar);
+
+            $duration = round((microtime(true) - $startTime) * 1000, 2);
+
+            \Log::info('Nginx fastcgi_cache cleared', [
+                'duration_ms' => $duration,
+                'return_code' => $returnVar,
+                'output' => implode("\n", $output)
+            ]);
+        } catch (\Exception $e) {
+            \Log::warning('Failed to clear nginx cache: ' . $e->getMessage());
         }
     }
 }

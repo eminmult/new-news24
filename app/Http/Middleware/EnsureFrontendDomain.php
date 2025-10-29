@@ -17,8 +17,8 @@ class EnsureFrontendDomain
     {
         $host = $request->getHost();
 
-        // Если запрос на домен em.olay.az - редиректим на админку
-        if ($host === 'em.olay.az') {
+        // Если запрос на домен edm.news24.az - редиректим на админку
+        if ($host === 'edm.news24.az') {
             return redirect('/admin');
         }
 

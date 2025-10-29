@@ -1,19 +1,15 @@
-# robots.txt для NEWS24.az
-# Обновлено: 2025-10-25
+# News24.az - Robots.txt
 
-# Правила для всех поисковых роботов
-User-agent: *
+Sitemap: https://news24.az/sitemap.xml
+
+
+# Google Bot
+User-agent: Googlebot
 Allow: /
-
-# Запретить индексацию страниц с параметрами (дубли)
 Disallow: /*?*page=
 Disallow: /*?*sort=
 Disallow: /*?*filter=
 
-# Запретить индексацию поиска (включая параметры)
-Disallow: /search*
-
-# Специфичные правила для Yandex (поддерживает Clean-param)
 User-agent: Yandex
 Allow: /
 Disallow: /*?*page=
@@ -22,5 +18,259 @@ Disallow: /*?*filter=
 Disallow: /search*
 Clean-param: page&sort&filter /category/
 
-# Карта сайта
-Sitemap: https://news24.az/sitemap.xml
+Crawl-delay: 1
+
+# Google Image Bot
+User-agent: Googlebot-Image
+Allow: /uploads/
+Allow: /templates/
+Disallow: /engine/
+Crawl-delay: 1
+
+# Google News Bot
+User-agent: Googlebot-News
+Allow: /
+Disallow: /engine/
+Crawl-delay: 1
+
+# Bing Bot
+User-agent: Bingbot
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 2
+
+# Yandex Bot
+User-agent: YandexBot
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 2
+
+# Baidu Bot
+User-agent: Baiduspider
+Allow: /
+Disallow: /engine/
+Crawl-delay: 3
+
+# DuckDuckGo Bot
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /engine/
+Crawl-delay: 2
+
+# ================================================
+# AI BOTLARI - ChatGPT, Gemini, Claude
+# ================================================
+
+# OpenAI GPTBot (ChatGPT Web Tarama)
+User-agent: GPTBot
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Disallow: /admin-sitemap.php
+Disallow: /user/
+Crawl-delay: 5
+
+# OpenAI ChatGPT-User
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 5
+
+# Google-Extended (Gemini AI)
+User-agent: Google-Extended
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Disallow: /admin-sitemap.php
+Crawl-delay: 5
+
+# Google Gemini
+User-agent: GoogleOther
+Allow: /
+Disallow: /engine/
+Crawl-delay: 5
+
+# Anthropic Claude Bot
+User-agent: Claude-Web
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 5
+
+# Anthropic ClaudeBot
+User-agent: ClaudeBot
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 5
+
+# Common Crawl (AI eğitimi için)
+User-agent: CCBot
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 10
+
+# Cohere AI Bot
+User-agent: cohere-ai
+Allow: /
+Disallow: /engine/
+Crawl-delay: 5
+
+# Perplexity AI Bot
+User-agent: PerplexityBot
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 5
+
+# Meta AI Bot (Facebook/Meta)
+User-agent: FacebookBot
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 5
+
+# Apple Intelligence Bot
+User-agent: Applebot
+Allow: /
+Disallow: /engine/
+Crawl-delay: 5
+
+# Bytespider (TikTok/ByteDance AI)
+User-agent: Bytespider
+Allow: /
+Disallow: /engine/
+Disallow: /admin.php
+Crawl-delay: 10
+
+# Facebook Bot
+User-agent: facebookexternalhit
+Allow: /
+
+# Twitter Bot
+User-agent: Twitterbot
+Allow: /
+
+# LinkedIn Bot
+User-agent: LinkedInBot
+Allow: /
+
+# Telegram Bot
+User-agent: TelegramBot
+Allow: /
+
+# WhatsApp Bot
+User-agent: WhatsApp
+Allow: /
+
+# Slack Bot
+User-agent: Slackbot
+Allow: /
+
+
+# Agresif scraper'lar
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SeznamBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+# Spam botları
+User-agent: ia_archiver
+Disallow: /
+
+User-agent: duggmirror
+Disallow: /
+
+User-agent: Nutch
+Disallow: /
+
+User-agent: bingbot
+Disallow: /
+
+# Email toplama botları
+User-agent: EmailCollector
+Disallow: /
+
+User-agent: EmailSiphon
+Disallow: /
+
+User-agent: WebBandit
+Disallow: /
+
+# İçerik kopyalama botları
+User-agent: WebCopier
+Disallow: /
+
+User-agent: HTTrack
+Disallow: /
+
+User-agent: Offline Explorer
+Disallow: /
+
+User-agent: Teleport
+Disallow: /
+
+User-agent: WebZip
+Disallow: /
+
+User-agent: WebReaper
+Disallow: /
+
+
+
+User-agent: *
+Allow: /
+Allow: /uploads/
+Allow: /templates/
+Disallow: /engine/
+Disallow: /admin.php
+Disallow: /cron.php
+Disallow: /dbemin/
+Disallow: /backup/
+Disallow: /mail/
+Disallow: /language/
+Disallow: /user/
+Disallow: /newposts/
+Disallow: /statistics.html
+Disallow: /*?*sort=
+Disallow: /*?*orderby=
+Disallow: /*subaction=userinfo
+Disallow: /*subaction=newposts
+Disallow: /*do=lastcomments
+Disallow: /*do=feedback
+Disallow: /*do=register
+Disallow: /*do=lostpassword
+Disallow: /*do=addnews
+Disallow: /*do=stats
+Disallow: /*do=pm
+Disallow: /*do=search
+Disallow: /*do=download
+Disallow: /*do=go
+
+
+Crawl-delay: 5
+
+Host: news24.az

@@ -52,6 +52,6 @@ class AppServiceProvider extends ServiceProvider
         Media::observe(MediaObserver::class);
 
         // Относительные URL /storage работают корректно на обоих доменах
-        // (em.olay.az - админка, new1.olay.az - фронтенд)
+        // (edm.news24.az - админка, news24.az - фронтенд)
     }
 }

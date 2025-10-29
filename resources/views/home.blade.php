@@ -69,6 +69,13 @@
     />
 @endsection
 
+@section('preload')
+    {{-- Preload first slider image (LCP) for faster loading --}}
+    @if(isset($sliderPosts) && $sliderPosts->isNotEmpty() && $sliderPosts->first()->featured_image_large)
+    <link rel="preload" as="image" href="{{ $sliderPosts->first()->featured_image_large }}" fetchpriority="high">
+    @endif
+@endsection
+
 @section('content')
 <main class="main">
     <!-- Trending Topics Carousel -->
@@ -127,7 +134,7 @@
                 $topBannerAdLink = config_value('TOP_BANNER_AD_LINK_DESKTOP', '#');
             @endphp
             <a href="{{ $topBannerAdLink }}" target="_blank" rel="noopener" style="display: block; max-width: 1080px; margin: 0 auto;">
-                <img src="{{ $topBannerAd }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                <img src="{{ $topBannerAd }}" alt="Reklam" width="1080" height="160" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
             </a>
         </div>
     </section>
@@ -140,7 +147,7 @@
                 $mobileBannerLink = config_value('TOP_BANNER_MOBILE_LINK', '#');
             @endphp
             <a href="{{ $mobileBannerLink }}" target="_blank" rel="noopener" style="display: block; max-width: 430px; margin: 0 auto;">
-                <img src="{{ $mobileBanner }}" alt="Reklam" style="width: 100%; height: auto; border-radius: 12px; display: block;" loading="lazy">
+                <img src="{{ $mobileBanner }}" alt="Reklam" width="430" height="200" style="width: 100%; height: auto; border-radius: 12px; display: block;" loading="lazy">
             </a>
         </div>
     </section>
@@ -164,7 +171,7 @@
                             <article class="main-featured-card">
                                 <div class="card-image">
                                     @if($post->featured_image_large)
-                                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;" {{ $loop->first ? 'fetchpriority="high"' : 'loading="lazy"' }}>
                                     @else
                                         <div class="img-gradient-{{ ($loop->index % 8) + 1 }}" style="width: 100%; height: 100%;"></div>
                                     @endif
@@ -198,7 +205,7 @@
                 @endphp
                 @if($adBanner)
                 <a href="{{ config_value('MAIN_FEATURED_AD_BANNER_LINK_DESKTOP', '#') }}" class="side-banner-wrapper" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
-                    <img src="{{ $adBanner }}" alt="Reklam" class="main-featured-side-image" style="width: 100%; height: 100%; object-fit: fill; border-radius: 20px;" loading="lazy">
+                    <img src="{{ $adBanner }}" alt="Reklam" width="264" height="528" class="main-featured-side-image" style="width: 100%; height: 100%; object-fit: fill; border-radius: 20px;" loading="lazy">
                 </a>
                 @endif
             </div>

@@ -27,11 +27,22 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\RedirectOldDleUrls::class,
             \App\Http\Middleware\AdminRobotsTxt::class,
         ]);
+
+        // Отключаем CSRF для гостевых страниц (админка Filament защищена своим CSRF)
+        $middleware->validateCsrfTokens(except: [
+            '*',  // Все роуты фронтенда
+        ]);
     })
     ->withSchedule(function (Schedule $schedule): void {
         // Генерация sitemap каждые 10 минут
         $schedule->command('sitemap:generate --type=all')
             ->everyTenMinutes()
+            ->withoutOverlapping()
+            ->runInBackground();
+
+        // Генерация llm.txt для AI-ботов каждые 30 минут
+        $schedule->command('llm:generate')
+            ->everyThirtyMinutes()
             ->withoutOverlapping()
             ->runInBackground();
     })

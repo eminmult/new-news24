@@ -35,6 +35,9 @@
     <link rel="preload" href="{{ asset('css/style.min.css?v=78') }}" as="style">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style">
 
+    {{-- Page-specific preloads (LCP images) --}}
+    @yield('preload')
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,7 +97,7 @@
             <!-- Верхний блок -->
             <div class="header-top">
                 <a href="{{ route('home') }}" class="logo">
-                    <img src="{{ asset('images/newslogo3.svg') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" class="logo-img">
+                    <img src="{{ asset('images/newslogo3.svg') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" width="619" height="90" class="logo-img">
                 </a>
 
                 <div class="header-right">
@@ -232,7 +235,7 @@
         <div class="mobile-menu-content">
             <div class="mobile-menu-header">
                 <a href="{{ route('home') }}" class="logo">
-                    <img src="{{ asset('images/newslogo3.svg') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" class="logo-img">
+                    <img src="{{ asset('images/newslogo3.svg') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" width="619" height="90" class="logo-img">
                 </a>
                 <button class="mobile-menu-close" id="mobileMenuClose">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -317,7 +320,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <a href="{{ route('home') }}" class="footer-logo">
-                        <img src="{{ asset('images/newslogo3.svg') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" class="logo-img">
+                        <img src="{{ asset('images/newslogo3.svg') }}" alt="{{ $mainInfo?->site_name ?? 'News24.az' }}" width="619" height="90" class="logo-img">
                     </a>
                     <p class="footer-desc">Aktual xəbərlərin 24/7 mənbəyi. Azərbaycanda və dünyada baş verən hadisələri işıqlandırırıq.</p>
                     <div class="social-links">

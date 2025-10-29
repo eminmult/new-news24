@@ -43,6 +43,20 @@ Route::get('/sitemap-images.xml', [SitemapController::class, 'imagesIndex'])->na
 Route::get('/sitemap-images-{year}-{month}.xml', [SitemapController::class, 'imagesByMonth'])->name('sitemap.images.month')->where(['year' => '[0-9]{4}', 'month' => '[0-9]{2}']);
 Route::get('/sitemap-images-{year}.xml', [SitemapController::class, 'imagesByYear'])->name('sitemap.images.year')->where(['year' => '[0-9]{4}']);
 
+// LLM.txt для AI-ботов (ChatGPT, Claude, Perplexity)
+Route::get('/llm.txt', function () {
+    $path = public_path('llm.txt');
+
+    if (!file_exists($path)) {
+        abort(404, 'LLM.txt not generated yet. Run: php artisan llm:generate');
+    }
+
+    return response()->file($path, [
+        'Content-Type' => 'text/plain; charset=utf-8',
+        'Cache-Control' => 'public, max-age=1800', // 30 минут
+    ]);
+})->name('llm.txt');
+
 // Роут для постов (с категорией в URL)
 Route::get('/{category}/{slug}', [HomeController::class, 'show'])->name('post');
 
