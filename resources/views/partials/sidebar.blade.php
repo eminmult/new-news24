@@ -20,7 +20,6 @@
             @endphp
             @foreach($trendingPosts as $index => $trendingPost)
             <a href="{{ $trendingPost->url }}" class="trending-item">
-                <span class="trending-number">#{{ $index + 1 }}</span>
                 <div class="trending-content">
                     <h4 class="trending-title">{{ $trendingPost->title }}</h4>
                     <span class="trending-views">{{ number_format($trendingPost->views) }} baxış</span>

@@ -103,7 +103,6 @@
                                 @if($post->featured_image_thumb)
                                 <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" loading="lazy">
                                 @endif
-                                <span class="trending-number">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
                             </div>
                             <div class="trending-content">
                                 @if($post->main_category)
