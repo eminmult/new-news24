@@ -58,7 +58,9 @@ Route::get('/llm.txt', function () {
 })->name('llm.txt');
 
 // Роут для постов (с категорией в URL)
-Route::get('/{category}/{slug}', [HomeController::class, 'show'])->name('post');
+Route::get('/{category}/{slug}', [HomeController::class, 'show'])
+    ->name('post')
+    ->middleware(\Spatie\ResponseCache\Middlewares\CacheResponse::class);
 
 // Роут для категорий и старых DLE URL-ов (должен быть последним)
 Route::get('/{slug}', function ($slug) {
