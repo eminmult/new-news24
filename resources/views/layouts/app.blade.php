@@ -214,17 +214,25 @@
 
     @if($leftSidebarAd)
     <div class="side-banner left-banner" style="position: fixed; top: 160px; left: calc((100vw - 1120px) / 2 - 180px); width: 160px; height: 580px; z-index: 100;">
-        <a href="{{ $leftSidebarAdLink }}" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
-            <img src="{{ $leftSidebarAd }}" alt="Banner" loading="lazy" style="width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-        </a>
+        @if(str_starts_with(trim($leftSidebarAd), '<'))
+            {!! $leftSidebarAd !!}
+        @else
+            <a href="{{ $leftSidebarAdLink }}" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
+                <img src="{{ $leftSidebarAd }}" alt="Banner" loading="lazy" style="width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+            </a>
+        @endif
     </div>
     @endif
 
     @if($rightSidebarAd)
     <div class="side-banner right-banner" style="position: fixed; top: 160px; right: calc((100vw - 1120px) / 2 - 180px); width: 160px; height: 580px; z-index: 100;">
-        <a href="{{ $rightSidebarAdLink }}" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
-            <img src="{{ $rightSidebarAd }}" alt="Banner" loading="lazy" style="width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-        </a>
+        @if(str_starts_with(trim($rightSidebarAd), '<'))
+            {!! $rightSidebarAd !!}
+        @else
+            <a href="{{ $rightSidebarAdLink }}" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%;">
+                <img src="{{ $rightSidebarAd }}" alt="Banner" loading="lazy" style="width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+            </a>
+        @endif
     </div>
     @endif
 

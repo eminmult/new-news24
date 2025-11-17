@@ -232,13 +232,25 @@
                 $mobileBannerLink = config_value('TOP_BANNER_MOBILE_LINK', '#');
             @endphp
             <!-- Desktop Banner -->
-            <a href="{{ $topBannerAdLink }}" target="_blank" rel="noopener" class="top-banner-desktop" style="display: block; max-width: 1080px; margin: 0 auto;">
-                <img src="{{ $topBannerAd }}" alt="Reklam" width="1080" height="160" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
-            </a>
+            <div class="top-banner-desktop" style="display: block; max-width: 1080px; margin: 0 auto;">
+                @if(str_starts_with(trim($topBannerAd), '<'))
+                    {!! $topBannerAd !!}
+                @else
+                    <a href="{{ $topBannerAdLink }}" target="_blank" rel="noopener">
+                        <img src="{{ $topBannerAd }}" alt="Reklam" width="1080" height="160" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                    </a>
+                @endif
+            </div>
             <!-- Mobile Banner -->
-            <a href="{{ $mobileBannerLink }}" target="_blank" rel="noopener" class="top-banner-mobile" style="display: none; max-width: 430px; margin: 0 auto;">
-                <img src="{{ $mobileBanner }}" alt="Reklam" width="430" height="200" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
-            </a>
+            <div class="top-banner-mobile" style="display: none; max-width: 430px; margin: 0 auto;">
+                @if(str_starts_with(trim($mobileBanner), '<'))
+                    {!! $mobileBanner !!}
+                @else
+                    <a href="{{ $mobileBannerLink }}" target="_blank" rel="noopener">
+                        <img src="{{ $mobileBanner }}" alt="Reklam" width="430" height="200" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                    </a>
+                @endif
+            </div>
         </div>
     </section>
 
@@ -294,9 +306,15 @@
                             $postBanner = config_value('POST_CONTENT_BANNER_DESKTOP', '/images/ad-post-639x80.svg');
                             $postBannerLink = config_value('POST_CONTENT_BANNER_LINK_DESKTOP', '#');
                         @endphp
-                        <a href="{{ $postBannerLink }}" target="_blank" rel="noopener" style="display: block; max-width: 639px;">
-                            <img src="{{ $postBanner }}" alt="Reklam" width="639" height="80" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
-                        </a>
+                        <div style="display: block; max-width: 639px;">
+                            @if(str_starts_with(trim($postBanner), '<'))
+                                {!! $postBanner !!}
+                            @else
+                                <a href="{{ $postBannerLink }}" target="_blank" rel="noopener">
+                                    <img src="{{ $postBanner }}" alt="Reklam" width="639" height="80" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                                </a>
+                            @endif
+                        </div>
                     </div>
 
                     <!-- Post Content Banner Mobile -->
@@ -305,9 +323,15 @@
                             $postBannerMobile = config_value('POST_CONTENT_BANNER_MOBILE', '/images/ad-post-mobile-277x60.svg');
                             $postBannerMobileLink = config_value('POST_CONTENT_BANNER_MOBILE_LINK', '#');
                         @endphp
-                        <a href="{{ $postBannerMobileLink }}" target="_blank" rel="noopener" style="display: block; max-width: 277px; margin: 0 auto;">
-                            <img src="{{ $postBannerMobile }}" alt="Reklam" width="277" height="60" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
-                        </a>
+                        <div style="display: block; max-width: 277px; margin: 0 auto;">
+                            @if(str_starts_with(trim($postBannerMobile), '<'))
+                                {!! $postBannerMobile !!}
+                            @else
+                                <a href="{{ $postBannerMobileLink }}" target="_blank" rel="noopener">
+                                    <img src="{{ $postBannerMobile }}" alt="Reklam" width="277" height="60" style="width: 100%; height: auto; border-radius: 8px; display: block;" loading="lazy">
+                                </a>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="article-content">
