@@ -144,16 +144,83 @@ class HomeController extends Controller
                 ->get();
         });
 
-        // Кешируем похожие посты на 30 минут
-        $relatedPosts = Cache::remember("post_{$post->id}_related", 1800, function() use ($post) {
-            return Post::published()
-                ->whereHas('categories', function($q) use ($post) {
-                    $q->whereIn('categories.id', $post->categories->pluck('id'));
+        // Improved related posts algorithm (Internal Linking Optimization)
+        $relatedPosts = Cache::remember("post_{$post->id}_related_improved", 1800, function() use ($post) {
+            $categoryIds = $post->categories->pluck('id');
+            $tagIds = $post->tags->pluck('id');
+            
+            // Priority 1: Same category + same tags (most relevant)
+            $priority1 = Post::published()
+                ->whereHas('categories', function($q) use ($categoryIds) {
+                    $q->whereIn('categories.id', $categoryIds);
+                })
+                ->whereHas('tags', function($q) use ($tagIds) {
+                    $q->whereIn('tags.id', $tagIds);
                 })
                 ->where('id', '!=', $post->id)
                 ->latest('published_at')
-                ->take(Setting::get('related_posts_count', 6))
+                ->take(3)
                 ->get();
+            
+            // Priority 2: Same category (if we need more)
+            if ($priority1->count() < 3) {
+                $priority2 = Post::published()
+                    ->whereHas('categories', function($q) use ($categoryIds) {
+                        $q->whereIn('categories.id', $categoryIds);
+                    })
+                    ->where('id', '!=', $post->id)
+                    ->whereNotIn('id', $priority1->pluck('id'))
+                    ->latest('published_at')
+                    ->take(3 - $priority1->count())
+                    ->get();
+                
+                $priority1 = $priority1->merge($priority2);
+            }
+            
+            // Priority 3: Same tags (if we still need more)
+            if ($priority1->count() < 6 && $tagIds->isNotEmpty()) {
+                $priority3 = Post::published()
+                    ->whereHas('tags', function($q) use ($tagIds) {
+                        $q->whereIn('tags.id', $tagIds);
+                    })
+                    ->where('id', '!=', $post->id)
+                    ->whereNotIn('id', $priority1->pluck('id'))
+                    ->latest('published_at')
+                    ->take(6 - $priority1->count())
+                    ->get();
+                
+                $priority1 = $priority1->merge($priority3);
+            }
+            
+            // Priority 4: Same author (if we still need more)
+            if ($priority1->count() < 6 && $post->author_id) {
+                $priority4 = Post::published()
+                    ->where('author_id', $post->author_id)
+                    ->where('id', '!=', $post->id)
+                    ->whereNotIn('id', $priority1->pluck('id'))
+                    ->latest('published_at')
+                    ->take(6 - $priority1->count())
+                    ->get();
+                
+                $priority1 = $priority1->merge($priority4);
+            }
+            
+            // Priority 5: Recent posts from same category (fallback)
+            if ($priority1->count() < 6) {
+                $priority5 = Post::published()
+                    ->whereHas('categories', function($q) use ($categoryIds) {
+                        $q->whereIn('categories.id', $categoryIds);
+                    })
+                    ->where('id', '!=', $post->id)
+                    ->whereNotIn('id', $priority1->pluck('id'))
+                    ->latest('published_at')
+                    ->take(6 - $priority1->count())
+                    ->get();
+                
+                $priority1 = $priority1->merge($priority5);
+            }
+            
+            return $priority1->take(Setting::get('related_posts_count', 6));
         });
 
         return view('post', compact('post', 'categories', 'relatedPosts'));

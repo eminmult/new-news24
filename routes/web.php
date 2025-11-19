@@ -32,6 +32,14 @@ Route::get('/api/popular-searches', [HomeController::class, 'popularSearches'])-
 Route::get('/haqqimizda', [HomeController::class, 'about'])->name('about');
 Route::get('/elaqe', [HomeController::class, 'contact'])->name('contact');
 
+// Author profile route
+Route::get('/muelleif/{slug}', [\App\Http\Controllers\AuthorController::class, 'show'])->name('author.show');
+
+// RSS/Atom Feed маршруты
+Route::get('/feed/rss', [\App\Http\Controllers\FeedController::class, 'rss'])->name('feed.rss');
+Route::get('/feed/atom', [\App\Http\Controllers\FeedController::class, 'atom'])->name('feed.atom');
+Route::get('/feed', [\App\Http\Controllers\FeedController::class, 'rss'])->name('feed'); // RSS as default
+
 // Sitemap маршруты (ДОЛЖНЫ БЫТЬ ПЕРЕД catch-all роутом!)
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
 Route::get('/sitemap-news.xml', [SitemapController::class, 'news'])->name('sitemap.news');
@@ -39,6 +47,7 @@ Route::get('/sitemap-posts-{year}-{month}.xml', [SitemapController::class, 'post
 Route::get('/sitemap-posts-{year}.xml', [SitemapController::class, 'postsByYear'])->name('sitemap.posts.year')->where(['year' => '[0-9]{4}']);
 Route::get('/sitemap-categories.xml', [SitemapController::class, 'categories'])->name('sitemap.categories');
 Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sitemap.pages');
+Route::get('/sitemap-authors.xml', [SitemapController::class, 'authors'])->name('sitemap.authors');
 Route::get('/sitemap-images.xml', [SitemapController::class, 'imagesIndex'])->name('sitemap.images');
 Route::get('/sitemap-images-{year}-{month}.xml', [SitemapController::class, 'imagesByMonth'])->name('sitemap.images.month')->where(['year' => '[0-9]{4}', 'month' => '[0-9]{2}']);
 Route::get('/sitemap-images-{year}.xml', [SitemapController::class, 'imagesByYear'])->name('sitemap.images.year')->where(['year' => '[0-9]{4}']);

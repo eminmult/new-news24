@@ -8,7 +8,7 @@ use App\Http\Controllers\SitemapController;
 
 class GenerateSitemap extends Command
 {
-    protected $signature = 'sitemap:generate {--type=all : all, index, posts, categories, pages, news, images}';
+    protected $signature = 'sitemap:generate {--type=all : all, index, posts, categories, pages, news, images, authors}';
     protected $description = 'Генерация sitemap в Redis (без запросов к БД при загрузке)';
 
     public function handle()
@@ -38,6 +38,9 @@ class GenerateSitemap extends Command
             case 'images':
                 $this->generateAllImages();
                 break;
+            case 'authors':
+                $this->generateAuthors();
+                break;
             case 'all':
             default:
                 $this->generateNews();
@@ -45,6 +48,7 @@ class GenerateSitemap extends Command
                 $this->generateAllImages();
                 $this->generateCategories();
                 $this->generatePages();
+                $this->generateAuthors();
                 $this->generateIndex();
                 break;
         }
@@ -189,5 +193,13 @@ class GenerateSitemap extends Command
         $xml = app(SitemapController::class)->generateImagesIndexXml();
         Redis::setex('sitemap:images:index', 900, $xml); // 15 минут
         $this->line('   ✓ sitemap-images.xml');
+    }
+
+    private function generateAuthors()
+    {
+        $this->info('👤 Генерирую authors sitemap...');
+        $xml = app(SitemapController::class)->generateAuthorsXml();
+        Redis::setex('sitemap:authors', 3600, $xml); // 1 час
+        $this->line('   ✓ sitemap-authors.xml');
     }
 }

@@ -69,6 +69,12 @@ class SitemapController extends Controller
         $xml .= '<lastmod>' . now()->toAtomString() . '</lastmod>';
         $xml .= '</sitemap>';
 
+        // Sitemap для авторов (E-A-T)
+        $xml .= '<sitemap>';
+        $xml .= '<loc>' . route('sitemap.authors') . '</loc>';
+        $xml .= '<lastmod>' . now()->toAtomString() . '</lastmod>';
+        $xml .= '</sitemap>';
+
         // Sitemap для изображений
         $xml .= '<sitemap>';
         $xml .= '<loc>' . route('sitemap.images') . '</loc>';
@@ -203,7 +209,19 @@ class SitemapController extends Controller
                 $xml .= '</news:publication>';
                 $xml .= '<news:publication_date>' . $post->published_at->toAtomString() . '</news:publication_date>';
                 $xml .= '<news:title>' . htmlspecialchars($post->title) . '</news:title>';
-                $xml .= '<news:keywords>' . htmlspecialchars($mainCategory->name) . '</news:keywords>';
+                
+                // Enhanced keywords: category + tags
+                $keywords = [$mainCategory->name];
+                if ($post->tags && $post->tags->count() > 0) {
+                    $keywords = array_merge($keywords, $post->tags->pluck('name')->take(3)->toArray());
+                }
+                $xml .= '<news:keywords>' . htmlspecialchars(implode(', ', $keywords)) . '</news:keywords>';
+                
+                // Geo locations if available
+                if ($post->meta_keywords) {
+                    $xml .= '<news:geo_locations>' . htmlspecialchars($post->meta_keywords) . '</news:geo_locations>';
+                }
+                
                 $xml .= '</news:news>';
 
                 // Добавляем изображение если есть
@@ -509,6 +527,58 @@ class SitemapController extends Controller
     }
 
     /**
+     * Authors Sitemap - ЧИТАЕТ ИЗ REDIS
+     */
+    public function authors(): Response
+    {
+        $xml = Redis::get('sitemap:authors');
+
+        if (!$xml) {
+            $xml = $this->generateAuthorsXml();
+            Redis::setex('sitemap:authors', 3600, $xml);
+        }
+
+        return response($xml, 200)
+            ->header('Content-Type', 'application/xml')
+            ->header('Cache-Control', 'public, max-age=3600');
+    }
+
+    /**
+     * ПУБЛИЧНЫЙ метод генерации Authors XML
+     */
+    public function generateAuthorsXml(): string
+    {
+        $authors = \App\Models\User::where('is_active', true)
+            ->whereIn('role', [\App\Models\User::ROLE_AUTHOR, \App\Models\User::ROLE_EDITOR, \App\Models\User::ROLE_ADMIN])
+            ->whereNotNull('slug')
+            ->withCount(['posts' => function($query) {
+                $query->published();
+            }])
+            ->having('posts_count', '>', 0)
+            ->orderBy('name')
+            ->get();
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+        foreach ($authors as $author) {
+            $lastPost = $author->posts()->published()->latest('updated_at')->first();
+            $lastmod = $lastPost ? $lastPost->updated_at : $author->updated_at;
+
+            $xml .= '<url>';
+            $xml .= '<loc>' . htmlspecialchars(route('author.show', $author->slug)) . '</loc>';
+            $xml .= '<lastmod>' . $lastmod->toAtomString() . '</lastmod>';
+            $xml .= '<changefreq>weekly</changefreq>';
+            $xml .= '<priority>0.7</priority>';
+            $xml .= '</url>';
+        }
+
+        $xml .= '</urlset>';
+
+        return $xml;
+    }
+
+    /**
      * Images Sitemap Index - индекс с разделением по месяцам
      * ЧИТАЕТ ИЗ REDIS
      */
@@ -686,6 +756,7 @@ class SitemapController extends Controller
         Redis::del('sitemap:news');
         Redis::del('sitemap:categories');
         Redis::del('sitemap:pages');
+        Redis::del('sitemap:authors');
         Redis::del('sitemap:images:index');
 
         // Очищаем все sitemap постов по периодам (2021-2025 по месяцам)

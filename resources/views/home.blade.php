@@ -101,7 +101,7 @@
                         <div class="trending-card">
                             <div class="trending-image @if(!$post->featured_image_thumb) img-gradient-{{ ($index % 8) + 1 }} @endif">
                                 @if($post->featured_image_thumb)
-                                <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" loading="lazy">
+                                <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" width="450" height="300" loading="lazy" decoding="async">
                                 @endif
                             </div>
                             <div class="trending-content">
@@ -182,7 +182,7 @@
                             <article class="main-featured-card">
                                 <div class="card-image">
                                     @if($post->featured_image_large)
-                                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;" {{ $loop->first ? 'fetchpriority="high"' : 'loading="lazy"' }}>
+                                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" width="1200" height="630" style="width: 100%; height: 100%; object-fit: cover;" {{ $loop->first ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"' }}>
                                     @else
                                         <div class="img-gradient-{{ ($loop->index % 8) + 1 }}" style="width: 100%; height: 100%;"></div>
                                     @endif
@@ -327,7 +327,7 @@
                     <a href="{{ $post->url }}">
                         <div class="card-image">
                             @if($post->featured_image_thumb)
-                                <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                                <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" width="450" height="300" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                             @else
                                 <div class="img-gradient-{{ ($loop->index % 8) + 1 }}" style="width: 100%; height: 100%;"></div>
                             @endif

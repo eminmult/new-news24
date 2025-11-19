@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="az" xmlns:og="http://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', $mainInfo?->site_name ?? 'News24.az')</title>
+    
+    {{-- Hreflang Tags (for future multilingual support) --}}
+    <link rel="alternate" hreflang="az" href="{{ url()->current() }}">
+    <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">

@@ -2,6 +2,11 @@
 
 Sitemap: https://news24.az/sitemap.xml
 
+# RSS Feeds
+Allow: /feed/rss
+Allow: /feed/atom
+Allow: /feed
+
 
 # Google Bot
 User-agent: Googlebot

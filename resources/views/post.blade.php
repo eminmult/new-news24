@@ -50,153 +50,219 @@
     />
 
     {{-- WebPage Schema --}}
-    <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "WebPage",
-      "name": "{{ $post->title }}",
-      "description": "{{ $post->meta_description }}",
-      "url": "{{ $post->url }}",
-      "inLanguage": "az",
-      "isPartOf": {
-        "@@type": "WebSite",
-        "name": "News24.az",
-        "url": "{{ config('app.url') }}"
-      },
-      "primaryImageOfPage": {
-        "@@type": "ImageObject",
-        "url": "{{ $post->featured_image }}",
-        "width": 1200,
-        "height": 630
-      },
-      "datePublished": "{{ $post->published_at->toIso8601String() }}",
-      "dateModified": "{{ $post->updated_at->toIso8601String() }}",
-      "author": {
-        "@@type": "Person",
-        "name": "{{ $post->author->name ?? 'News24.az' }}"
-      }
+    @php
+    $webPageSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'WebPage',
+        'name' => $post->title,
+        'description' => $post->meta_description,
+        'url' => $post->url,
+        'inLanguage' => 'az',
+        'isPartOf' => [
+            '@type' => 'WebSite',
+            'name' => 'News24.az',
+            'url' => config('app.url')
+        ],
+        'datePublished' => $post->published_at->toIso8601String(),
+        'dateModified' => $post->updated_at->toIso8601String(),
+        'author' => [
+            '@type' => 'Person',
+            'name' => $post->author->name ?? 'News24.az'
+        ]
+    ];
+    
+    if ($post->featured_image) {
+        $webPageSchema['primaryImageOfPage'] = [
+            '@type' => 'ImageObject',
+            'url' => $post->featured_image,
+            'width' => 1200,
+            'height' => 630
+        ];
     }
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode($webPageSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
 
     {{-- Person Schema (Author) --}}
     @if($post->author)
-    <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "Person",
-      "name": "{{ $post->author->name }}",
-      "url": "{{ route('search', ['q' => $post->author->name]) }}",
-      @if($post->author->avatar_thumb)
-      "image": {
-        "@@type": "ImageObject",
-        "url": "{{ $post->author->avatar_thumb }}"
-      },
-      @endif
-      "jobTitle": "Jurnalist",
-      "worksFor": {
-        "@@type": "NewsMediaOrganization",
-        "name": "News24.az",
-        "url": "{{ config('app.url') }}"
-      }
+    @php
+    $personSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Person',
+        'name' => $post->author->name,
+        'url' => route('author.show', $post->author->slug),
+        'jobTitle' => 'Jurnalist',
+        'worksFor' => [
+            '@type' => 'NewsMediaOrganization',
+            'name' => 'News24.az',
+            'url' => config('app.url')
+        ]
+    ];
+    
+    if ($post->author->avatar_thumb) {
+        $personSchema['image'] = [
+            '@type' => 'ImageObject',
+            'url' => $post->author->avatar_thumb
+        ];
     }
+    
+    if ($post->author->bio) {
+        $personSchema['description'] = $post->author->bio;
+    }
+    
+    // Add expertise areas
+    $authorCategories = \App\Models\Post::published()
+        ->where('author_id', $post->author->id)
+        ->with('categories')
+        ->get()
+        ->map(fn($p) => $p->main_category?->name)->filter()
+        ->filter()
+        ->unique()
+        ->take(3)
+        ->toArray();
+    
+    if (!empty($authorCategories)) {
+        $personSchema['knowsAbout'] = $authorCategories;
+    }
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode($personSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
     @endif
 
     {{-- ImageGallery Schema (если есть галерея) --}}
     @if($post->hasMedia('post-gallery') && $post->getMedia('post-gallery')->count() > 1)
-    <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "ImageGallery",
-      "name": "{{ $post->title }} - Foto qalereya",
-      "description": "{{ $post->meta_description }}",
-      "url": "{{ $post->url }}",
-      "associatedMedia": [
-        @foreach($post->getMedia('post-gallery') as $media)
-        {
-          "@@type": "ImageObject",
-          "contentUrl": "{{ $media->getFullUrl('webp') }}",
-          "url": "{{ $media->getFullUrl('webp') }}",
-          "width": 1200,
-          "height": 800,
-          "caption": "{{ $post->title }}",
-          "encodingFormat": "image/webp",
-          "uploadDate": "{{ $post->published_at->toIso8601String() }}"
-        }@if(!$loop->last),@endif
-        @endforeach
-      ],
-      "author": {
-        "@@type": "Person",
-        "name": "{{ $post->author->name ?? 'News24.az' }}"
-      },
-      "publisher": {
-        "@@type": "Organization",
-        "name": "News24.az",
-        "logo": {
-          "@@type": "ImageObject",
-          "url": "{{ asset('images/logo-cropped.png') }}"
-        }
-      }
+    @php
+    $associatedMedia = [];
+    foreach ($post->getMedia('post-gallery') as $media) {
+        $associatedMedia[] = [
+            '@type' => 'ImageObject',
+            'contentUrl' => $media->getFullUrl('webp'),
+            'url' => $media->getFullUrl('webp'),
+            'width' => 1200,
+            'height' => 800,
+            'caption' => $post->title,
+            'encodingFormat' => 'image/webp',
+            'uploadDate' => $post->published_at->toIso8601String()
+        ];
     }
+    
+    $imageGallerySchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ImageGallery',
+        'name' => $post->title . ' - Foto qalereya',
+        'description' => $post->meta_description,
+        'url' => $post->url,
+        'associatedMedia' => $associatedMedia,
+        'author' => [
+            '@type' => 'Person',
+            'name' => $post->author->name ?? 'News24.az'
+        ],
+        'publisher' => [
+            '@type' => 'NewsMediaOrganization',
+            'name' => 'News24.az',
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('images/logo-cropped.png')
+            ]
+        ]
+    ];
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode($imageGallerySchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
     @endif
 
     {{-- VideoObject Schema (для YouTube/OK.ru видео) --}}
     @foreach($post->widgets->whereIn('type', ['youtube', 'okru']) as $videoWidget)
-    <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "VideoObject",
-      "name": "{{ $post->title }}",
-      "description": "{{ $post->meta_description }}",
-      "thumbnailUrl": [
-        "{{ $post->featured_image }}"
-      ],
-      "uploadDate": "{{ $post->published_at->toIso8601String() }}",
-      @if($videoWidget->type === 'youtube')
-      "embedUrl": "https://www.youtube.com/embed/{{ $videoWidget->content }}",
-      "contentUrl": "https://www.youtube.com/watch?v={{ $videoWidget->content }}",
-      @else
-      "embedUrl": "https://ok.ru/videoembed/{{ $videoWidget->content }}",
-      @endif
-      "publisher": {
-        "@@type": "Organization",
-        "name": "News24.az",
-        "logo": {
-          "@@type": "ImageObject",
-          "url": "{{ asset('images/logo-cropped.png') }}"
-        }
-      },
-      "author": {
-        "@@type": "Person",
-        "name": "{{ $post->author->name ?? 'News24.az' }}"
-      },
-      "inLanguage": "az"
+    @php
+    $videoSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'VideoObject',
+        'name' => $post->title,
+        'description' => $post->meta_description,
+        'uploadDate' => $post->published_at->toIso8601String(),
+        'publisher' => [
+            '@type' => 'NewsMediaOrganization',
+            'name' => 'News24.az',
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('images/logo-cropped.png')
+            ]
+        ],
+        'author' => [
+            '@type' => 'Person',
+            'name' => $post->author->name ?? 'News24.az'
+        ],
+        'inLanguage' => 'az'
+    ];
+    
+    if ($post->featured_image) {
+        $videoSchema['thumbnailUrl'] = [$post->featured_image];
     }
+    
+    if ($videoWidget->type === 'youtube') {
+        $videoSchema['embedUrl'] = 'https://www.youtube.com/embed/' . $videoWidget->content;
+        $videoSchema['contentUrl'] = 'https://www.youtube.com/watch?v=' . $videoWidget->content;
+    } else {
+        $videoSchema['embedUrl'] = 'https://ok.ru/videoembed/' . $videoWidget->content;
+    }
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode($videoSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
     @endforeach
 
     {{-- MediaObject для других типов виджетов --}}
     @foreach($post->widgets->whereIn('type', ['image', 'audio']) as $widget)
     @if($widget->type === 'image')
+    @php
+    $imageObjectSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ImageObject',
+        'contentUrl' => $widget->content,
+        'caption' => $post->title,
+        'author' => [
+            '@type' => 'Person',
+            'name' => $post->author->name ?? 'News24.az'
+        ],
+        'copyrightHolder' => [
+            '@type' => 'Organization',
+            'name' => 'News24.az'
+        ]
+    ];
+    @endphp
     <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "ImageObject",
-      "contentUrl": "{{ $widget->content }}",
-      "caption": "{{ $post->title }}",
-      "author": {
-        "@@type": "Person",
-        "name": "{{ $post->author->name ?? 'News24.az' }}"
-      },
-      "copyrightHolder": {
-        "@@type": "Organization",
-        "name": "News24.az"
-      }
-    }
+    {!! json_encode($imageObjectSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
     @endif
     @endforeach
+
+    {{-- Related Articles Schema (Internal Linking Optimization) --}}
+    @if($relatedPosts->isNotEmpty())
+    @php
+    $relatedItems = [];
+    foreach ($relatedPosts->take(5) as $index => $relatedPost) {
+        $relatedItems[] = [
+            '@type' => 'ListItem',
+            'position' => $index + 1,
+            'url' => $relatedPost->url,
+            'name' => $relatedPost->title
+        ];
+    }
+    
+    $relatedListSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ItemList',
+        'name' => 'Əlaqəli xəbərlər',
+        'itemListElement' => $relatedItems
+    ];
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode($relatedListSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+    </script>
+    @endif
 @endsection
 
 @section('preload')
@@ -266,7 +332,7 @@
 
                     <div class="article-image">
                         @if($post->featured_image_large)
-                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" fetchpriority="high" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                        <img src="{{ $post->featured_image_large }}" alt="{{ $post->title }}" width="1200" height="630" fetchpriority="high" decoding="async" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
                         @endif
                         @if($post->main_category)
                         <span class="category-badge category-{{ $post->main_category->id }}">{{ $post->main_category->name }}</span>
@@ -276,13 +342,15 @@
                     <div class="article-meta">
                         <div class="article-author">
                             @if($post->author)
-                            <div class="author-avatar">
-                                <img src="{{ $post->author->avatar_thumb }}" alt="{{ $post->author->name }}">
-                            </div>
-                            <div class="author-info">
-                                <span class="author-name">{{ $post->author->name }}</span>
-                                <span class="publish-date">{{ format_date_az($post->published_at, 'd F Y, H:i') }}</span>
-                            </div>
+                            <a href="{{ route('author.show', $post->author->slug) }}" class="author-link" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
+                                <div class="author-avatar">
+                                    <img src="{{ $post->author->avatar_thumb }}" alt="{{ $post->author->name }}" width="48" height="48" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
+                                </div>
+                                <div class="author-info">
+                                    <span class="author-name" style="font-weight: 600; display: block;">{{ $post->author->name }}</span>
+                                    <span class="publish-date" style="font-size: 0.875rem; color: #666;">{{ format_date_az($post->published_at, 'd F Y, H:i') }}</span>
+                                </div>
+                            </a>
                             @else
                             <div class="author-info">
                                 <span class="publish-date">{{ format_date_az($post->published_at, 'd F Y, H:i') }}</span>
@@ -341,7 +409,7 @@
                         @if($post->hasMedia('post-gallery') && $post->getMedia('post-gallery')->count() > 1)
                         <div class="article-gallery" style="display: flex; flex-direction: column; align-items: center; gap: 20px; margin-top: 32px;">
                             @foreach($post->getMedia('post-gallery')->skip(1) as $media)
-                            <img src="{{ $media->getUrl('webp') }}" alt="{{ $post->title }}" style="width: 100%; height: auto; border-radius: 20px;" loading="lazy">
+                            <img src="{{ $media->getUrl('webp') }}" alt="{{ $post->title }}" width="1200" height="800" loading="lazy" decoding="async" style="width: 100%; height: auto; border-radius: 20px;">
                             @endforeach
                         </div>
                         @endif
@@ -569,14 +637,14 @@
     @if($relatedPosts->isNotEmpty())
     <section class="related-news-section">
         <div class="container">
-            <h2 class="section-title">Son xəbərlər</h2>
+            <h2 class="section-title">Əlaqəli xəbərlər</h2>
             <div class="news-cards-grid">
                 @foreach($relatedPosts->take(3) as $relatedPost)
                 <article class="news-card">
                     <a href="{{ $relatedPost->url }}">
                         <div class="card-image">
                             @if($relatedPost->featured_image_thumb)
-                                <img src="{{ $relatedPost->featured_image_thumb }}" alt="{{ $relatedPost->title }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                                <img src="{{ $relatedPost->featured_image_thumb }}" alt="{{ $relatedPost->title }}" width="450" height="300" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                             @else
                                 <div class="img-gradient-{{ ($loop->index % 8) + 1 }}" style="width: 100%; height: 100%;"></div>
                             @endif

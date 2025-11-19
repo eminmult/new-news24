@@ -149,7 +149,7 @@
                             <a href="{{ $post->url }}">
                                 <div class="card-image">
                                     @if($post->featured_image_thumb)
-                                        <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                                        <img src="{{ $post->featured_image_thumb }}" alt="{{ $post->title }}" width="450" height="300" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                                     @else
                                         <div class="img-gradient-{{ ($loop->index % 8) + 1 }}" style="width: 100%; height: 100%;"></div>
                                     @endif

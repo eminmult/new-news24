@@ -87,3 +87,38 @@
 <meta name="article:published_time" content="{{ $publishedTime }}">
 <meta name="publication_date" content="{{ $publishedTime }}">
 @endif
+
+{{-- Article Freshness Signals (2025+) --}}
+@if(isset($publishedTime))
+@php
+    $publishedDate = \Carbon\Carbon::parse($publishedTime);
+    $hoursSincePublished = $publishedDate->diffInHours(now());
+    $isFresh = $hoursSincePublished < 24; // 24 saat içinde yayınlanan haberler "fresh"
+@endphp
+@if($isFresh)
+<meta name="article:freshness" content="fresh">
+<meta name="news:breaking" content="true">
+@endif
+<meta name="article:age_hours" content="{{ $hoursSincePublished }}">
+@endif
+
+{{-- Last Modified Date (Article Freshness) --}}
+@if(isset($modifiedTime) && isset($publishedTime) && $modifiedTime !== $publishedTime)
+<meta name="last-modified" content="{{ $modifiedTime }}">
+<meta name="article:updated_time" content="{{ $modifiedTime }}">
+@endif
+
+{{-- RSS Feed Link --}}
+<link rel="alternate" type="application/rss+xml" title="{{ $siteName }} RSS Feed" href="{{ route('feed.rss') }}">
+<link rel="alternate" type="application/atom+xml" title="{{ $siteName }} Atom Feed" href="{{ route('feed.atom') }}">
+
+{{-- Preconnect to External Domains (Performance) --}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.google-analytics.com">
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+
+{{-- Core Web Vitals Optimizations --}}
+@if(isset($ogImage))
+<link rel="preload" as="image" href="{{ $ogImage }}" fetchpriority="high">
+@endif
